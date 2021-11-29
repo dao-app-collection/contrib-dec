@@ -2,7 +2,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/types'
 import chalk from 'chalk'
 
-const name = 'YourContract'
+const name = 'BucketFactory'
 
 const func: DeployFunction = async ({
   deployments,
@@ -19,4 +19,4 @@ const func: DeployFunction = async ({
 
 export default func
 
-func.tags = [name]
+func.tags = [name, 'all']
