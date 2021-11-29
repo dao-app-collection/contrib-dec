@@ -6,6 +6,7 @@
     "prepare": "npx is-ci || npx husky install",
     "build": "yarn workspace @dapp-starter-fullstack/frontend build --max-old-space-size=12288",
     "prettier": "yarn workspace @dapp-starter-fullstack/frontend prettier",
+    "dev:frontend": "yarn workspace @dapp-starter-fullstack/frontend dev",
     "chain": "yarn workspace @dapp-starter-fullstack/hardhat chain",
     "fork": "yarn workspace @dapp-starter-fullstack/hardhat fork",
     "node": "yarn workspace @dapp-starter-fullstack/hardhat chain",
