@@ -29,6 +29,3 @@ yarn dev:frontend
 That's it!
 
 - The frontend application will be reached on `http://localhost:3000`
-- The graphql playground will be reached on `http://localhost:8000/subgraphs/name/dat-feel/master/graphql`
-
-## Other commands
