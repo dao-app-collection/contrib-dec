@@ -1,0 +1,97 @@
+{
+  "name": "@dapp-starter-fullstack/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "npx is-ci || npx husky install",
+    "build": "yarn workspace @dapp-starter-fullstack/frontend build --max-old-space-size=12288",
+    "prettier": "yarn workspace @dapp-starter-fullstack/frontend prettier",
+    "chain": "yarn workspace @dapp-starter-fullstack/hardhat chain",
+    "fork": "yarn workspace @dapp-starter-fullstack/hardhat fork",
+    "node": "yarn workspace @dapp-starter-fullstack/hardhat chain",
+    "test": "yarn workspace @dapp-starter-fullstack/hardhat test",
+    "start": "yarn workspace @dapp-starter-fullstack/frontend start",
+    "compile": "yarn workspace @dapp-starter-fullstack/hardhat compile",
+    "deploy": "yarn workspace @dapp-starter-fullstack/hardhat deploy",
+    "watch": "yarn workspace @dapp-starter-fullstack/hardhat watch",
+    "accounts": "yarn workspace @dapp-starter-fullstack/hardhat accounts",
+    "balance": "yarn workspace @dapp-starter-fullstack/hardhat balance",
+    "send": "yarn workspace @dapp-starter-fullstack/hardhat send",
+    "ipfs": "yarn workspace @dapp-starter-fullstack/frontend ipfs",
+    "surge": "yarn workspace @dapp-starter-fullstack/frontend surge",
+    "s3": "yarn workspace @dapp-starter-fullstack/frontend s3",
+    "ship": "yarn workspace @dapp-starter-fullstack/frontend ship",
+    "generate": "yarn workspace @dapp-starter-fullstack/hardhat generate",
+    "account": "yarn workspace @dapp-starter-fullstack/hardhat account",
+    "mineContractAddress": "cd packages/hardhat && npx hardhat mineContractAddress",
+    "wallet": "cd packages/hardhat && npx hardhat wallet",
+    "fundedwallet": "cd packages/hardhat && npx hardhat fundedwallet",
+    "flatten": "cd packages/hardhat && npx hardhat flatten",
+    "clean": "yarn clean:files && cd packages/hardhat && npx hardhat clean",
+    "clean:files": "npx ts-node scripts/clean.ts",
+    "run-graph-node": "yarn workspace @dapp-starter-fullstack/services run-graph-node",
+    "remove-graph-node": "yarn workspace @dapp-starter-fullstack/services remove-graph-node",
+    "clean-graph-node": "yarn workspace @dapp-starter-fullstack/services clean-graph-node",
+    "generate-types": "typechain --target=ethers-v5 'packages/frontend/src/abi/*.json' --out-dir packages/frontend/src/generated",
+    "graph-prepare": "mustache packages/subgraph/config/config.json packages/subgraph/src/subgraph.template.yaml > packages/subgraph/subgraph.yaml",
+    "graph-codegen": "yarn workspace @dapp-starter-fullstack/subgraph graph codegen",
+    "graph-build": "yarn workspace @dapp-starter-fullstack/subgraph graph build",
+    "graph-create-local": "yarn workspace @dapp-starter-fullstack/subgraph graph create --node http://localhost:8020/ dapp-starter-fullstack/your-contract",
+    "graph-remove-local": "yarn workspace @dapp-starter-fullstack/subgraph graph remove --node http://localhost:8020/ dapp-starter-fullstack/your-contract",
+    "graph-deploy-local": "yarn workspace @dapp-starter-fullstack/subgraph graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 dapp-starter-fullstack/your-contract",
+    "graph-ship-local": "yarn graph-prepare && yarn graph-codegen && yarn graph-deploy-local",
+    "deploy-and-graph": "yarn deploy && yarn graph-ship-local",
+    "theme": "yarn workspace @dapp-starter-fullstack/frontend theme",
+    "watch-theme": "yarn workspace @dapp-starter-fullstack/frontend watch",
+    "postinstall": "husky install && yarn generate-types"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**",
+      "**/hardhat",
+      "**/hardhat/**",
+      "**/hardhat-ts",
+      "**/hardhat-ts/**"
+    ]
+  },
+  "dependencies": {
+    "rimraf": "3.0.2"
+  },
+  "devDependencies": {
+    "@types/rimraf": "3.0.2",
+    "@typechain/ethers-v5": "7.1.1",
+    "eslint": "7.32.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-next": "11.1.2",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-better-styled-components": "1.1.2",
+    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.26.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "@typescript-eslint/eslint-plugin": "4.31.2",
+    "@typescript-eslint/parser": "4.31.2",
+    "is-ci": "3.0.0",
+    "jest": "27.2.1",
+    "husky": "7.0.4",
+    "prettier": "2.4.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "./node_modules/@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
+  }
+}
