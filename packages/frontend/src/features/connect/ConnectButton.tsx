@@ -1,11 +1,10 @@
-import { Button } from 'antd'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Identicon from './Identicon'
 import Balance from './Balance'
 import { getShortAccount } from '../../utils/account-utils'
 import { useRootStore } from '../../context/RootStoreProvider'
-import { spacingIncrement } from '../../utils/theme/utils'
+import { spacingIncrement } from '../../theme/utils'
 
 const Wrapper = styled.div`
   border-radius: ${({ theme }): string => `${theme.borderRadius}px`};
@@ -50,10 +49,10 @@ const ConnectButton: React.FC = () => {
         </BalanceWrapper>
       )}
       <Flex>
-        <Button onClick={onClick} size="large">
+        <button type="button" onClick={onClick}>
           {getShortAccount(account) ?? 'Connect Wallet'}
           <AccountIcon />
-        </Button>
+        </button>
       </Flex>
     </Wrapper>
   )

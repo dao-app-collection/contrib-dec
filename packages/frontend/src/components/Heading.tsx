@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
-import { media } from '../utils/theme/media'
-import { getLineHeight } from '../utils/theme/utils'
-import { primaryFontFamily } from '../utils/theme/general-settings'
+import { media } from '../theme/media'
+import { getLineHeight } from '../theme/utils'
+import { primaryFontFamily } from '../theme/general-settings'
 
 type HeadingSize = 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
 

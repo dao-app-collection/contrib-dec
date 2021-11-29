@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
-import { pixelSizes } from '../utils/theme/breakpoints'
-import { secondaryFontFamily } from '../utils/theme/utils'
+import { pixelSizes } from './breakpoints'
+import { secondaryFontFamily } from './utils'
 
 const GlobalStyle = createGlobalStyle`
   html {

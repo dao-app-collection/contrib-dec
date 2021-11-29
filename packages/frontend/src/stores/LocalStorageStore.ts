@@ -1,7 +1,7 @@
 import { observe, makeAutoObservable, toJS } from 'mobx'
 import deepEqual from 'fast-deep-equal'
 import { RootStore } from './RootStore'
-import { SupportedThemes } from '../utils/theme/theme.types'
+import { SupportedThemes } from '../theme/theme.types'
 
 const PROJECT_NAME = 'boilerplate'
 
@@ -11,7 +11,7 @@ type Storage = {
 }
 
 const initLocalStorage: Storage = {
-  selectedTheme: 'light',
+  selectedTheme: 'dark',
   selectedWallet: undefined,
 }
 

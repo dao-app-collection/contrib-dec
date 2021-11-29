@@ -1,19 +1,12 @@
-import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { ThemeProvider } from 'styled-components'
-import GlobalStyle from './GlobalStyle'
-import { useRootStore } from '../context/RootStoreProvider'
+import GlobalStyle from '../theme/GlobalStyle'
+import { darkTheme } from '../theme/dark-theme'
 
 const AppBootstrap: React.FC = ({ children }) => {
-  const { localStorageStore, uiStore } = useRootStore()
-
-  useEffect(() => {
-    localStorageStore.load()
-  }, [localStorageStore])
-
   return (
     <>
-      <ThemeProvider theme={uiStore.themeObject}>
+      <ThemeProvider theme={darkTheme}>
         <GlobalStyle />
         {children}
       </ThemeProvider>

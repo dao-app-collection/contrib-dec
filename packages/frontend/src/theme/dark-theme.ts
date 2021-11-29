@@ -26,7 +26,7 @@ const secondaryAccentColor = '#0DC675'
 const thirdAccentColor = '#07653B'
 const lightGray = '#F2EBF9'
 
-const primaryBackgroundColor = '#1a202c'
+const primaryBackgroundColor = '#39217e'
 const secondaryBackgroundColor = '#2d3748'
 const thirdBackgroundColor = '#0C001A'
 

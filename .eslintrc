@@ -2,10 +2,10 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": { "jsx": true },
+    "ecmaFeatures": { "jsx": true }
   },
   "env": {
-    "node": true,
+    "node": true
   },
   "plugins": ["@typescript-eslint", "better-styled-components"],
   "extends": [
@@ -16,7 +16,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
-    "plugin:prettier/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "better-styled-components/sort-declarations-alphabetically": 2,
@@ -30,7 +30,7 @@
     "@typescript-eslint/explicit-function-return-type": "error",
     "import/order": [
       "error",
-      { "groups": ["external", "index", "sibling", "parent", "internal", "builtin", "object"] },
+      { "groups": ["external", "index", "sibling", "parent", "internal", "builtin", "object"] }
     ],
     "import/prefer-default-export": "off",
     "no-underscore-dangle": "off",
@@ -39,12 +39,14 @@
     "@typescript-eslint/no-shadow": ["error"],
     "lines-between-class-members": "off",
     "no-restricted-properties": "off",
+    "react/require-default-props": "off",
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"],
-      },
-    },
-  },
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
 }
