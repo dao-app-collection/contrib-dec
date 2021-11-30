@@ -288,6 +288,9 @@ export default {
   solidity: {
     compilers: [
       {
+        version: '0.5.12',
+      },
+      {
         version: '0.8.4',
         settings: {
           optimizer: {
