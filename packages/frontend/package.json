@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npx next",
-    "build": "next build && next export",
+    "build": "next build",
     "test": "jest -w 1",
     "start": "next start",
     "pre-commit": "lint-staged",
