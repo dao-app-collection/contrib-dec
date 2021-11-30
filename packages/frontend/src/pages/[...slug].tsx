@@ -1,10 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { FC } from 'react'
+import DAOLayout from '../components/DAOLayout'
 import { DaoProvider } from '../context/DaoContext'
 import BucketPage from '../features/bucket/BucketPage'
-import { getBucketSlug } from '../utils/buckets-utils'
-import { getEntityFromSlug } from '../utils/services/api'
+import { getEntityFromSlug } from '../utils/services/bucket-api'
 
 const SlugPage: FC = (props) => {
   const router = useRouter()
@@ -14,9 +14,11 @@ const SlugPage: FC = (props) => {
   }
 
   return (
-    <DaoProvider>
-      <BucketPage />
-    </DaoProvider>
+    <DAOLayout colors={{ primary: '#7B4BFF', inverted: '#FFF' }}>
+      <DaoProvider>
+        <BucketPage />
+      </DaoProvider>
+    </DAOLayout>
   )
 }
 

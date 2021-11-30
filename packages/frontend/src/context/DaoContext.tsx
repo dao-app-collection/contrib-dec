@@ -1,54 +1,66 @@
 import { useRouter } from 'next/dist/client/router'
-import { createContext, FC, useContext } from 'react'
-import { DaoConfig, PopulatedBucket, PopulatedTask } from '../types/all-types'
-import { getBucketLevel, getBucketUrl } from '../utils/buckets-utils'
+import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useRootStore } from './RootStoreProvider'
+import { DAOEntity } from '../stores/entities/DAO.entity'
+import { PopulatedBucket, PopulatedTask } from '../types/all-types'
 import { mockBuckets, mockTasks } from '../utils/mocked'
+import { BucketEntity } from '../stores/entities/Bucket.entity'
 
 type DaoContextInterface = {
-  navigateTo: () => void
-  dao: DaoConfig
-  buckets: PopulatedBucket[]
-  tasks: PopulatedTask[]
-  currentLevel: number
-  currentBucket: PopulatedBucket
+  navigateTo: (bucket: BucketEntity) => void
+  buckets: BucketEntity[]
+  selectedBucket?: BucketEntity
+  dao: DAOEntity
 }
 
 const DaoContext = createContext<DaoContextInterface | null>(null)
 
-export const DaoProvider: FC = ({ children }) => {
+export const DaoProvider: FC = observer(({ children }) => {
   const router = useRouter()
+  const store = useRootStore()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const dao = useMemo(() => new DAOEntity(store), [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  console.log(router)
-  const buckets = mockBuckets.map((bucket) => ({
-    ...bucket,
-    url: getBucketUrl(bucket, mockBuckets),
-    level: getBucketLevel(bucket, mockBuckets),
-  }))
+  const [slug, setSlug] = useState(router.query.slug)
 
-  const tasks = mockTasks.map((task) => ({
-    ...task,
-  }))
+  useEffect(() => {
+    dao.init(slug as string[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dao])
 
-  const dao = {
-    name: 'DxDao',
-    website: '...href',
-  }
+  useEffect(() => {
+    setSlug(router.query.slug)
+  }, [router.query.slug])
 
-  const navigateTo = (): void => {
-    console.log('nav')
+  const slugStr = typeof slug === 'string' ? slug : slug?.join('')
+
+  console.log()
+  const selectedBucket = dao.buckets.find((bucket) => bucket.slug.join('') === slugStr)
+  const navigateTo = (bucket: BucketEntity): void => {
+    setSlug(bucket.slug)
+    router.push(
+      {
+        pathname: '/[...slug]',
+        query: {
+          slug: bucket.slug,
+        },
+      },
+      { href: bucket.url },
+      { shallow: true }
+    )
   }
 
   const value: DaoContextInterface = {
     navigateTo,
     dao,
-    buckets,
-    tasks,
-    currentLevel: 2,
-    currentBucket: buckets[2],
+    buckets: dao.buckets,
+    selectedBucket,
   }
 
   return <DaoContext.Provider value={value}>{children}</DaoContext.Provider>
-}
+})
 
 export const useDao = (): DaoContextInterface => {
   const Dao = useContext(DaoContext)

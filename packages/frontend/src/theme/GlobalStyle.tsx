@@ -1,25 +1,25 @@
 import { createGlobalStyle } from 'styled-components'
 import { pixelSizes } from './breakpoints'
-import { secondaryFontFamily } from './utils'
 
 const GlobalStyle = createGlobalStyle`
   html {
     box-sizing: border-box;
     margin: 0; 
-    height: 100%; 
+
   }
+
+  html, body, #__next {
+     height: 100%; 
+  }
+
   *, *:before, *:after {
     box-sizing: inherit;
   }
-  body {
-    ${secondaryFontFamily}
-    height: 100%; 
+  body { 
     padding: 0;
-    margin: 0;
-    font-size: ${({ theme }): string => theme.bodyFontSize};
-    line-height: 2;
-    color: ${({ theme }): string => theme.primaryFontColor};
-    background: ${({ theme }): string => theme.primaryBackgroundColor};
+    margin: 0; 
+    line-height: 2; 
+    font-family: ${(props: any) => props.theme.font.standard};
   }
   a {
     text-decoration: none;
@@ -36,8 +36,7 @@ const GlobalStyle = createGlobalStyle`
   h3,
   h4,
   h5 {
-    color: ${({ theme }): string => theme.primaryFontColor};
-    line-height: 1;
+     line-height: 1;
     margin: 0;
   }
   

@@ -1,24 +1,54 @@
 import * as React from 'react'
 import { FC } from 'react'
-import { PopulatedBucket } from '../../types/all-types'
+import Link from 'next/link'
+import { observer } from 'mobx-react-lite'
+import styled, { css } from 'styled-components'
+import { useDao } from '../../context/DaoContext'
 
-type Props = {
-  buckets: PopulatedBucket[]
-}
+const Container = styled.div`
+  height: 100%;
+  padding: 20px;
+  position: absolute;
+  width: 100%;
+`
 
-const BucketCanvas: FC<Props> = ({ buckets }) => {
+const Blob = styled.div<{ selected: boolean }>`
+  align-items: center;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  text-align: center;
+  width: 200px;
+
+  ${(props) =>
+    props.selected &&
+    css`
+      background-color: #000;
+      color: white;
+    `}
+`
+
+const BucketCanvas: FC = () => {
+  const { buckets, selectedBucket, navigateTo } = useDao()
   return (
-    <div>
+    <Container>
       {buckets.map((bucket) => (
-        <div key={bucket.id}>
+        <Blob
+          key={bucket.id}
+          onClick={() => navigateTo(bucket)}
+          selected={selectedBucket?.id === bucket.id}
+        >
           <div>{bucket.name}</div>
 
-          <div>url: {bucket.url}</div>
           <div>level: {bucket.level}</div>
-        </div>
+        </Blob>
       ))}
-    </div>
+    </Container>
   )
 }
 
-export default BucketCanvas
+export default observer(BucketCanvas)

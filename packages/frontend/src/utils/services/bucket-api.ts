@@ -1,6 +1,5 @@
 import { TheGraphBucket, TheGraphTask, TaskPopulated } from '../../types/all-types'
-import { mockBuckets } from '../buckets-utils'
-import { mockTasks } from '../mocked'
+import { mockTasks, mockBuckets } from '../mocked'
 
 export const getBucket = async (id: string): Promise<TheGraphBucket | void> => {
   return mockBuckets.find((bucket) => bucket.id.toLowerCase() === id.toLowerCase())

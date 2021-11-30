@@ -26,8 +26,9 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
     "import/extensions": "off",
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/explicit-function-return-type": "error",
+    // "@typescript-eslint/no-explicit-any": "error",
+    // "@typescript-eslint/explicit-function-return-type": "error",
+    "jsx-a11y/click-events-have-key-events": "error",
     "import/order": [
       "error",
       { "groups": ["external", "index", "sibling", "parent", "internal", "builtin", "object"] }
@@ -40,7 +41,10 @@
     "lines-between-class-members": "off",
     "no-restricted-properties": "off",
     "react/require-default-props": "off",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {
     "import/resolver": {

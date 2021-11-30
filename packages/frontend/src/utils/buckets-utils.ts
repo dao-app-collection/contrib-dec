@@ -1,25 +1,6 @@
+import { BucketEntity } from '../stores/entities/Bucket.entity'
+import { RootStore } from '../stores/RootStore'
 import { TheGraphBucket } from '../types/all-types'
-
-export const mockBuckets: TheGraphBucket[] = [
-  {
-    name: 'dxdao',
-    id: '123',
-  },
-  {
-    name: 'frontend',
-    id: '456',
-    parent: '123',
-  },
-  {
-    name: 'website',
-    id: '999',
-    parent: '456',
-  },
-  {
-    name: 'orakuru',
-    id: '8589',
-  },
-]
 
 export const getBucketSlug = (
   bucket: TheGraphBucket,
@@ -36,6 +17,7 @@ export const getBucketSlug = (
 
   return url
 }
+
 export const getBucketUrl = (bucket: TheGraphBucket, allBuckets: TheGraphBucket[]): string =>
   `/${getBucketSlug(bucket, allBuckets).join('/')}`
 
@@ -44,4 +26,53 @@ export const getBucketLevel = (bucket: TheGraphBucket, allBuckets: TheGraphBucke
   const index = slugs.findIndex((slug) => slug === bucket.name)
 
   return index >= 0 ? index + 1 : 0
+}
+
+// const getChildBuckets = (parent: BucketEntity, level: number, allBuckets: TheGraphBucket[]) => {
+//   const parentBucket = allBuckets.find((bucket) => parent.id === bucket.parent)
+
+//   console.log(parentBucket)
+// }
+
+export const buildBucketStructure = (
+  name: string,
+  allBuckets: TheGraphBucket[],
+  root: RootStore
+): BucketEntity[] => {
+  const normalizedName = name.toLowerCase()
+  const topBucket = allBuckets.find((bucket) => bucket.name.toLowerCase() === normalizedName)
+
+  if (!topBucket) {
+    throw new Error('Cant find top bucket')
+  }
+
+  const topBucketEntity = new BucketEntity(root, {
+    bucket: topBucket,
+    level: 1,
+  })
+
+  const tree = [topBucketEntity]
+
+  const getChildBuckets = (parent: BucketEntity, level: number): void => {
+    allBuckets
+      .filter((bucket) => parent.id === bucket.parent)
+      .forEach((bucket) => {
+        const entity = new BucketEntity(root, {
+          bucket,
+          level,
+          parent,
+        })
+        tree.push(entity)
+        getChildBuckets(entity, level + 1)
+      })
+  }
+
+  getChildBuckets(topBucketEntity, 2)
+
+  tree.forEach((entity) => {
+    const children = tree.filter((bucket) => bucket.parent?.id === entity.id)
+    entity.setChildren(children)
+  })
+
+  return tree
 }

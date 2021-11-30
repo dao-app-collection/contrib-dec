@@ -23,3 +23,19 @@ export type PopulatedBucket = TheGraphBucket & {
 }
 
 export type PopulatedTask = TheGraphTask
+
+// export type Bucket = {
+//   parent?: string
+//   name: string
+//   id: string
+//   allocation: BigNumber
+//   owners: string[]
+// }
+
+// export type Task = {
+//   data: string
+//   id: string
+//   bucket: string
+//   allocation: BigNumber
+//   assigned?: string
+// }
