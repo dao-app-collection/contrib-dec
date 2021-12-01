@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { Button, Spacer } from '@geist-ui/react'
 import Identicon from './Identicon'
 import Balance from './Balance'
 import { getShortAccount } from '../../utils/account-utils'
 import { useRootStore } from '../../context/RootStoreProvider'
-import { spacingIncrement } from '../../theme/utils'
+import { centered, spacingIncrement } from '../../theme/utils'
 
 const Wrapper = styled.div`
-  border-radius: ${({ theme }): string => `${theme.borderRadius}px`};
-  display: inline-flex;
+  ${centered};
 `
 
 const BalanceWrapper = styled.div`
@@ -49,10 +49,11 @@ const ConnectButton: React.FC = () => {
         </BalanceWrapper>
       )}
       <Flex>
-        <button type="button" onClick={onClick}>
+        <Button onClick={onClick}>
           {getShortAccount(account) ?? 'Connect Wallet'}
+          <Spacer w={0.5} inline />
           <AccountIcon />
-        </button>
+        </Button>
       </Flex>
     </Wrapper>
   )

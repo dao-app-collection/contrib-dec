@@ -1,46 +1,48 @@
 import { makeAutoObservable } from 'mobx'
-import { DefaultTheme } from 'styled-components'
 import { RootStore } from './RootStore'
 import { SupportedThemes } from '../theme/theme.types'
-import { darkTheme } from '../theme/dark-theme'
 
 export class UiStore {
   root: RootStore
   accountModalOpen = false
-  selectedTheme: SupportedThemes
-  // message: typeof message
+  toast: any
 
-  constructor(root: RootStore) {
+  constructor(root: RootStore, toast: any) {
     this.root = root
-    // this.message = message
-    this.selectedTheme = 'dark'
+    this.toast = toast
     makeAutoObservable(this)
   }
 
+  get selectedTheme(): SupportedThemes | undefined {
+    return this.root.localStorageStore.storage.selectedTheme
+  }
+
   setTheme(selectedTheme: SupportedThemes): void {
-    this.selectedTheme = selectedTheme
-    // this.root.localStorageStore.setLocalStorage<{ [key: string]: SupportedThemes }>({
-    //   selectedTheme,
-    // })
+    this.root.localStorageStore.storage.selectedTheme = selectedTheme
   }
 
-  get themeObject(): DefaultTheme {
-    return darkTheme
+  successToast(text: string): void {
+    this.toast({
+      text,
+      type: 'success',
+    })
   }
 
-  successToast(description: string): void {
-    // this.message.success(description)
-  }
-
-  warningToast(description: string): void {
-    // this.message.warning(description)
+  warningToast(text: string): void {
+    this.toast({
+      text,
+      type: 'warning',
+    })
   }
 
   errorToast(title: string, error: unknown): void {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error type'
     // eslint-disable-next-line no-console
     console.error(error)
-    // this.message.error(errorMessage)
+    this.toast({
+      text: errorMessage,
+      type: 'error',
+    })
   }
 
   setAccountModalOpen(value: boolean): void {

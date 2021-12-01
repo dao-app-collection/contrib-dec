@@ -17,8 +17,8 @@ export class RootStore {
   localStorageStore: LocalStorageStore
   usdcStore: Erc20Store
 
-  constructor() {
-    this.uiStore = new UiStore(this)
+  constructor(toast: any) {
+    this.uiStore = new UiStore(this, toast)
     this.browserStore = new BrowserStore(this)
     this.clockStore = new ClockStore(this)
     this.web3Store = new Web3Store(this)
