@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
+import BucketInner from './BucketInner'
 import Heading from '../../components/Heading'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 
@@ -14,7 +15,7 @@ const Container = styled.div`
   width: 420px;
 `
 
-const BucketOverview: FC = () => {
+const BucketContent: FC = () => {
   const selected = useSelectedBucket()
 
   if (!selected) {
@@ -25,8 +26,9 @@ const BucketOverview: FC = () => {
     <Container>
       <Heading type="h2">{selected.name}</Heading>
       <div>{selected.children.length} sub-buckets</div>
+      <BucketInner />
     </Container>
   )
 }
 
-export default BucketOverview
+export default BucketContent

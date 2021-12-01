@@ -1,5 +1,8 @@
+import { makeObservable, observable } from 'mobx'
+import { TaskEntity } from './Task.entity'
 import { TheGraphBucket } from '../../types/all-types'
 import { RootStore } from '../RootStore'
+import { mockTasks } from '../../utils/mocked'
 
 export class BucketEntity {
   root: RootStore
@@ -11,6 +14,7 @@ export class BucketEntity {
   slug: string[]
   parent?: BucketEntity
   children: BucketEntity[] = []
+  tasks: TaskEntity[] = []
 
   constructor(
     root: RootStore,
@@ -23,9 +27,21 @@ export class BucketEntity {
     this.url = parent ? `${parent.url}/${bucket.name}` : `/${bucket.name}`
     this.slug = parent ? [...parent.slug, bucket.name] : [bucket.name]
     this.parent = parent
+
+    makeObservable(this, {
+      tasks: observable,
+    })
+
+    this.init()
   }
 
   setChildren = (children: BucketEntity[]): void => {
     this.children = children
+  }
+
+  init = (): void => {
+    this.tasks = mockTasks
+      .filter((task) => task.bucket === this.id)
+      .map((task) => new TaskEntity(this.root, { task }))
   }
 }

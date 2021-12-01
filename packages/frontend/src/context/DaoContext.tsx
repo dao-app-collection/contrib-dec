@@ -3,8 +3,6 @@ import { createContext, FC, useContext, useEffect, useMemo, useState } from 'rea
 import { observer } from 'mobx-react-lite'
 import { useRootStore } from './RootStoreProvider'
 import { DAOEntity } from '../stores/entities/DAO.entity'
-import { PopulatedBucket, PopulatedTask } from '../types/all-types'
-import { mockBuckets, mockTasks } from '../utils/mocked'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
 
 type DaoContextInterface = {
@@ -36,7 +34,6 @@ export const DaoProvider: FC = observer(({ children }) => {
 
   const slugStr = typeof slug === 'string' ? slug : slug?.join('')
 
-  console.log()
   const selectedBucket = dao.buckets.find((bucket) => bucket.slug.join('') === slugStr)
   const navigateTo = (bucket: BucketEntity): void => {
     setSlug(bucket.slug)

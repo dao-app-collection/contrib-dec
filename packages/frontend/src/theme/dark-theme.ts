@@ -13,6 +13,7 @@ export const darkTheme: DefaultTheme = {
 
   bg: {
     primary: '#252525',
+    placeholder: '#A1A1A1',
   },
   text: {
     primary: ' #FFF',

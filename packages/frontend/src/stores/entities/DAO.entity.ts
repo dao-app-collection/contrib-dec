@@ -1,4 +1,4 @@
-import { makeObservable, observable, runInAction } from 'mobx'
+import { action, makeObservable, observable, runInAction } from 'mobx'
 import { BucketEntity } from './Bucket.entity'
 import { RootStore } from '../RootStore'
 import { getAllBuckets } from '../../utils/services/bucket-api'
@@ -14,6 +14,7 @@ export class DAOEntity {
 
     makeObservable(this, {
       buckets: observable,
+      init: action,
     })
   }
 

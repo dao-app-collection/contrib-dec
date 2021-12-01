@@ -1,9 +1,7 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import BucketCanvas from './BucketCanvas'
-import BucketOverview from './BucketOverview'
-import { useDao } from '../../context/DaoContext'
-import Heading from '../../components/Heading'
+import BucketContent from './BucketContent'
 
 const Container = styled.div`
   height: 100%;
@@ -11,12 +9,10 @@ const Container = styled.div`
 `
 
 const BucketPage: FC = () => {
-  const context = useDao()
-
   return (
     <Container>
       <BucketCanvas />
-      <BucketOverview />
+      <BucketContent />
     </Container>
   )
 }
