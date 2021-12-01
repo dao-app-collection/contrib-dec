@@ -12,7 +12,9 @@ const Container = styled.div`
   height: 100%;
   margin-left: auto;
   padding: 20px;
+  position: relative;
   width: 420px;
+  z-index: 2;
 `
 
 const BucketContent: FC = () => {

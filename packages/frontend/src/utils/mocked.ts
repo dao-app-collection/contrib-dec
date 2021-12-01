@@ -42,4 +42,9 @@ export const mockBuckets: TheGraphBucket[] = [
     name: 'orakuru',
     id: '8589',
   },
+  {
+    name: 'design',
+    id: '4441222',
+    parent: '123',
+  },
 ]
