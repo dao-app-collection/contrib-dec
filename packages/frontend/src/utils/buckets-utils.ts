@@ -28,12 +28,6 @@ export const getBucketLevel = (bucket: TheGraphBucket, allBuckets: TheGraphBucke
   return index >= 0 ? index + 1 : 0
 }
 
-// const getChildBuckets = (parent: BucketEntity, level: number, allBuckets: TheGraphBucket[]) => {
-//   const parentBucket = allBuckets.find((bucket) => parent.id === bucket.parent)
-
-//   console.log(parentBucket)
-// }
-
 export const buildBucketStructure = (
   name: string,
   allBuckets: TheGraphBucket[],

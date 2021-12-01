@@ -4,7 +4,8 @@ import { FC } from 'react'
 import DAOLayout from '../components/DAOLayout'
 import { DaoProvider } from '../context/DaoContext'
 import BucketPage from '../features/bucket/BucketPage'
-import { getEntityFromSlug } from '../utils/services/bucket-api'
+import { getBucketSlug } from '../utils/buckets-utils'
+import { getAllBuckets, getEntityFromSlug } from '../utils/services/bucket-api'
 
 const SlugPage: FC = (props) => {
   const router = useRouter()
@@ -51,10 +52,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  //   const [buckets, tasks] = await Promise.all([getAllBuckets(), getAllTasks()])
-  //   const bucketPaths = buckets.map((bucket) => ({
-  //     params: { id: bucket.id, slug: getBucketSlug(bucket, buckets), type: 'bucket' },
-  //   }))
+  const [buckets] = await Promise.all([getAllBuckets()])
+  const bucketPaths = buckets.map((bucket) => ({
+    params: { id: bucket.id, slug: getBucketSlug(bucket, buckets), type: 'bucket' },
+  }))
 
   //   const taskPaths = tasks
   //     .map((task) => {
@@ -70,9 +71,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   //     })
   //     .filter((item) => item.params.slug)
 
-  //   const paths = [...bucketPaths, ...taskPaths]
+  const paths = [...bucketPaths]
 
-  return { paths: [], fallback: true }
+  return { paths, fallback: true }
 }
 
 export default SlugPage
