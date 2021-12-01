@@ -13,7 +13,7 @@ const Container = styled.div<{ colors: Colors }>`
   }
 
   background-color: ${(props) => props.colors.primary};
-  height: 100%;
+  height: 90%;
 `
 
 type Props = {

@@ -8,6 +8,7 @@ import ConnectButton from '../features/connect/ConnectButton'
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
+  height: 6%;
   justify-content: flex-end;
 `
 
