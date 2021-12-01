@@ -87,11 +87,6 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "commitlint": {
-    "extends": [
-      "./node_modules/@commitlint/config-conventional"
-    ]
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
   }
