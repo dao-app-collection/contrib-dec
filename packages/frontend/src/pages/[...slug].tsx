@@ -15,7 +15,7 @@ const SlugPage: FC = (props) => {
   }
 
   return (
-    <DAOLayout colors={{ primary: '#7B4BFF', inverted: '#FFF' }}>
+    <DAOLayout colors={{ primary: '#7B4BFF', inverted: '#FFF', accent: '#B0FFCB' }}>
       <DaoProvider>
         <BucketPage />
       </DaoProvider>
@@ -56,20 +56,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const bucketPaths = buckets.map((bucket) => ({
     params: { id: bucket.id, slug: getBucketSlug(bucket, buckets), type: 'bucket' },
   }))
-
-  //   const taskPaths = tasks
-  //     .map((task) => {
-  //       const match = bucketPaths.find((bucket) => bucket.params.id === task.bucket)
-  //       if (match) {
-  //         return {
-  //           params: { id: task.id, slug: [...match.params.slug, task.id], type: 'task' },
-  //         }
-  //       }
-  //       return {
-  //         params: {},
-  //       }
-  //     })
-  //     .filter((item) => item.params.slug)
 
   const paths = [...bucketPaths]
 

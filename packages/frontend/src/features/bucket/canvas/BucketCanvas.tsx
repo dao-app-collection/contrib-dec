@@ -1,31 +1,27 @@
 import * as React from 'react'
 import { FC, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled, { css } from 'styled-components'
-import { ResponsiveCirclePacking, ResponsiveCirclePackingHtml } from '@nivo/circle-packing'
-import { useTheme } from '@nivo/core'
-import { animated, to, SpringValue, Interpolation } from '@react-spring/web'
-import CircleComponent from './canvas/CircleComponent'
-import { useDao } from '../../context/DaoContext'
-import { BucketEntity } from '../../stores/entities/Bucket.entity'
+import styled from 'styled-components'
+import { ResponsiveCirclePackingHtml } from '@nivo/circle-packing'
+
+import CircleComponent from './CircleComponent'
+import { useDao } from '../../../context/DaoContext'
+import { BucketEntity } from '../../../stores/entities/Bucket.entity'
+import { pixelSizes } from '../../../theme/breakpoints'
 
 const Container = styled.div`
   background-color: #321c6f;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  right: 420px;
+  height: 100vh;
+  left: 420px;
+  position: fixed;
+  right: 0;
   top: 0;
+
+  @media (max-width: ${pixelSizes.tablet}) {
+    left: 0;
+  }
 `
 
-/*
- * This file is part of the nivo project.
- *
- * Copyright 2016-present, Raphaël Benitte.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 type DataItem = {
   name: string
   color: string
@@ -33,20 +29,15 @@ type DataItem = {
   loc: number
 }
 
-export const interpolatePosition = (
-  positionValue: SpringValue<number>,
-  radiusValue: Interpolation<number>
-) => to([positionValue, radiusValue], (position, radius) => position - radius)
-
-export const interpolateSize = (radiusValue: Interpolation<number>) =>
-  to([radiusValue], (radius) => radius * 2)
-
-export const interpolateBorderWidth = (borderWidth: number, radiusValue: Interpolation<number>) =>
-  to([radiusValue], (radius) => Math.min(borderWidth, radius))
+const createChild = (b: BucketEntity): DataItem => ({
+  name: b.name,
+  children: b.children.map(createChild) || [],
+  color: '',
+  loc: b.level,
+})
 
 const BucketCanvas: FC = () => {
   const { buckets, selectedBucket, navigateTo } = useDao()
-  const available = selectedBucket?.children || []
   const [zoomedId, setZoomedId] = useState<string | null>(null)
   const [currentDepth, setDepth] = useState(0)
 
@@ -59,15 +50,6 @@ const BucketCanvas: FC = () => {
 
   if (buckets.length === 0) {
     return null
-  }
-
-  const createChild = (b: BucketEntity): DataItem => {
-    return {
-      name: b.name,
-      children: b.children.map(createChild) || [],
-      color: 'hsl(344, 70%, 50%)',
-      loc: b.level,
-    }
   }
 
   const data = createChild(buckets[0])
@@ -86,7 +68,7 @@ const BucketCanvas: FC = () => {
         labelsFilter={(e) => {
           return e.node.depth === currentDepth + 1
         }}
-        tooltip={() => null}
+        tooltip={() => null as any}
         borderWidth={0}
         zoomedId={zoomedId}
         motionConfig="slow"

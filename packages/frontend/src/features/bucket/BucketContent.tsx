@@ -4,17 +4,23 @@ import styled from 'styled-components'
 import BucketInner from './BucketInner'
 import Heading from '../../components/Heading'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
+import { pixelSizes } from '../../theme/breakpoints'
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.bg.primary};
   color: ${(props) => props.theme.text.primary};
 
-  height: 100%;
-  margin-left: auto;
+  /* margin-left: auto; */
+  min-height: 100vh;
   padding: 20px;
   position: relative;
   width: 420px;
   z-index: 2;
+
+  @media (max-width: ${pixelSizes.tablet}) {
+    width: 100%;
+    margin-top: 80vh;
+  }
 `
 
 const BucketContent: FC = () => {

@@ -1,10 +1,9 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import BucketCanvas from './BucketCanvas'
+import BucketCanvas from './canvas/BucketCanvas'
 import BucketContent from './BucketContent'
 
 const Container = styled.div`
-  height: 100%;
   position: relative;
 `
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FC } from 'react'
-import { TabsProps, Tabs as MantineTabs, Tab } from '@mantine/core'
+import { Tabs as GeistTabs } from '@geist-ui/react'
 
 type Props = {
   tabs: {
@@ -11,17 +11,15 @@ type Props = {
   onChange: (id: string) => void
 }
 
-const Tabs: FC<Props> = ({ tabs, selected, onChange }) => {
-  const active = tabs.findIndex((tab) => tab.id === selected)
-
+const Tabs: FC<Props> = ({ tabs, selected, onChange, ...props }) => {
   return (
-    <MantineTabs active={active} onTabChange={(tabIndex) => onChange(tabs[tabIndex].id || '')}>
+    <GeistTabs value={selected} onChange={onChange} {...props}>
       {tabs.map((tab) => (
-        <Tab label={tab.id} key={tab.id}>
+        <GeistTabs.Item label={tab.id} key={tab.id} value={tab.id}>
           {tab.text}
-        </Tab>
+        </GeistTabs.Item>
       ))}
-    </MantineTabs>
+    </GeistTabs>
   )
 }
 

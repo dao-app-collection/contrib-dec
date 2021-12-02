@@ -9,6 +9,7 @@ export const darkTheme: DefaultTheme = {
   dao: {
     primary: 'var(--dao-primary-color)',
     inverted: 'var(--dao-inverted-color)',
+    accent: 'var(--dao-accent-color)',
   },
 
   bg: {

@@ -9,11 +9,28 @@ export const interpolatePosition = (
   radiusValue: Interpolation<number>
 ) => to([positionValue, radiusValue], (position, radius) => position - radius)
 
-export const interpolateSize = (radiusValue: Interpolation<number>) =>
-  to([radiusValue], (radius) => radius * 2)
+export const interpolateSize = (radiusValue: Interpolation<number>, multiplier: number) =>
+  to([radiusValue], (radius) => radius * multiplier)
 
 export const interpolateBorderWidth = (borderWidth: number, radiusValue: Interpolation<number>) =>
   to([radiusValue], (radius) => Math.min(borderWidth, radius))
+
+const Counter = styled(animated.div)`
+  align-items: center;
+  background: #b0ffcb;
+  border-radius: 50%;
+  border-radius: 72px;
+  box-shadow: 0px 0px 11px #4fff8b;
+  color: #000;
+  display: flex;
+  height: 38px;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(50%, -50%);
+  width: 38px;
+`
 
 const InfoInner = styled(motion.div)`
   align-items: center;
@@ -58,8 +75,8 @@ const Circle = styled(animated.div)<{ depth: number; isChildCircle: boolean }>`
 
 const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
   const { node, style, onMouseEnter, onMouseMove, onMouseLeave, onClick } = circleProps
-  const size = interpolateSize(style.radius)
-
+  const size = interpolateSize(style.radius, 2)
+  const countSize = interpolateSize(style.radius, 0.2)
   // eslint-disable-next-line
   const handlers = useNodeMouseHandlers<any>(node, {
     onMouseEnter,
@@ -90,6 +107,8 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
       onClick={handlers.onClick}
     >
       <AnimatePresence>
+        {showInfo && <Counter>4</Counter>}
+
         {showInfo && (
           <InfoInner
             initial={{ opacity: 0, scale: 0.7 }}
