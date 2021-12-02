@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 import { media } from '../theme/media'
 import { getLineHeight } from '../theme/utils'
-import { primaryFontFamily } from '../theme/general-settings'
 
 type HeadingSize = 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
 
@@ -12,15 +11,12 @@ type Props = {
 
 export const lineHeightHeadings = css`
   line-height: ${getLineHeight('22')};
-  text-align: center;
-
   ${media.phone`
     line-height: ${getLineHeight('15')};
   `}
 `
 
 const Heading1 = styled.h1`
-  ${primaryFontFamily}
   ${lineHeightHeadings}
   font-size: ${({ theme }): string => theme.fontSize['5xl']};
 
@@ -30,9 +26,9 @@ const Heading1 = styled.h1`
 `
 
 const Heading2 = styled.h2`
-  ${primaryFontFamily}
   ${lineHeightHeadings}
   font-size: ${({ theme }): string => theme.fontSize['4xl']};
+  font-weight: 100;
 
   ${media.tablet`
     font-size: ${({ theme }): string => theme.fontSize.xl};
@@ -40,7 +36,6 @@ const Heading2 = styled.h2`
 `
 
 const Heading3 = styled.h3`
-  ${primaryFontFamily}
   ${lineHeightHeadings}
   font-size: ${({ theme }): string => theme.fontSize['3xl']};
 
@@ -50,13 +45,11 @@ const Heading3 = styled.h3`
 `
 
 const Heading4 = styled.h4`
-  ${primaryFontFamily}
   ${lineHeightHeadings}
   font-size: ${({ theme }): string => theme.fontSize['2xl']};
 `
 
 const Heading5 = styled.h5`
-  ${primaryFontFamily}
   ${lineHeightHeadings}
   font-size: ${({ theme }): string => theme.fontSize.xl};
 `

@@ -15,9 +15,7 @@ const Tabs: FC<Props> = ({ tabs, selected, onChange, ...props }) => {
   return (
     <GeistTabs value={selected} onChange={onChange} {...props}>
       {tabs.map((tab) => (
-        <GeistTabs.Item label={tab.id} key={tab.id} value={tab.id}>
-          {tab.text}
-        </GeistTabs.Item>
+        <GeistTabs.Item label={tab.text} key={tab.id} value={tab.id} />
       ))}
     </GeistTabs>
   )

@@ -38,7 +38,11 @@ const GlobalStyle = createGlobalStyle`
   h5 {
      line-height: 1;
     margin: 0;
+    font-family: ${(props: any) => props.theme.font.standard};
+
   }
+
+ 
   
   @media screen and (max-width: ${pixelSizes.tablet}) {
     input, select, textarea {

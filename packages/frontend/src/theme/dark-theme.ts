@@ -13,10 +13,13 @@ export const darkTheme: DefaultTheme = {
   },
 
   bg: {
+    secondary: '#000',
     primary: '#252525',
     placeholder: '#A1A1A1',
   },
   text: {
     primary: ' #FFF',
   },
+
+  gap: (value: number) => `${value * 8}px`,
 }

@@ -10,6 +10,9 @@ const Wrapper = styled.div`
   display: flex;
   height: 6%;
   justify-content: flex-end;
+  position: fixed;
+  right: 0;
+  z-index: 10;
 `
 
 const Header: FC = () => {
