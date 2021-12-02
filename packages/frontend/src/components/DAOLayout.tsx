@@ -7,10 +7,8 @@ type Colors = {
 }
 
 const Container = styled.div<{ colors: Colors }>`
-  :root {
-    --dao-inverted-color: ${(props) => props.colors.inverted};
-    --dao-primary-color: ${(props) => props.colors.primary};
-  }
+  --dao-inverted-color: ${(props) => props.colors.inverted};
+  --dao-primary-color: ${(props) => props.colors.primary};
 
   background-color: ${(props) => props.colors.primary};
   height: 100%;

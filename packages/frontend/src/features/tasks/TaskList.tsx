@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { FC } from 'react'
+import { observer } from 'mobx-react-lite'
 import TaskListItem from './TaskListItem'
 import useTasks from '../../hooks/useTasksFromBucket'
 
@@ -15,4 +16,4 @@ const TaskList: FC = () => {
   )
 }
 
-export default TaskList
+export default observer(TaskList)
