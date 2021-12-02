@@ -46,25 +46,42 @@ const InfoInner = styled(motion.div)`
   z-index: 5;
 `
 
-const Circle = styled(animated.div)<{ depth: number; isChildCircle: boolean }>`
-  background: linear-gradient(
-    154.57deg,
-    #6035d6 2.94%,
-    #6035d6 2.95%,
-    rgba(123, 75, 255, 0) 105.2%
-  );
-  background-color: transparent;
-  box-shadow: inset 0px -1.85837px 50.176px rgba(255, 255, 255, 0.31);
+const Circle = styled(animated.div)<{ depth: number; isChildCircle: boolean; isSelected: boolean }>`
   transition: background 0.3s ease, background-color 0.3s ease;
   will-change: background, background-color;
 
   ${(props) =>
     props.depth === 0 &&
     css`
-      background: transparent;
+      /* background: transparent;
+      border: none; */
       box-shadow: inset 0px 0px 7px 4px rgb(25 0 95 / 62%);
     `}
 
+  ${(props) =>
+    props.depth > 0 &&
+    css`
+      background: linear-gradient(
+        154.57deg,
+        #6035d6 2.94%,
+        #6035d6 2.95%,
+        rgba(123, 75, 255, 0) 105.2%
+      );
+      background: linear-gradient(154.57deg, #6035d6 2.94%, rgba(123, 75, 255, 0) 105.2%);
+      background-color: transparent;
+      box-shadow: inset 0px -1.85837px 50.176px rgba(255, 255, 255, 0.31);
+      box-sizing: border-box;
+    `}
+
+
+    ${(props) =>
+    props.isSelected &&
+    props.depth !== 0 &&
+    css`
+      border: 12px solid #ffffff;
+      box-shadow: inset 0px -3.02075px 55.5603px rgba(255, 255, 255, 0.31);
+    `}
+    
   ${(props) =>
     props.isChildCircle &&
     css`
@@ -76,7 +93,6 @@ const Circle = styled(animated.div)<{ depth: number; isChildCircle: boolean }>`
 const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
   const { node, style, onMouseEnter, onMouseMove, onMouseLeave, onClick } = circleProps
   const size = interpolateSize(style.radius, 2)
-  const countSize = interpolateSize(style.radius, 0.2)
   // eslint-disable-next-line
   const handlers = useNodeMouseHandlers<any>(node, {
     onMouseEnter,
@@ -85,14 +101,20 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
     onClick,
   })
 
-  const showInfo = extraProps.currentDepth + 1 === node.depth
+  const isSelected = node.id === extraProps.zoomedId
   const isChildCircle = extraProps.currentDepth + 2 === node.depth
+  const isLastLevel = node.depth + 1 === extraProps.maxLevel
 
+  let showInfo = extraProps.currentDepth + 1 === node.depth
+
+  if (isLastLevel && isSelected) {
+    showInfo = true
+  }
   return (
     <Circle
       depth={node.depth}
-      showInfo={showInfo}
       isChildCircle={isChildCircle}
+      isSelected={isSelected}
       style={{
         position: 'absolute',
         top: interpolatePosition(style.y, style.radius),
@@ -108,7 +130,6 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
     >
       <AnimatePresence>
         {showInfo && <Counter>4</Counter>}
-
         {showInfo && (
           <InfoInner
             initial={{ opacity: 0, scale: 0.7 }}

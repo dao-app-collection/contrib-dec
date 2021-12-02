@@ -52,9 +52,13 @@ const BucketCanvas: FC = () => {
     return null
   }
 
+  const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
+
   const data = createChild(buckets[0])
   const extraProps = {
     currentDepth,
+    zoomedId,
+    maxLevel,
   }
   return (
     <Container>
