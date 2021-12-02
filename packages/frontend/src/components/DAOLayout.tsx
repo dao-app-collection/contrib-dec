@@ -11,7 +11,7 @@ const Container = styled.div<{ colors: Colors }>`
   --dao-primary-color: ${(props) => props.colors.primary};
 
   background-color: ${(props) => props.colors.primary};
-  height: 100%;
+  height: 90%;
 `
 
 type Props = {
