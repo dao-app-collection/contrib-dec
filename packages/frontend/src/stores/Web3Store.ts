@@ -57,7 +57,6 @@ export class Web3Store {
     if (this.root.browserStore.tabIsInactive) return
     try {
       this.blockNumber = n
-      this.refreshChainState()
     } catch (error) {
       this.root.uiStore.errorToast('Error handling new block', error)
     }

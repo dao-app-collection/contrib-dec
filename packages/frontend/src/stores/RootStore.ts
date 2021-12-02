@@ -1,3 +1,4 @@
+import { Toast } from '@geist-ui/react'
 import { UiStore } from './UiStore'
 import { Web3Store } from './Web3Store'
 import { UniswapV2RouterContractStore } from './UniswapV2RouterContractStore'
@@ -17,6 +18,7 @@ export class RootStore {
   localStorageStore: LocalStorageStore
   usdcStore: Erc20Store
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(toast: any) {
     this.uiStore = new UiStore(this, toast)
     this.browserStore = new BrowserStore(this)

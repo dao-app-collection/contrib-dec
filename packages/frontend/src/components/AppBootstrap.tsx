@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { ThemeProvider } from 'styled-components'
+import { ToastContainer } from 'react-toastify'
 import { GeistProvider, CssBaseline } from '@geist-ui/react'
 import { useEffect } from 'react'
 import GlobalStyle from '../theme/GlobalStyle'
@@ -17,6 +18,7 @@ const AppBootstrap: React.FC = ({ children }) => {
     <>
       <GeistProvider themeType={uiStore.selectedTheme}>
         <ThemeProvider theme={darkTheme}>
+          <ToastContainer theme={uiStore.selectedTheme} />
           <CssBaseline />
           <GlobalStyle />
           {children}
