@@ -9,11 +9,9 @@ import "./standard-bounties/StandardBounties.sol";
 contract Bucket is Ownable {
 
     address[] public owners;
-    uint256 public balance;
     ERC20 public token;
     Bucket public parent;
     StandardBounties public standardBounties;
-
 
     modifier onlyBucketOwners() {
         bool isSenderOwner = false;
@@ -46,7 +44,6 @@ contract Bucket is Ownable {
     /// @param _amount the amount of tokens to send to the bucket
     function fundBucket(uint256 _amount) public {
         require(token.transferFrom(msg.sender, address(this), _amount));
-        balance += _amount;
     }
 
     // add a new bucket owner
@@ -65,10 +62,10 @@ contract Bucket is Ownable {
         uint256 _deadline,
         address payable[] memory _issuers,
         address[] memory _approvers
-    ) public onlyBucketOwners {
+    ) public onlyBucketOwners returns (uint256) {
         address payable sender = address(uint160(address(this)));
 
-        standardBounties.issueBounty(
+        return standardBounties.issueBounty(
             sender,
             _issuers,
             _approvers,
@@ -77,6 +74,18 @@ contract Bucket is Ownable {
             address(token),
             20
         );
+    }
+
+    /// @param _bountyId the index of the bounty
+    /// @param _amount the amount of tokens being contributed
+    function fundTask(
+        uint _bountyId,
+        uint _amount
+    ) public onlyBucketOwners {
+        require(token.approve(address(standardBounties), _amount));
+
+        address payable sender = address(uint160(address(this)));
+        standardBounties.contribute(sender, _bountyId, _amount);
     }
 
     // create a task and allocate funds
@@ -92,29 +101,8 @@ contract Bucket is Ownable {
         address[] memory _approvers,
         uint256 _depositAmount
     ) public onlyBucketOwners {
-        address payable sender = address(uint160(address(this)));
-
-        require(token.approve(address(standardBounties), _depositAmount));
-
-        standardBounties.issueAndContribute(
-            sender,
-            _issuers,
-            _approvers,
-            _data,
-            _deadline,
-            address(token),
-            20,
-            _depositAmount
-        );
-    }
-
-    /// @param _bountyId the index of the bounty
-    /// @param _amount the amount of tokens being contributed
-    function fundTask(
-        uint _bountyId,
-        uint _amount
-    ) public onlyBucketOwners {
-        // standardBounties.contribute(_sender, _bountyId, _amount);
+        uint256 bountyId = createTask(_data, _deadline, _issuers, _approvers);
+        fundTask(bountyId, _depositAmount);
     }
 
     /// @param _bountyId the index of the bounty

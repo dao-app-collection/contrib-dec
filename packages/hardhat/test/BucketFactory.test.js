@@ -74,8 +74,6 @@ describe('Bucket', function () {
     const fundTx = Bucket.fundBucket(100)
 
     await expect(fundTx).to.emit(Token, 'Transfer').withArgs(owner.address, Bucket.address, 100)
-
-    await expect(await Bucket.balance()).to.equal('100')
   })
 
   it('should create a task', async function () {
@@ -136,5 +134,47 @@ describe('Bucket', function () {
     await expect(createAndFundTx)
       .to.emit(Token, 'Transfer')
       .withArgs(Bucket.address, StandardBounties.address, depositAmount)
+  })
+
+  it('should increase funds of a task', async function () {
+    const [owner] = await ethers.getSigners()
+
+    const Bucket = await createBucket(
+      [owner.address],
+      'dev',
+      Token.address,
+      '0x0000000000000000000000000000000000000000',
+      owner
+    )
+    const depositAmount = 100
+
+    // approve token spend
+    await Token.approve(Bucket.address, depositAmount)
+
+    // fund bucket
+    await Bucket.fundBucket(depositAmount)
+
+    const data = 'the ipfs hash'
+    const deadline = Math.round(new Date().getTime() / 1000) + 86400000 // 1 day from now
+    const issuers = [owner.address]
+    const approvers = [owner.address]
+
+    await Bucket.createAndFundTask(data, deadline, issuers, approvers, depositAmount)
+
+    const taskId = 0
+    const topupAmount = 100
+
+    // approve token spend
+    await Token.approve(Bucket.address, topupAmount)
+
+    // fund bucket
+    await Bucket.fundBucket(topupAmount)
+
+    // fund bounty
+    await Bucket.fundTask(taskId, topupAmount)
+
+    await expect((await StandardBounties.bounties(taskId)).balance).to.equal(
+      depositAmount + topupAmount
+    )
   })
 })
