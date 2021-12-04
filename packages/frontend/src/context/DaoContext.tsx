@@ -12,7 +12,7 @@ type DaoContextInterface = {
   selectedBucket?: BucketEntity
   dao: DAOEntity
   currentTask: TaskEntity | null
-  openTask: (task: TaskEntity) => void
+  openTask: (task?: TaskEntity) => void
 }
 
 const DaoContext = createContext<DaoContextInterface | null>(null)

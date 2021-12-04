@@ -2,8 +2,10 @@ import * as React from 'react'
 import { FC } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { Spacer } from '@geist-ui/react'
 import TaskListItem from './TaskListItem'
 import TaskModal from './TaskModal'
+import CreateTaskButton from './CreateTaskButton'
 import useTasks from '../../hooks/useTasksFromBucket'
 import { useDao } from '../../context/DaoContext'
 
@@ -17,11 +19,13 @@ const TaskList: FC = () => {
 
   return (
     <Container>
+      <CreateTaskButton />
+      <Spacer h={1} />
       {tasks.map((task) => (
         <TaskListItem openTask={() => openTask(task)} key={task.id} task={task} />
       ))}
 
-      <TaskModal task={currentTask} onClose={() => openTask(null)} />
+      <TaskModal task={currentTask} onClose={() => openTask()} />
     </Container>
   )
 }
