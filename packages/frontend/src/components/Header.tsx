@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import ToggleTheme from './ToggleTheme'
 import ConnectButton from '../features/connect/ConnectButton'
+import { Z_INDEX } from '../utils/general-settings'
 
 const Wrapper = styled.div`
   align-items: center;
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
   justify-content: flex-end;
   position: fixed;
   right: 0;
-  z-index: 10;
+  z-index: ${Z_INDEX.header};
 `
 
 const Header: FC = () => {

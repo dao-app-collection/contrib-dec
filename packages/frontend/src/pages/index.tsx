@@ -1,12 +1,17 @@
-import Link from 'next/link'
+import styled from 'styled-components'
+import Div100vh from 'react-div-100vh'
+import CreateBucketButton from '../features/create-bucket/CreateBucketButton'
+import { centered } from '../theme/utils'
+
+const Wrapper = styled(Div100vh)`
+  ${centered};
+`
 
 const Index: React.FC = () => {
   return (
-    <div>
-      <Link href="/dxdao">
-        <a>DXDAO</a>
-      </Link>
-    </div>
+    <Wrapper>
+      <CreateBucketButton />
+    </Wrapper>
   )
 }
 
