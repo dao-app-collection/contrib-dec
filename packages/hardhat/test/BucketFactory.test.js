@@ -22,6 +22,7 @@ describe('Bucket', function () {
       await BucketFactory.connect(owner).createBucket(
         [owner.address],
         'dev',
+        Token.address,
         '0x0000000000000000000000000000000000000000'
       )
     ).to.emit(BucketFactory, 'BucketCreated')
@@ -34,6 +35,7 @@ describe('Bucket', function () {
     const parentTx = await BucketFactory.connect(owner).createBucket(
       [owner.address],
       'dev',
+      Token.address,
       '0x0000000000000000000000000000000000000000'
     )
     const parentReceipt = await parentTx.wait()
@@ -45,6 +47,7 @@ describe('Bucket', function () {
     const childTx = await BucketFactory.connect(owner).createBucket(
       [owner.address],
       'dev-child',
+      Token.address,
       parentBucket
     )
     const childReceipt = await childTx.wait()
@@ -54,5 +57,41 @@ describe('Bucket', function () {
     const { bucket: childBucket } = childLog.args
     const Bucket = await ethers.getContractAt('Bucket', childBucket)
     await expect(await Bucket.parent()).to.equal(parentBucket)
+  })
+
+  it('Should fund a bucket', async function () {
+    const [owner] = await ethers.getSigners()
+
+    //  create bucket
+    const bucketTx = await BucketFactory.connect(owner).createBucket(
+      [owner.address],
+      'dev',
+      Token.address,
+      '0x0000000000000000000000000000000000000000'
+    )
+
+    const parentReceipt = await bucketTx.wait()
+    const abi = (await deployments.get('BucketFactory')).abi
+    const iface = new ethers.utils.Interface(abi)
+    const parentLog = iface.parseLog(
+      parentReceipt.events.find((event) => event.event === 'BucketCreated')
+    )
+    const { bucket } = parentLog.args
+
+    const Bucket = await ethers.getContractAt('Bucket', bucket)
+
+    // approve token spend
+    await Token.approve(Bucket.address, 100)
+
+    // fund bucket
+    const fundTx = Bucket.fundBucket(100)
+
+    expect(fundTx).to.emit('Transfer').withArgs({
+      from: owner.address,
+      to: bucket,
+      amount: 100,
+    })
+
+    expect(await Bucket.balance()).to.equal('100')
   })
 })

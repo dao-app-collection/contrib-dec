@@ -30,22 +30,27 @@ contract Bucket is Ownable {
         _;
     }
 
-    constructor(address[] memory _owners, string memory _name, Bucket _parent) public {
+    constructor(
+        address[] memory _owners,
+        string memory _name,
+        ERC20 _token,
+        Bucket _parent,
+        StandardBounties _standardBounties
+    ) public {
         require(_owners.length > 0, "Bucket requires at least one owner");
         name = name;
         owners = _owners;
         parent = _parent;
-    }
-
-    function setStandardBounties(StandardBounties _standardBounties) public onlyOwner {
+        token = _token;
         standardBounties = _standardBounties;
     }
 
-    // increase the balance of this bucket
-    /// @param _token the address to ERC20 token that is being funded
-    /// @param _amount the amount of tokens to send to the bucket
-    function fundBucket(ERC20 _token, uint256 _amount) public {
 
+    // increase the balance of this bucket
+    /// @param _amount the amount of tokens to send to the bucket
+    function fundBucket(uint256 _amount) public {
+        require(token.transferFrom(msg.sender, address(this), _amount));
+        balance += _amount;
     }
 
     // add a new bucket owner
