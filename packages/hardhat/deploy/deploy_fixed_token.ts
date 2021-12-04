@@ -19,4 +19,4 @@ const func: DeployFunction = async ({
 
 export default func
 
-func.tags = [name]
+func.tags = [name, 'all']
