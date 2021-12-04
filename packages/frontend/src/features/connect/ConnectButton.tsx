@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { Button, Modal, Spacer, Grid } from '@geist-ui/react'
-import { useState } from 'react'
 import Identicon from './Identicon'
 import Balance from './Balance'
 import { getShortAccount } from '../../utils/account-utils'

@@ -3,6 +3,7 @@ import { CircleProps, useNodeMouseHandlers } from '@nivo/circle-packing'
 import { FC } from 'react'
 import styled, { css } from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Z_INDEX } from '../../../utils/general-settings'
 
 export const interpolatePosition = (
   positionValue: SpringValue<number>,
@@ -43,7 +44,7 @@ const InfoInner = styled(motion.div)`
   position: relative;
   text-align: center;
   width: 100%;
-  z-index: 5;
+  z-index: ${Z_INDEX.circleComponent};
 `
 
 const Circle = styled(animated.div)<{ depth: number; isChildCircle: boolean; isSelected: boolean }>`

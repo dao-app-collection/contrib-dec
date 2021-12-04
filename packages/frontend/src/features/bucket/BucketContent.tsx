@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import BucketInner from './BucketInner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import { pixelSizes } from '../../theme/breakpoints'
+import { Z_INDEX } from '../../utils/general-settings'
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.bg.primary};
@@ -16,7 +17,7 @@ const Container = styled.div`
   overflow: hidden;
   position: relative;
   width: 420px;
-  z-index: 2;
+  z-index: ${Z_INDEX.bucketContent};
 
   @media (max-width: ${pixelSizes.tablet}) {
     width: 100%;

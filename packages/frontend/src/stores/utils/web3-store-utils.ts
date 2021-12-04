@@ -9,10 +9,12 @@ import {
   FALLBACK_PROVIDER_CONFIG,
 } from '../../lib/constants'
 
-export const getOnboardConfig = (chainId: number): Initialization => {
+export const getOnboardConfig = (chainId: number, darkMode: boolean): Initialization => {
   const rpcUrl = getNetworkByChainId(chainId)?.rpcUrls[0]
   return {
     networkId: chainId, // Desired chain
+    darkMode,
+    hideBranding: true,
     walletSelect: {
       wallets: [
         // Desktop preferred wallets

@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 import { pixelSizes } from './breakpoints'
+import blocknativeStyles from '../utils/blocknative-styles'
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -49,6 +50,9 @@ const GlobalStyle = createGlobalStyle`
       font-size: 16px;
     }
   }
+
+  /* Blocknative modal style classes */
+  ${blocknativeStyles}
 `
 
 export default GlobalStyle

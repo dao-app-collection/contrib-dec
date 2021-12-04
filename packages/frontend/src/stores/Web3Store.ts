@@ -108,7 +108,7 @@ export class Web3Store {
             this.refreshSignerBalance()
           },
         },
-        ...getOnboardConfig(this.network.chainId),
+        ...getOnboardConfig(this.network.chainId, this.root.uiStore.selectedTheme === 'dark'),
       })
       if (walletName) {
         await onboard.walletSelect(walletName)
