@@ -82,7 +82,7 @@ export class ContractStore {
     params: Parameters<T>,
     callerOptions: UnsignedTransaction = {}
   ): Promise<GasOptions> {
-    if (!this.contract) throw Error('contract not initialzied')
+    if (!this.contract) throw Error('contract not initialized')
 
     const estimateOptions = { from: this.root.web3Store.signerState.address, ...callerOptions }
 

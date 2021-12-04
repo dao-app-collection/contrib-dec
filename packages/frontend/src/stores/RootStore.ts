@@ -19,13 +19,13 @@ export class RootStore {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(toast: any) {
+    this.localStorageStore = new LocalStorageStore(this)
     this.uiStore = new UiStore(this, toast)
     this.browserStore = new BrowserStore(this)
     this.clockStore = new ClockStore(this)
     this.web3Store = new Web3Store(this)
     this.contribBucketFactoryContractStore = new ContribBucketFactoryContractStore(this)
     this.multicallStore = new MulticallStore(this)
-    this.localStorageStore = new LocalStorageStore(this)
     this.usdcStore = new Erc20Store(this, 'USDC', 'usdcStore')
   }
 }
