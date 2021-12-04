@@ -11,10 +11,11 @@ const Container = styled.div`
 
 type Props = {
   task: TaskEntity
+  openTask: () => void
 }
 
-const TaskListItem: FC<Props> = ({ task }) => {
-  return <Container>id: {task.id}</Container>
+const TaskListItem: FC<Props> = ({ task, openTask }) => {
+  return <Container onClick={() => openTask()}>id: {task.id}</Container>
 }
 
 export default TaskListItem
