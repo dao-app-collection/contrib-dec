@@ -18,7 +18,6 @@ describe('Bucket', function () {
   it('Should create a bucket', async function () {
     const [owner] = await ethers.getSigners()
 
-    // todo: fix parent
     await expect(
       await BucketFactory.connect(owner).createBucket(
         [owner.address],
@@ -29,26 +28,31 @@ describe('Bucket', function () {
   })
 
   it('Should create a subbucket', async function () {
-    // const [owner] = await ethers.getSigners()
-    // const abi = (await deployments.get('BucketFactory')).abi
-    // const iface = new ethers.utils.Interface(abi)
-    // const parentTx = await BucketFactory.connect(owner).createBucket(
-    //   [owner.address],
-    //   'dev',
-    //   '0x0000000000000000000000000000000000000000'
-    // )
-    // const parentReceipt = await parentTx.wait()
-    // const parentLog = iface.parseLog(parentReceipt.logs[0])
-    // const { bucket: parentBucket } = parentLog.args
-    // const childTx = await BucketFactory.connect(owner).createBucket(
-    //   [owner.address],
-    //   'dev-child',
-    //   parentBucket
-    // )
-    // const childReceipt = await childTx.wait()
-    // const childLog = iface.parseLog(childReceipt.logs[0])
-    // const { bucket: childBucket } = childLog.args
-    // const Bucket = await ethers.getContractAt('Bucket', childBucket)
-    // await expect(await Bucket.parent()).to.equal(parentBucket)
+    const [owner] = await ethers.getSigners()
+    const abi = (await deployments.get('BucketFactory')).abi
+    const iface = new ethers.utils.Interface(abi)
+    const parentTx = await BucketFactory.connect(owner).createBucket(
+      [owner.address],
+      'dev',
+      '0x0000000000000000000000000000000000000000'
+    )
+    const parentReceipt = await parentTx.wait()
+    const parentLog = iface.parseLog(
+      parentReceipt.events.find((event) => event.event === 'BucketCreated')
+    )
+    const { bucket: parentBucket } = parentLog.args
+
+    const childTx = await BucketFactory.connect(owner).createBucket(
+      [owner.address],
+      'dev-child',
+      parentBucket
+    )
+    const childReceipt = await childTx.wait()
+    const childLog = iface.parseLog(
+      childReceipt.events.find((event) => event.event === 'BucketCreated')
+    )
+    const { bucket: childBucket } = childLog.args
+    const Bucket = await ethers.getContractAt('Bucket', childBucket)
+    await expect(await Bucket.parent()).to.equal(parentBucket)
   })
 })
