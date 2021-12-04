@@ -24,6 +24,12 @@ export type PopulatedBucket = TheGraphBucket & {
 
 export type PopulatedTask = TheGraphTask
 
+export type BucketPayload = {
+  name: string
+  // allocation: string
+  // owners: string[]
+}
+
 // export type Bucket = {
 //   parent?: string
 //   name: string

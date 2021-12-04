@@ -47,8 +47,11 @@ export class ContractStore {
   init(): void {
     const network = this.root.web3Store.network.name
     const address = getContractAddress(this.contractName, network)
-    if (typeof address === 'undefined')
-      throw Error(`no address for ${this.contractName} on ${network}`)
+
+    if (typeof address === 'undefined') {
+      // throw Error(`no address for ${this.contractName} on ${network}`)
+      return
+    }
     this.address = address
     this.contract = this.factory.connect(this.address, this.root.web3Store.coreProvider)
   }

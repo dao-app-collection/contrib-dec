@@ -11,6 +11,7 @@ import {
 
 export const getOnboardConfig = (chainId: number, darkMode: boolean): Initialization => {
   const rpcUrl = getNetworkByChainId(chainId)?.rpcUrls[0]
+
   return {
     networkId: chainId, // Desired chain
     darkMode,

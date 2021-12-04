@@ -47,7 +47,10 @@ const InfoInner = styled(motion.div)`
   z-index: ${Z_INDEX.circleComponent};
 `
 
-const Circle = styled(animated.div)<{ depth: number; isChildCircle: boolean; isSelected: boolean }>`
+const Circle = styled(animated.div).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) =>
+    !['isChildCircle', 'isSelected'].includes(prop) && defaultValidatorFn(prop),
+})<{ depth: number; isChildCircle: boolean; isSelected: boolean }>`
   transition: background 0.3s ease, background-color 0.3s ease;
   will-change: background, background-color;
 
@@ -130,9 +133,10 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
       onClick={handlers.onClick}
     >
       <AnimatePresence>
-        {showInfo && <Counter>4</Counter>}
+        {showInfo && <Counter key="counter">4</Counter>}
         {showInfo && (
           <InfoInner
+            key="inner"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1, transition: { delay: 0.5 } }}
             exit={{ opacity: 0, scale: 0.7 }}
