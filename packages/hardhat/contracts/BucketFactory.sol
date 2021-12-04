@@ -9,7 +9,7 @@ import '@openzeppelin/contracts/ownership/Ownable.sol';
 
 contract BucketFactory is Ownable {
 
-  event BucketCreated(address bucket);
+  event BucketCreated(address bucket, string name);
 
     StandardBounties public standardBounties;
 
@@ -29,12 +29,11 @@ contract BucketFactory is Ownable {
     ) public {
         Bucket bucket = new Bucket(
             _owners,
-            _name,
             _token,
             _parent,
             standardBounties
         );
 
-        emit BucketCreated(address(bucket));
+        emit BucketCreated(address(bucket), _name);
     }
 }

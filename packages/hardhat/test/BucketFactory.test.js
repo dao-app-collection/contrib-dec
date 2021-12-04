@@ -99,4 +99,42 @@ describe('Bucket', function () {
       'BountyIssued'
     )
   })
+
+  it('should create and fund a task', async function () {
+    const [owner] = await ethers.getSigners()
+
+    const Bucket = await createBucket(
+      [owner.address],
+      'dev',
+      Token.address,
+      '0x0000000000000000000000000000000000000000',
+      owner
+    )
+
+    // approve token spend
+    await Token.approve(Bucket.address, 100)
+
+    // fund bucket
+    await Bucket.fundBucket(100)
+
+    const data = 'the ipfs hash'
+    const deadline = Math.round(new Date().getTime() / 1000) + 86400000 // 1 day from now
+    const issuers = [owner.address]
+    const approvers = [owner.address]
+    const depositAmount = 100
+
+    const createAndFundTx = Bucket.createAndFundTask(
+      data,
+      deadline,
+      issuers,
+      approvers,
+      depositAmount
+    )
+
+    await expect(createAndFundTx).to.emit(StandardBounties, 'ContributionAdded')
+
+    await expect(createAndFundTx)
+      .to.emit(Token, 'Transfer')
+      .withArgs(Bucket.address, StandardBounties.address, depositAmount)
+  })
 })

@@ -8,7 +8,6 @@ import "./standard-bounties/StandardBounties.sol";
 
 contract Bucket is Ownable {
 
-    string public name;
     address[] public owners;
     uint256 public balance;
     ERC20 public token;
@@ -32,13 +31,11 @@ contract Bucket is Ownable {
 
     constructor(
         address[] memory _owners,
-        string memory _name,
         ERC20 _token,
         Bucket _parent,
         StandardBounties _standardBounties
     ) public {
         require(_owners.length > 0, "Bucket requires at least one owner");
-        name = name;
         owners = _owners;
         parent = _parent;
         token = _token;
@@ -85,13 +82,30 @@ contract Bucket is Ownable {
     // create a task and allocate funds
     /// @param _data the IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
     /// @param _deadline the timestamp which will become the deadline of the bounty
+    /// @param _issuers the array of addresses who will be the issuers of the bounty
+    /// @param _approvers the array of addresses who will be the approvers of the bounty
     /// @param _depositAmount the amount of tokens being deposited to the bounty, which will create a new contribution to the bounty
     function createAndFundTask(
         string memory _data,
         uint256 _deadline,
+        address payable[] memory _issuers,
+        address[] memory _approvers,
         uint256 _depositAmount
     ) public onlyBucketOwners {
-        // standardBounties.issueAndContribute(_sender, _issuers, _approvers, _data, _deadline, _token, _tokenVersion, _depositAmount);
+        address payable sender = address(uint160(address(this)));
+
+        require(token.approve(address(standardBounties), _depositAmount));
+
+        standardBounties.issueAndContribute(
+            sender,
+            _issuers,
+            _approvers,
+            _data,
+            _deadline,
+            address(token),
+            20,
+            _depositAmount
+        );
     }
 
     /// @param _bountyId the index of the bounty
