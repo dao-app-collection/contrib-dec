@@ -4,12 +4,12 @@ import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledButton = styled(GeistButton)<{ modifier?: 'dao' }>`
-  ${(props) =>
-    props.modifier === 'dao' &&
+  ${({ modifier, theme }) =>
+    modifier === 'dao' &&
     css`
       &&& {
-        background-color: ${(props) => props.theme.dao.primary};
-        color: ${(props) => props.theme.dao.inverted};
+        background-color: ${theme.dao.primary};
+        color: ${theme.dao.inverted};
       }
     `}
 `
@@ -18,8 +18,12 @@ type Props = ButtonProps & {
   modifier?: 'dao'
 }
 
-const Button: FC<Props> = ({ children, modifier }) => {
-  return <StyledButton modifier={modifier}>{children}</StyledButton>
+const Button: FC<Props> = ({ children, modifier, ...props }) => {
+  return (
+    <StyledButton modifier={modifier} {...props}>
+      {children}
+    </StyledButton>
+  )
 }
 
 export default Button

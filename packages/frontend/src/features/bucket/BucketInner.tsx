@@ -6,6 +6,7 @@ import BucketNav from './BucketNav'
 import Tabs from '../../components/Tabs'
 import TaskList from '../tasks/TaskList'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
+import Overview from '../overview/Overview'
 
 const Top = styled.div`
   background-color: ${(props) => props.theme.bg.secondary};
@@ -18,8 +19,10 @@ const Inner = styled.div`
   margin: ${(props) => props.theme.gap(2)};
 `
 
+export type TabId = 'overview' | 'tasks' | 'members' | 'suggestions'
+
 const BucketInner: FC = () => {
-  const [activeTab, setActiveTab] = useState('tasks')
+  const [activeTab, setActiveTab] = useState<TabId>('tasks')
   const selected = useSelectedBucket()
 
   if (!selected) {
@@ -45,6 +48,13 @@ const BucketInner: FC = () => {
     },
   ]
 
+  const tabList = {
+    overview: <Overview />,
+    tasks: <TaskList />,
+    members: <div>Members</div>,
+    suggestions: <div>Suggestions</div>,
+  }
+
   return (
     <>
       <Top>
@@ -52,7 +62,7 @@ const BucketInner: FC = () => {
         <Spacer h={2} />
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
-      <Inner>{activeTab === 'tasks' && <TaskList />}</Inner>
+      <Inner>{tabList[activeTab]}</Inner>
     </>
   )
 }
