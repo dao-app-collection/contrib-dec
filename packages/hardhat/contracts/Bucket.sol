@@ -45,7 +45,6 @@ contract Bucket is Ownable {
         standardBounties = _standardBounties;
     }
 
-
     // increase the balance of this bucket
     /// @param _amount the amount of tokens to send to the bucket
     function fundBucket(uint256 _amount) public {
@@ -62,11 +61,25 @@ contract Bucket is Ownable {
     // create a new task with no funds
     /// @param _data the IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
     /// @param _deadline the timestamp which will become the deadline of the bounty
+    /// @param _issuers the array of addresses who will be the issuers of the bounty
+    /// @param _approvers the array of addresses who will be the approvers of the bounty
     function createTask(
         string memory _data,
-        uint256 _deadline
+        uint256 _deadline,
+        address payable[] memory _issuers,
+        address[] memory _approvers
     ) public onlyBucketOwners {
-        // standardBounties.issueBounty(_sender, _issuers, _approvers, _data, _deadline, _token, _tokenVersion);
+        address payable sender = address(uint160(address(this)));
+
+        standardBounties.issueBounty(
+            sender,
+            _issuers,
+            _approvers,
+            _data,
+            _deadline,
+            address(token),
+            20
+        );
     }
 
     // create a task and allocate funds

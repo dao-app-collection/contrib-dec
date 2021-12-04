@@ -5,6 +5,7 @@ const { createBucket } = require('./helpers')
 describe('Bucket', function () {
   let BucketFactory
   let Token
+  let StandardBounties
 
   beforeEach(async () => {
     await deployments.fixture(['all'])
@@ -14,6 +15,9 @@ describe('Bucket', function () {
 
     const token = await deployments.get('FixedToken')
     Token = await ethers.getContractAt('FixedToken', token.address)
+
+    const standardBounties = await deployments.get('StandardBounties')
+    StandardBounties = await ethers.getContractAt('StandardBounties', standardBounties.address)
   })
 
   it('Should create a bucket', async function () {
@@ -69,12 +73,30 @@ describe('Bucket', function () {
     // fund bucket
     const fundTx = Bucket.fundBucket(100)
 
-    expect(fundTx).to.emit('Transfer').withArgs({
-      from: owner.address,
-      to: Bucket.address,
-      amount: 100,
-    })
+    await expect(fundTx).to.emit(Token, 'Transfer').withArgs(owner.address, Bucket.address, 100)
 
-    expect(await Bucket.balance()).to.equal('100')
+    await expect(await Bucket.balance()).to.equal('100')
+  })
+
+  it('should create a task', async function () {
+    const [owner] = await ethers.getSigners()
+
+    const Bucket = await createBucket(
+      [owner.address],
+      'dev',
+      Token.address,
+      '0x0000000000000000000000000000000000000000',
+      owner
+    )
+
+    const data = 'the ipfs hash'
+    const deadline = Math.round(new Date().getTime() / 1000) + 86400000 // 1 day from now
+    const issuers = [owner.address]
+    const approvers = [owner.address]
+
+    await expect(Bucket.createTask(data, deadline, issuers, approvers)).to.emit(
+      StandardBounties,
+      'BountyIssued'
+    )
   })
 })
