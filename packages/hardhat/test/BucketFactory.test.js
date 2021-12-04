@@ -1,5 +1,6 @@
 const { expect } = require('chai')
 const { ethers, deployments } = require('hardhat')
+const { createBucket } = require('./helpers')
 
 describe('Bucket', function () {
   let BucketFactory
@@ -30,55 +31,37 @@ describe('Bucket', function () {
 
   it('Should create a subbucket', async function () {
     const [owner] = await ethers.getSigners()
-    const abi = (await deployments.get('BucketFactory')).abi
-    const iface = new ethers.utils.Interface(abi)
-    const parentTx = await BucketFactory.connect(owner).createBucket(
+
+    const parentBucket = await createBucket(
       [owner.address],
       'dev',
       Token.address,
-      '0x0000000000000000000000000000000000000000'
+      '0x0000000000000000000000000000000000000000',
+      owner
     )
-    const parentReceipt = await parentTx.wait()
-    const parentLog = iface.parseLog(
-      parentReceipt.events.find((event) => event.event === 'BucketCreated')
-    )
-    const { bucket: parentBucket } = parentLog.args
 
-    const childTx = await BucketFactory.connect(owner).createBucket(
+    const childBucket = await createBucket(
       [owner.address],
       'dev-child',
       Token.address,
-      parentBucket
+      parentBucket.address,
+      owner
     )
-    const childReceipt = await childTx.wait()
-    const childLog = iface.parseLog(
-      childReceipt.events.find((event) => event.event === 'BucketCreated')
-    )
-    const { bucket: childBucket } = childLog.args
-    const Bucket = await ethers.getContractAt('Bucket', childBucket)
-    await expect(await Bucket.parent()).to.equal(parentBucket)
+
+    await expect(await childBucket.parent()).to.equal(parentBucket.address)
   })
 
   it('Should fund a bucket', async function () {
     const [owner] = await ethers.getSigners()
 
     //  create bucket
-    const bucketTx = await BucketFactory.connect(owner).createBucket(
+    const Bucket = await createBucket(
       [owner.address],
       'dev',
       Token.address,
-      '0x0000000000000000000000000000000000000000'
+      '0x0000000000000000000000000000000000000000',
+      owner
     )
-
-    const parentReceipt = await bucketTx.wait()
-    const abi = (await deployments.get('BucketFactory')).abi
-    const iface = new ethers.utils.Interface(abi)
-    const parentLog = iface.parseLog(
-      parentReceipt.events.find((event) => event.event === 'BucketCreated')
-    )
-    const { bucket } = parentLog.args
-
-    const Bucket = await ethers.getContractAt('Bucket', bucket)
 
     // approve token spend
     await Token.approve(Bucket.address, 100)
@@ -88,7 +71,7 @@ describe('Bucket', function () {
 
     expect(fundTx).to.emit('Transfer').withArgs({
       from: owner.address,
-      to: bucket,
+      to: Bucket.address,
       amount: 100,
     })
 
