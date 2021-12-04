@@ -1,9 +1,9 @@
-import { Button, Modal } from 'antd'
+// import { Button, Modal } from 'antd'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useRootStore } from '../../context/RootStoreProvider'
-import { spacingIncrement } from '../../utils/theme/utils'
+import { spacingIncrement } from '../../theme/utils'
 
 const Header = styled.div`
   font-size: ${({ theme }): string => theme.fontSize['2xl']};
@@ -37,32 +37,33 @@ const AccountModal: React.FC = () => {
     onClose()
   }
 
-  return (
-    <Modal
-      title="Vertically centered modal dialog"
-      centered
-      visible={accountModalOpen}
-      onOk={onClose}
-      onCancel={onClose}
-    >
-      <Header>Account</Header>
-      <ModalSection>
-        <SubTitle>Connected</SubTitle>
-        <Button size="small" onClick={handleDeactivateAccount}>
-          Disconnect
-        </Button>
-      </ModalSection>
-      <ModalSection>
-        <SubTitle>
-          {account &&
-            `${account.slice(0, 6)}...${account.slice(account.length - 4, account.length)}`}
-        </SubTitle>
-        <CopyToClipboard text={account ?? ''}>
-          <Button size="small">Copy to Clipboard</Button>
-        </CopyToClipboard>
-      </ModalSection>
-    </Modal>
-  )
+  return null
+  // return (
+  //   <Modal
+  //     title="Vertically centered modal dialog"
+  //     centered
+  //     visible={accountModalOpen}
+  //     onOk={onClose}
+  //     onCancel={onClose}
+  //   >
+  //     <Header>Account</Header>
+  //     <ModalSection>
+  //       <SubTitle>Connected</SubTitle>
+  //       <Button size="small" onClick={handleDeactivateAccount}>
+  //         Disconnect
+  //       </Button>
+  //     </ModalSection>
+  //     <ModalSection>
+  //       <SubTitle>
+  //         {account &&
+  //           `${account.slice(0, 6)}...${account.slice(account.length - 4, account.length)}`}
+  //       </SubTitle>
+  //       <CopyToClipboard text={account ?? ''}>
+  //         <Button size="small">Copy to Clipboard</Button>
+  //       </CopyToClipboard>
+  //     </ModalSection>
+  //   </Modal>
+  // )
 }
 
 export default observer(AccountModal)

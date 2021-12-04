@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers'
 import Decimal from 'decimal.js'
-import Web3 from 'web3'
+
 import config from '../lib/config'
 
 export const roundToDecimals = (
@@ -13,6 +13,7 @@ export const roundToDecimals = (
 }
 
 export const fromWeiToEther = (value: number | BigNumber): string => {
-  const etherStringValue = Web3.utils.fromWei(`${value}`, 'ether')
-  return roundToDecimals(etherStringValue)
+  // const etherStringValue = Web3.utils.fromWei(`${value}`, 'ether')
+  // return roundToDecimals(etherStringValue)
+  return '...'
 }

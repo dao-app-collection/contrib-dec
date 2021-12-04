@@ -1,12 +1,10 @@
 import { configure } from 'mobx'
 import { AppProps } from 'next/app'
 
-import '@fontsource/open-sans/700.css'
-import '@fontsource/inter'
 import { RootStoreProvider } from '../context/RootStoreProvider'
 import AppBootstrap from '../components/AppBootstrap'
-
-import 'antd/dist/antd.css'
+import Header from '../components/Header'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 // mobx config
 configure({
@@ -21,6 +19,7 @@ const App = ({ Component, pageProps }: AppProps): React.ReactElement => {
   return (
     <RootStoreProvider>
       <AppBootstrap>
+        <Header />
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Component {...pageProps} />
       </AppBootstrap>

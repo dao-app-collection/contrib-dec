@@ -1,6 +1,6 @@
 import { ContractCallContext } from 'ethereum-multicall'
 import { action, makeObservable, observable, onBecomeUnobserved, runInAction } from 'mobx'
-import { Contract, ContractFunction, BigNumber } from 'ethers'
+import { Contract, ContractFunction, BigNumber, UnsignedTransaction } from 'ethers'
 import { RootStore } from './RootStore'
 import { Abi, ContractReturn, Factory, Storage, TransactionReceipt } from './utils/class-utils'
 import { getContractAddress, SupportedContractName } from '../lib/supported-contracts'
@@ -55,10 +55,12 @@ export class ContractStore {
 
   async sendTransaction<T extends ContractFunction>(
     methodName: string,
-    params: Parameters<T>
+    params: Parameters<T>,
+    callerOptions: UnsignedTransaction = {}
   ): Promise<{ hash: string; wait: () => Promise<TransactionReceipt> }> {
     // Estimate gasLimit and build tx options
-    const options = await this.generateGasOptions(methodName, params)
+    const gasOptions = await this.generateGasOptions(methodName, params, callerOptions)
+    const options = { ...gasOptions, ...callerOptions }
 
     // Craft and send the tx with the signer
     await this.root.web3Store.checkSigner()
@@ -77,20 +79,25 @@ export class ContractStore {
 
   generateGasOptions<T extends ContractFunction>(
     methodName: string,
-    params: Parameters<T>
+    params: Parameters<T>,
+    callerOptions: UnsignedTransaction = {}
   ): Promise<GasOptions> {
-    if (!this.contract) throw Error('contract not initialzied')
+    if (!this.contract) throw Error('contract not initialized')
 
-    return this.contract.estimateGas[methodName](...params).then((gasLimitEstimate) => {
-      const options: GasOptions = {
-        gasLimit: gasLimitEstimate.mul(2),
+    const estimateOptions = { from: this.root.web3Store.signerState.address, ...callerOptions }
+
+    return this.contract.estimateGas[methodName](...params, estimateOptions).then(
+      (gasLimitEstimate) => {
+        const options: GasOptions = {
+          gasLimit: gasLimitEstimate.mul(2),
+        }
+        runInAction(() => {
+          if (this.root.web3Store.network.gasPrice !== undefined)
+            options.gasPrice = this.root.web3Store.network.gasPrice
+        })
+        return options
       }
-      runInAction(() => {
-        if (this.root.web3Store.network.gasPrice !== undefined)
-          options.gasPrice = this.root.web3Store.network.gasPrice
-      })
-      return options
-    })
+    )
   }
 
   call<T extends ContractFunction>(

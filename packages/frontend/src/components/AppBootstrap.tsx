@@ -1,11 +1,14 @@
-import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { ThemeProvider } from 'styled-components'
-import GlobalStyle from './GlobalStyle'
+import { ToastContainer } from 'react-toastify'
+import { GeistProvider, CssBaseline } from '@geist-ui/react'
+import { useEffect } from 'react'
+import GlobalStyle from '../theme/GlobalStyle'
+import { darkTheme } from '../theme/dark-theme'
 import { useRootStore } from '../context/RootStoreProvider'
 
 const AppBootstrap: React.FC = ({ children }) => {
-  const { localStorageStore, uiStore } = useRootStore()
+  const { uiStore, localStorageStore } = useRootStore()
 
   useEffect(() => {
     localStorageStore.load()
@@ -13,10 +16,14 @@ const AppBootstrap: React.FC = ({ children }) => {
 
   return (
     <>
-      <ThemeProvider theme={uiStore.themeObject}>
-        <GlobalStyle />
-        {children}
-      </ThemeProvider>
+      <GeistProvider themeType={uiStore.selectedTheme}>
+        <ThemeProvider theme={darkTheme}>
+          <ToastContainer theme={uiStore.selectedTheme} />
+          <CssBaseline />
+          <GlobalStyle />
+          {children}
+        </ThemeProvider>
+      </GeistProvider>
     </>
   )
 }

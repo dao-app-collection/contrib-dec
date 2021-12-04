@@ -1,9 +1,9 @@
 import { observe, makeAutoObservable, toJS } from 'mobx'
 import deepEqual from 'fast-deep-equal'
 import { RootStore } from './RootStore'
-import { SupportedThemes } from '../utils/theme/theme.types'
+import { SupportedThemes } from '../theme/theme.types'
 
-const PROJECT_NAME = 'boilerplate'
+const PROJECT_NAME = 'dapp'
 
 type Storage = {
   selectedTheme?: SupportedThemes
@@ -11,7 +11,7 @@ type Storage = {
 }
 
 const initLocalStorage: Storage = {
-  selectedTheme: 'light',
+  selectedTheme: 'dark',
   selectedWallet: undefined,
 }
 
@@ -23,7 +23,7 @@ class LocalStorageStore {
 
   constructor(root: RootStore) {
     this.root = root
-    this.localStorageKey = `prepo.${PROJECT_NAME}`
+    this.localStorageKey = `contrib.${PROJECT_NAME}`
     this.storage = initLocalStorage
     makeAutoObservable(this)
   }

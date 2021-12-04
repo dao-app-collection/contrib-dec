@@ -1,26 +1,20 @@
-import { Button } from 'antd'
+import { Button } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import { Sun, Moon } from '@geist-ui/react-icons'
 import { useRootStore } from '../context/RootStoreProvider'
-import { spacingIncrement } from '../utils/theme/utils'
-
-const Wrapper = styled(Button)`
-  margin-left: ${spacingIncrement(32)};
-`
 
 const ToggleTheme: React.FC = () => {
   const { uiStore } = useRootStore()
   const newTheme = uiStore.selectedTheme === 'light' ? 'dark' : 'light'
+
   return (
-    <Wrapper
-      type="primary"
-      size="large"
+    <Button
+      auto
+      iconRight={uiStore.selectedTheme === 'light' ? <Moon /> : <Sun />}
       onClick={(): void => {
         uiStore.setTheme(newTheme)
       }}
-    >
-      Toggle Theme
-    </Wrapper>
+    />
   )
 }
 

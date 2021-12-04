@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useRootStore } from '../../context/RootStoreProvider'
-import { spacingIncrement } from '../../utils/theme/utils'
+import { spacingIncrement } from '../../theme/utils'
 
 const Wrapper = styled.div`
   align-items: center;

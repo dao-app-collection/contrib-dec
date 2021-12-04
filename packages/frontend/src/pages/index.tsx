@@ -1,14 +1,17 @@
-import Navigation from '../components/Navigation'
-import AccountModal from '../features/connect/AccountModal'
-import BlackHole from '../features/black-hole/BlackHole'
+import styled from 'styled-components'
+import Div100vh from 'react-div-100vh'
+import CreateBucketButton from '../features/create-bucket/CreateBucketButton'
+import { centered } from '../theme/utils'
+
+const Wrapper = styled(Div100vh)`
+  ${centered};
+`
 
 const Index: React.FC = () => {
   return (
-    <div>
-      <Navigation />
-      <BlackHole />
-      <AccountModal />
-    </div>
+    <Wrapper>
+      <CreateBucketButton />
+    </Wrapper>
   )
 }
 
