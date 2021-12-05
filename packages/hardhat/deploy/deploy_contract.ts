@@ -10,8 +10,15 @@ const func: DeployFunction = async ({
 }: HardhatRuntimeEnvironment) => {
   const { deploy } = deployments
   const { deployer } = await getNamedAccounts()
-  const deployResult = await deploy(name, {
+
+  // TODO: update to reuse existing SB when not on local
+  const sbResult = await deploy('StandardBounties', {
     from: deployer,
+  })
+
+  const deployResult = await deploy('BucketFactory', {
+    from: deployer,
+    args: [sbResult.address],
   })
 
   deployments.log(' 📄', chalk.cyan(name), 'deployed to:', chalk.magenta(deployResult.address))

@@ -408,132 +408,132 @@ contract BountiesMetaTxRelayer {
     //increase the nonce to prevent replay attacks
     replayNonce[signer]++;
 
-    bountiesContract.changeBounty(signer,
-                  _bountyId,
-                  _issuerId,
-                  _issuers,
-                  _approvers,
-                  _data,
-                  _deadline);
+    // bountiesContract.changeBounty(signer,
+    //               _bountyId,
+    //               _issuerId,
+    //               _issuers,
+    //               _approvers,
+    //               _data,
+    //               _deadline);
   }
 
-  function metaChangeIssuer(
-    bytes memory _signature,
-    uint _bountyId,
-    uint _issuerId,
-    uint _issuerIdToChange,
-    address payable _newIssuer,
-    uint256 _nonce)
-    public
-    {
-    bytes32 metaHash = keccak256(abi.encode(address(this),
-                                                  "metaChangeIssuer",
-                                                  _bountyId,
-                                                  _issuerId,
-                                                  _issuerIdToChange,
-                                                  _newIssuer,
-                                                  _nonce));
-    address signer = getSigner(metaHash, _signature);
-    //make sure signer doesn't come back as 0x0
-    require(signer != address(0));
-    require(_nonce == replayNonce[signer]);
+//   function metaChangeIssuer(
+//     bytes memory _signature,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint _issuerIdToChange,
+//     address payable _newIssuer,
+//     uint256 _nonce)
+//     public
+//     {
+//     bytes32 metaHash = keccak256(abi.encode(address(this),
+//                                                   "metaChangeIssuer",
+//                                                   _bountyId,
+//                                                   _issuerId,
+//                                                   _issuerIdToChange,
+//                                                   _newIssuer,
+//                                                   _nonce));
+//     address signer = getSigner(metaHash, _signature);
+//     //make sure signer doesn't come back as 0x0
+//     require(signer != address(0));
+//     require(_nonce == replayNonce[signer]);
 
-    //increase the nonce to prevent replay attacks
-    replayNonce[signer]++;
+//     //increase the nonce to prevent replay attacks
+//     replayNonce[signer]++;
 
-    bountiesContract.changeIssuer(signer,
-                  _bountyId,
-                  _issuerId,
-                  _issuerIdToChange,
-                  _newIssuer);
-  }
+//     bountiesContract.changeIssuer(signer,
+//                   _bountyId,
+//                   _issuerId,
+//                   _issuerIdToChange,
+//                   _newIssuer);
+//   }
 
-  function metaChangeApprover(
-    bytes memory _signature,
-    uint _bountyId,
-    uint _issuerId,
-    uint _approverId,
-    address payable _approver,
-    uint256 _nonce)
-    public
-    {
-    bytes32 metaHash = keccak256(abi.encode(address(this),
-                                                  "metaChangeApprover",
-                                                  _bountyId,
-                                                  _issuerId,
-                                                  _approverId,
-                                                  _approver,
-                                                  _nonce));
-    address signer = getSigner(metaHash, _signature);
-    //make sure signer doesn't come back as 0x0
-    require(signer != address(0));
-    require(_nonce == replayNonce[signer]);
+//   function metaChangeApprover(
+//     bytes memory _signature,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint _approverId,
+//     address payable _approver,
+//     uint256 _nonce)
+//     public
+//     {
+//     bytes32 metaHash = keccak256(abi.encode(address(this),
+//                                                   "metaChangeApprover",
+//                                                   _bountyId,
+//                                                   _issuerId,
+//                                                   _approverId,
+//                                                   _approver,
+//                                                   _nonce));
+//     address signer = getSigner(metaHash, _signature);
+//     //make sure signer doesn't come back as 0x0
+//     require(signer != address(0));
+//     require(_nonce == replayNonce[signer]);
 
-    //increase the nonce to prevent replay attacks
-    replayNonce[signer]++;
+//     //increase the nonce to prevent replay attacks
+//     replayNonce[signer]++;
 
-    bountiesContract.changeApprover(signer,
-                  _bountyId,
-                  _issuerId,
-                  _approverId,
-                  _approver);
-  }
+//     bountiesContract.changeApprover(signer,
+//                   _bountyId,
+//                   _issuerId,
+//                   _approverId,
+//                   _approver);
+//   }
 
-  function metaChangeData(
-    bytes memory _signature,
-    uint _bountyId,
-    uint _issuerId,
-    string memory _data,
-    uint256 _nonce)
-    public
-    {
-    bytes32 metaHash = keccak256(abi.encode(address(this),
-                                                  "metaChangeData",
-                                                  _bountyId,
-                                                  _issuerId,
-                                                  _data,
-                                                  _nonce));
-    address signer = getSigner(metaHash, _signature);
-    //make sure signer doesn't come back as 0x0
-    require(signer != address(0));
-    require(_nonce == replayNonce[signer]);
+//   function metaChangeData(
+//     bytes memory _signature,
+//     uint _bountyId,
+//     uint _issuerId,
+//     string memory _data,
+//     uint256 _nonce)
+//     public
+//     {
+//     bytes32 metaHash = keccak256(abi.encode(address(this),
+//                                                   "metaChangeData",
+//                                                   _bountyId,
+//                                                   _issuerId,
+//                                                   _data,
+//                                                   _nonce));
+//     address signer = getSigner(metaHash, _signature);
+//     //make sure signer doesn't come back as 0x0
+//     require(signer != address(0));
+//     require(_nonce == replayNonce[signer]);
 
-    //increase the nonce to prevent replay attacks
-    replayNonce[signer]++;
+//     //increase the nonce to prevent replay attacks
+//     replayNonce[signer]++;
 
-    bountiesContract.changeData(signer,
-                _bountyId,
-                _issuerId,
-                _data);
-  }
+//     bountiesContract.changeData(signer,
+//                 _bountyId,
+//                 _issuerId,
+//                 _data);
+//   }
 
-  function metaChangeDeadline(
-    bytes memory _signature,
-    uint _bountyId,
-    uint _issuerId,
-    uint  _deadline,
-    uint256 _nonce)
-    public
-    {
-    bytes32 metaHash = keccak256(abi.encode(address(this),
-                                                  "metaChangeDeadline",
-                                                  _bountyId,
-                                                  _issuerId,
-                                                  _deadline,
-                                                  _nonce));
-    address signer = getSigner(metaHash, _signature);
-    //make sure signer doesn't come back as 0x0
-    require(signer != address(0));
-    require(_nonce == replayNonce[signer]);
+//   function metaChangeDeadline(
+//     bytes memory _signature,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint  _deadline,
+//     uint256 _nonce)
+//     public
+//     {
+//     bytes32 metaHash = keccak256(abi.encode(address(this),
+//                                                   "metaChangeDeadline",
+//                                                   _bountyId,
+//                                                   _issuerId,
+//                                                   _deadline,
+//                                                   _nonce));
+//     address signer = getSigner(metaHash, _signature);
+//     //make sure signer doesn't come back as 0x0
+//     require(signer != address(0));
+//     require(_nonce == replayNonce[signer]);
 
-    //increase the nonce to prevent replay attacks
-    replayNonce[signer]++;
+//     //increase the nonce to prevent replay attacks
+//     replayNonce[signer]++;
 
-    bountiesContract.changeDeadline(signer,
-                    _bountyId,
-                    _issuerId,
-                    _deadline);
-  }
+//     bountiesContract.changeDeadline(signer,
+//                     _bountyId,
+//                     _issuerId,
+//                     _deadline);
+//   }
 
   function metaAddIssuers(
     bytes memory _signature,

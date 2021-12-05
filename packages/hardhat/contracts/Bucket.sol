@@ -8,13 +8,10 @@ import "./standard-bounties/StandardBounties.sol";
 
 contract Bucket is Ownable {
 
-    string public name;
     address[] public owners;
-    uint256 public balance;
     ERC20 public token;
     Bucket public parent;
     StandardBounties public standardBounties;
-
 
     modifier onlyBucketOwners() {
         bool isSenderOwner = false;
@@ -30,22 +27,23 @@ contract Bucket is Ownable {
         _;
     }
 
-    constructor(address[] memory _owners, string memory _name, Bucket _parent) public {
+    constructor(
+        address[] memory _owners,
+        ERC20 _token,
+        Bucket _parent,
+        StandardBounties _standardBounties
+    ) public {
         require(_owners.length > 0, "Bucket requires at least one owner");
-        name = name;
         owners = _owners;
         parent = _parent;
-    }
-
-    function setStandardBounties(StandardBounties _standardBounties) public onlyOwner {
+        token = _token;
         standardBounties = _standardBounties;
     }
 
     // increase the balance of this bucket
-    /// @param _token the address to ERC20 token that is being funded
     /// @param _amount the amount of tokens to send to the bucket
-    function fundBucket(ERC20 _token, uint256 _amount) public {
-
+    function fundBucket(uint256 _amount) public {
+        require(token.transferFrom(msg.sender, address(this), _amount));
     }
 
     // add a new bucket owner
@@ -57,23 +55,25 @@ contract Bucket is Ownable {
     // create a new task with no funds
     /// @param _data the IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
     /// @param _deadline the timestamp which will become the deadline of the bounty
+    /// @param _issuers the array of addresses who will be the issuers of the bounty
+    /// @param _approvers the array of addresses who will be the approvers of the bounty
     function createTask(
         string memory _data,
-        uint256 _deadline
-    ) public onlyBucketOwners {
-        // standardBounties.issueBounty(_sender, _issuers, _approvers, _data, _deadline, _token, _tokenVersion);
-    }
-
-    // create a task and allocate funds
-    /// @param _data the IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
-    /// @param _deadline the timestamp which will become the deadline of the bounty
-    /// @param _depositAmount the amount of tokens being deposited to the bounty, which will create a new contribution to the bounty
-    function createAndFundTask(
-        string memory _data,
         uint256 _deadline,
-        uint256 _depositAmount
-    ) public onlyBucketOwners {
-        // standardBounties.issueAndContribute(_sender, _issuers, _approvers, _data, _deadline, _token, _tokenVersion, _depositAmount);
+        address payable[] memory _issuers,
+        address[] memory _approvers
+    ) public onlyBucketOwners returns (uint256) {
+        address payable sender = address(uint160(address(this)));
+
+        return standardBounties.issueBounty(
+            sender,
+            _issuers,
+            _approvers,
+            _data,
+            _deadline,
+            address(token),
+            20
+        );
     }
 
     /// @param _bountyId the index of the bounty
@@ -82,20 +82,54 @@ contract Bucket is Ownable {
         uint _bountyId,
         uint _amount
     ) public onlyBucketOwners {
-        // standardBounties.contribute(_sender, _bountyId, _amount);
+        require(token.approve(address(standardBounties), _amount));
+
+        address payable sender = address(uint160(address(this)));
+        standardBounties.contribute(sender, _bountyId, _amount);
     }
 
-    /// @param _bountyId the index of the bounty
-    /// @param _fulfillers the array of addresses which will receive payouts for the submission
-    /// @param _data the IPFS hash corresponding to a JSON object which contains the details of the submission (see docs for schema details)
+    // create a task and allocate funds
+    /// @param _data the IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
+    /// @param _deadline the timestamp which will become the deadline of the bounty
+    /// @param _issuers the array of addresses who will be the issuers of the bounty
+    /// @param _approvers the array of addresses who will be the approvers of the bounty
+    /// @param _depositAmount the amount of tokens being deposited to the bounty, which will create a new contribution to the bounty
+    function createAndFundTask(
+        string memory _data,
+        uint256 _deadline,
+        address payable[] memory _issuers,
+        address[] memory _approvers,
+        uint256 _depositAmount
+    ) public onlyBucketOwners {
+        uint256 bountyId = createTask(_data, _deadline, _issuers, _approvers);
+        fundTask(bountyId, _depositAmount);
+    }
+
+  /// @dev fulfillAndAccept(): Allows any of the approvers to fulfill and accept a submission simultaneously
+  /// @param _bountyId the index of the bounty
+  /// @param _fulfillers the array of addresses which will receive payouts for the submission
+  /// @param _data the IPFS hash corresponding to a JSON object which contains the details of the submission (see docs for schema details)
+  /// @param _approverId the index of the approver which is making the call
+  /// @param _tokenAmounts the array of token amounts which will be paid to the
+  ///                      fulfillers, whose length should equal the length of the
+  ///                      _fulfillers array of the submission. If the bounty pays
+  ///                      in ERC721 tokens, then these should be the token IDs
+  ///                      being sent to each of the individual fulfillers
     function completeTask(
         uint _bountyId,
         address payable[] memory  _fulfillers,
-        string memory _data
+        string memory _data,
+        uint256 _approverId,
+        uint256[] memory _tokenAmounts
     ) public onlyBucketOwners {
-        // standardBounties.fulfillBounty(_sender, _bountyId, _fulfillers, _data);
+        address payable sender = address(uint160(address(this)));
+        standardBounties.fulfillAndAccept(
+            sender,
+            _bountyId,
+            _fulfillers,
+            _data,
+            _approverId,
+            _tokenAmounts
+        );
     }
-
-
-
 }
