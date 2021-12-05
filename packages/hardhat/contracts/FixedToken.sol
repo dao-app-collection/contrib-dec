@@ -9,8 +9,7 @@ import 'hardhat/console.sol';
 
 contract FixedToken is ERC20 {
   constructor() 
-//   ERC20('Fixed Token', 'FTK')
    public {
-    // _mint(msg.sender, 1000000000000000000000); // 1000 tokens
+    _mint(msg.sender, 1000000000000000000000); // 1000 tokens
   }
 }
