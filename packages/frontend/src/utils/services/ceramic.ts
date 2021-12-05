@@ -9,6 +9,7 @@ const API_URL = 'http://localhost:7007' // 'https://gateway.ceramic.network'
 
 export enum CeramicSchema {
   BUCKET_META_DATA = 'k3y52l7qbv1frybyiobf1gh32oucpo8o76aciaa2ehcq4s1qyuv85hxs87s3wuscg',
+  TASK_META_DATA = 'k6zn3rc3v8qin1nhs5janurq194ioqf45aeumk07spnm19d0ob0v0iqywc2otkluxtg8vxtcp321881rtw6vdol15chnpt6r2obrdmyhaisfaodlbxdyjpy',
 }
 
 type BucketMetaDataInput = {
@@ -19,7 +20,15 @@ type BucketMetaDataInput = {
   }
 }
 
-type CeramicInput = BucketMetaDataInput
+type TaskMetaDataInput = {
+  schema: CeramicSchema.TASK_META_DATA
+  data: {
+    title: string
+    description: string
+  }
+}
+
+type CeramicInput = BucketMetaDataInput | TaskMetaDataInput
 
 class Ceramic {
   ceramic: CeramicClient
@@ -85,7 +94,7 @@ class Ceramic {
 
 export default new Ceramic()
 
-// creamic create tile --content '
+// ceramic create tile --content '
 //  {
 //     "$schema": "http://json-schema.org/draft-07/schema#",
 //     "properties": {
@@ -101,3 +110,5 @@ export default new Ceramic()
 //     "required": ["title", "description"]
 // }
 // '
+
+// ceramic commits streamID

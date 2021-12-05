@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs'
+
 export type TheGraphBucket = {
   parent?: string
   name: string
@@ -26,10 +28,19 @@ export type PopulatedTask = TheGraphTask
 
 export type BucketPayload = {
   name: string
+  owners: string[]
+  tokenAddress: string
   // allocation: string
   // owners: string[]
 }
 
+export type TaskPayload = {
+  title: string
+  description: string
+  deadline: Dayjs
+  issuers: string[]
+  approvers: string[]
+}
 // export type Bucket = {
 //   parent?: string
 //   name: string

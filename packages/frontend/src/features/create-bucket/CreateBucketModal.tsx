@@ -14,7 +14,6 @@ type Props = {
 }
 
 const CreateBucketModal: FC<Props> = ({ onClose, visible, onCreate, selectedBucket }) => {
-  // { state: addressInput, setState, reset, bindings }
   return (
     <Modal visible={visible} onClose={onClose}>
       <Modal.Title>Create new bucket</Modal.Title>
@@ -23,7 +22,6 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, onCreate, selectedBuck
       )}
 
       <BucketForm onClose={onClose} onSubmit={onCreate} />
-
       <Modal.Action passive onClick={onClose}>
         Cancel
       </Modal.Action>

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import TaskListItem from './TaskListItem'
 import TaskModal from './TaskModal'
-import CreateTaskButton from './CreateTaskButton'
+import CreateTaskButton from './create/CreateTaskButton'
 import useTasks from '../../hooks/useTasksFromBucket'
 import { useDao } from '../../context/DaoContext'
 
