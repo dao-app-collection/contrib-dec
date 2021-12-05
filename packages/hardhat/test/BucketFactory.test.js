@@ -27,6 +27,7 @@ describe('Bucket', function () {
       await BucketFactory.connect(owner).createBucket(
         [owner.address],
         'dev',
+        'this is the bucket data',
         Token.address,
         '0x0000000000000000000000000000000000000000'
       )
@@ -39,6 +40,7 @@ describe('Bucket', function () {
     const parentBucket = await createBucket(
       [owner.address],
       'dev',
+      'this is the bucket data',
       Token.address,
       '0x0000000000000000000000000000000000000000',
       owner
@@ -47,6 +49,7 @@ describe('Bucket', function () {
     const childBucket = await createBucket(
       [owner.address],
       'dev-child',
+      'this is the bucket data',
       Token.address,
       parentBucket.address,
       owner
@@ -62,6 +65,7 @@ describe('Bucket', function () {
     const Bucket = await createBucket(
       [owner.address],
       'dev',
+      'this is the bucket data',
       Token.address,
       '0x0000000000000000000000000000000000000000',
       owner
@@ -82,6 +86,7 @@ describe('Bucket', function () {
     const Bucket = await createBucket(
       [owner.address],
       'dev',
+      'this is the bucket data',
       Token.address,
       '0x0000000000000000000000000000000000000000',
       owner
@@ -104,6 +109,7 @@ describe('Bucket', function () {
     const Bucket = await createBucket(
       [owner.address],
       'dev',
+      'this is the bucket data',
       Token.address,
       '0x0000000000000000000000000000000000000000',
       owner
@@ -142,6 +148,7 @@ describe('Bucket', function () {
     const Bucket = await createBucket(
       [owner.address],
       'dev',
+      'this is the bucket data',
       Token.address,
       '0x0000000000000000000000000000000000000000',
       owner
@@ -184,6 +191,7 @@ describe('Bucket', function () {
     const Bucket = await createBucket(
       [owner.address],
       'dev',
+      'this is the bucket data',
       Token.address,
       '0x0000000000000000000000000000000000000000',
       owner

@@ -1,6 +1,6 @@
 import { ethers, deployments } from 'hardhat'
 
-export async function createBucket(owners, name, tokenAddress, parentAddress, signer) {
+export async function createBucket(owners, name, data, tokenAddress, parentAddress, signer) {
   const bucketFactory = await deployments.get('BucketFactory')
   const BucketFactory = await ethers.getContractAt('BucketFactory', bucketFactory.address)
 
@@ -9,6 +9,7 @@ export async function createBucket(owners, name, tokenAddress, parentAddress, si
   const parentTx = await BucketFactory.connect(signer).createBucket(
     owners,
     name,
+    data,
     tokenAddress,
     parentAddress
   )
