@@ -1,4 +1,5 @@
 import { makeObservable, observable, runInAction } from 'mobx'
+import { ethers } from 'ethers'
 import { RootStore } from './RootStore'
 import { ContractStore } from './ContractStore'
 import {
@@ -45,12 +46,13 @@ export class ContribBucketFactoryContractStore extends ContractStore {
     }
   }
 
-  getEvents = async () => {
+  getEvents = async (): Promise<ethers.Event[]> => {
     const result = await this.contract?.queryFilter(
       this.contract.filters.BucketCreated(null, null, null, null, null, null),
       0,
       'latest'
     )
-    console.log(result)
+
+    return result || []
   }
 }

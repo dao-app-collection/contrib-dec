@@ -12,7 +12,7 @@ export enum CeramicSchema {
   TASK_META_DATA = 'k6zn3rc3v8qin1nhs5janurq194ioqf45aeumk07spnm19d0ob0v0iqywc2otkluxtg8vxtcp321881rtw6vdol15chnpt6r2obrdmyhaisfaodlbxdyjpy',
 }
 
-type BucketMetaDataInput = {
+export type BucketMetaDataInput = {
   schema: CeramicSchema.BUCKET_META_DATA
   data: {
     title: string
@@ -20,7 +20,7 @@ type BucketMetaDataInput = {
   }
 }
 
-type TaskMetaDataInput = {
+export type TaskMetaDataInput = {
   schema: CeramicSchema.TASK_META_DATA
   data: {
     title: string

@@ -15,10 +15,6 @@ const AppBootstrap: React.FC = ({ children }) => {
     localStorageStore.load()
   }, [localStorageStore])
 
-  useEffect(() => {
-    ceramic.authenticate()
-  }, [])
-
   return (
     <>
       <GeistProvider themeType={uiStore.selectedTheme}>
