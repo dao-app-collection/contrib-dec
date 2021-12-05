@@ -177,4 +177,49 @@ describe('Bucket', function () {
       depositAmount + topupAmount
     )
   })
+
+  it('should pay assignee on completeTask', async function () {
+    const [owner, assignee] = await ethers.getSigners()
+
+    const Bucket = await createBucket(
+      [owner.address],
+      'dev',
+      Token.address,
+      '0x0000000000000000000000000000000000000000',
+      owner
+    )
+
+    const depositAmount = 100
+    // approve token spend
+    await Token.approve(Bucket.address, depositAmount)
+    // fund bucket
+    await Bucket.fundBucket(depositAmount)
+    // create task
+    const data = 'the ipfs hash'
+    const deadline = Math.round(new Date().getTime() / 1000) + 86400000 // 1 day from now
+    const issuers = [owner.address]
+    const approvers = [Bucket.address, owner.address]
+    await Bucket.createAndFundTask(data, deadline, issuers, approvers, depositAmount)
+    // complete task
+    const taskId = 0
+    const fulfillers = [assignee.address]
+    const completionData = 'this is an ipfs for the details of the submission'
+    const approverId = 0
+    const tokenAmounts = [depositAmount]
+    const completionTx = Bucket.completeTask(
+      taskId,
+      fulfillers,
+      completionData,
+      approverId,
+      tokenAmounts
+    )
+
+    await expect(completionTx)
+      .to.emit(StandardBounties, 'FulfillmentAccepted')
+      .withArgs(taskId, 0, Bucket.address, [depositAmount])
+
+    await expect(completionTx)
+      .to.emit(Token, 'Transfer')
+      .withArgs(StandardBounties.address, assignee.address, depositAmount)
+  })
 })

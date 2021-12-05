@@ -105,17 +105,31 @@ contract Bucket is Ownable {
         fundTask(bountyId, _depositAmount);
     }
 
-    /// @param _bountyId the index of the bounty
-    /// @param _fulfillers the array of addresses which will receive payouts for the submission
-    /// @param _data the IPFS hash corresponding to a JSON object which contains the details of the submission (see docs for schema details)
+  /// @dev fulfillAndAccept(): Allows any of the approvers to fulfill and accept a submission simultaneously
+  /// @param _bountyId the index of the bounty
+  /// @param _fulfillers the array of addresses which will receive payouts for the submission
+  /// @param _data the IPFS hash corresponding to a JSON object which contains the details of the submission (see docs for schema details)
+  /// @param _approverId the index of the approver which is making the call
+  /// @param _tokenAmounts the array of token amounts which will be paid to the
+  ///                      fulfillers, whose length should equal the length of the
+  ///                      _fulfillers array of the submission. If the bounty pays
+  ///                      in ERC721 tokens, then these should be the token IDs
+  ///                      being sent to each of the individual fulfillers
     function completeTask(
         uint _bountyId,
         address payable[] memory  _fulfillers,
-        string memory _data
+        string memory _data,
+        uint256 _approverId,
+        uint256[] memory _tokenAmounts
     ) public onlyBucketOwners {
-        // standardBounties.fulfillBounty(_sender, _bountyId, _fulfillers, _data);
+        address payable sender = address(uint160(address(this)));
+        standardBounties.fulfillAndAccept(
+            sender,
+            _bountyId,
+            _fulfillers,
+            _data,
+            _approverId,
+            _tokenAmounts
+        );
     }
-
-
-
 }

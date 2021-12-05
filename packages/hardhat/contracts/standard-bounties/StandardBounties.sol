@@ -59,7 +59,7 @@ contract StandardBounties {
    */
 
   modifier callNotStarted(){
-    require(!callStarted);
+    require(!callStarted, 'call started');
     callStarted = true;
     _;
     callStarted = false;
@@ -68,7 +68,7 @@ contract StandardBounties {
   modifier validateBountyArrayIndex(
     uint _index)
   {
-    require(_index < numBounties);
+    require(_index < numBounties, 'invalid bounty index');
     _;
   }
 
@@ -76,7 +76,7 @@ contract StandardBounties {
     uint _bountyId,
     uint _index)
   {
-    require(_index < bounties[_bountyId].contributions.length);
+    require(_index < bounties[_bountyId].contributions.length, 'invalid contrib index');
     _;
   }
 
@@ -84,7 +84,7 @@ contract StandardBounties {
     uint _bountyId,
     uint _index)
   {
-    require(_index < bounties[_bountyId].fulfillments.length);
+    require(_index < bounties[_bountyId].fulfillments.length, 'invalid fulfilment index');
     _;
   }
 
@@ -92,7 +92,7 @@ contract StandardBounties {
     uint _bountyId,
     uint _index)
   {
-    require(_index < bounties[_bountyId].issuers.length);
+    require(_index < bounties[_bountyId].issuers.length, 'invalid issuer index');
     _;
   }
 
@@ -100,7 +100,7 @@ contract StandardBounties {
     uint _bountyId,
     uint _index)
   {
-    require(_index < bounties[_bountyId].approvers.length);
+    require(_index < bounties[_bountyId].approvers.length, 'invalid approver index');
     _;
   }
 
@@ -109,7 +109,7 @@ contract StandardBounties {
   uint _bountyId,
   uint _issuerId)
   {
-  require(_sender == bounties[_bountyId].issuers[_issuerId]);
+  require(_sender == bounties[_bountyId].issuers[_issuerId], 'not issuer');
   _;
   }
 
@@ -138,7 +138,7 @@ contract StandardBounties {
     uint _bountyId,
     uint _approverId)
   {
-    require(_sender == bounties[_bountyId].approvers[_approverId]);
+    require(_sender == bounties[_bountyId].approvers[_approverId], 'invalid approver');
     _;
   }
 
@@ -160,7 +160,7 @@ contract StandardBounties {
   modifier senderIsValid(
     address _sender)
   {
-    require(msg.sender == _sender || msg.sender == metaTxRelayer);
+    require(msg.sender == _sender || msg.sender == metaTxRelayer, 'invalid sender');
     _;
   }
 
@@ -450,8 +450,8 @@ contract StandardBounties {
     senderIsValid(_sender)
     validateBountyArrayIndex(_bountyId)
   {
-    require(now < bounties[_bountyId].deadline); // Submissions are only allowed to be made before the deadline
-    require(_fulfillers.length > 0); // Submissions with no fulfillers would mean no one gets paid out
+    require(now < bounties[_bountyId].deadline, 'past deadline'); // Submissions are only allowed to be made before the deadline
+    require(_fulfillers.length > 0, 'no fulfillers'); // Submissions with no fulfillers would mean no one gets paid out
 
     bounties[_bountyId].fulfillments.push(Fulfillment(_fulfillers, _sender));
 
@@ -515,7 +515,7 @@ contract StandardBounties {
 
     Fulfillment storage fulfillment = bounties[_bountyId].fulfillments[_fulfillmentId];
 
-    require(_tokenAmounts.length == fulfillment.fulfillers.length); // Each fulfiller should get paid some amount of tokens (this can be 0)
+    require(_tokenAmounts.length == fulfillment.fulfillers.length, 'arr lengths dont match'); // Each fulfiller should get paid some amount of tokens (this can be 0)
 
     for (uint256 i = 0; i < fulfillment.fulfillers.length; i++){
         if (_tokenAmounts[i] > 0){
@@ -571,33 +571,33 @@ contract StandardBounties {
   /// @param _approvers the new array of addresses who will be the approvers of the bounty
   /// @param _data the new IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
   /// @param _deadline the new timestamp which will become the deadline of the bounty
-  function changeBounty(
-    address _sender,
-    uint _bountyId,
-    uint _issuerId,
-    address payable[] memory _issuers,
-    address payable[] memory _approvers,
-    string memory _data,
-    uint _deadline)
-    public
-    senderIsValid(_sender)
-  {
-    require(_bountyId < numBounties); // makes the validateBountyArrayIndex modifier in-line to avoid stack too deep errors
-    require(_issuerId < bounties[_bountyId].issuers.length); // makes the validateIssuerArrayIndex modifier in-line to avoid stack too deep errors
-    require(_sender == bounties[_bountyId].issuers[_issuerId]); // makes the onlyIssuer modifier in-line to avoid stack too deep errors
+//   function changeBounty(
+//     address _sender,
+//     uint _bountyId,
+//     uint _issuerId,
+//     address payable[] memory _issuers,
+//     address payable[] memory _approvers,
+//     string memory _data,
+//     uint _deadline)
+//     public
+//     senderIsValid(_sender)
+//   {
+//     require(_bountyId < numBounties); // makes the validateBountyArrayIndex modifier in-line to avoid stack too deep errors
+//     require(_issuerId < bounties[_bountyId].issuers.length); // makes the validateIssuerArrayIndex modifier in-line to avoid stack too deep errors
+//     require(_sender == bounties[_bountyId].issuers[_issuerId]); // makes the onlyIssuer modifier in-line to avoid stack too deep errors
 
-    require(_issuers.length > 0 || _approvers.length > 0); // Ensures there's at least 1 issuer or approver, so funds don't get stuck
+//     require(_issuers.length > 0 || _approvers.length > 0); // Ensures there's at least 1 issuer or approver, so funds don't get stuck
 
-    bounties[_bountyId].issuers = _issuers;
-    bounties[_bountyId].approvers = _approvers;
-    bounties[_bountyId].deadline = _deadline;
-    emit BountyChanged(_bountyId,
-                       _sender,
-                       _issuers,
-                       _approvers,
-                       _data,
-                       _deadline);
-  }
+//     bounties[_bountyId].issuers = _issuers;
+//     bounties[_bountyId].approvers = _approvers;
+//     bounties[_bountyId].deadline = _deadline;
+//     emit BountyChanged(_bountyId,
+//                        _sender,
+//                        _issuers,
+//                        _approvers,
+//                        _data,
+//                        _deadline);
+//   }
 
   /// @dev changeIssuer(): Allows any of the issuers to change a particular issuer of the bounty
   /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the meta tx relayer)
@@ -605,24 +605,24 @@ contract StandardBounties {
   /// @param _issuerId the index of the issuer who is calling the function
   /// @param _issuerIdToChange the index of the issuer who is being changed
   /// @param _newIssuer the address of the new issuer
-  function changeIssuer(
-    address _sender,
-    uint _bountyId,
-    uint _issuerId,
-    uint _issuerIdToChange,
-    address payable _newIssuer)
-    public
-    senderIsValid(_sender)
-    validateBountyArrayIndex(_bountyId)
-    validateIssuerArrayIndex(_bountyId, _issuerIdToChange)
-    onlyIssuer(_sender, _bountyId, _issuerId)
-  {
-    require(_issuerId < bounties[_bountyId].issuers.length || _issuerId == 0);
+//   function changeIssuer(
+//     address _sender,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint _issuerIdToChange,
+//     address payable _newIssuer)
+//     public
+//     senderIsValid(_sender)
+//     validateBountyArrayIndex(_bountyId)
+//     validateIssuerArrayIndex(_bountyId, _issuerIdToChange)
+//     onlyIssuer(_sender, _bountyId, _issuerId)
+//   {
+//     require(_issuerId < bounties[_bountyId].issuers.length || _issuerId == 0);
 
-    bounties[_bountyId].issuers[_issuerIdToChange] = _newIssuer;
+//     bounties[_bountyId].issuers[_issuerIdToChange] = _newIssuer;
 
-    emit BountyIssuersUpdated(_bountyId, _sender, bounties[_bountyId].issuers);
-  }
+//     emit BountyIssuersUpdated(_bountyId, _sender, bounties[_bountyId].issuers);
+//   }
 
   /// @dev changeApprover(): Allows any of the issuers to change a particular approver of the bounty
   /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the meta tx relayer)
@@ -630,22 +630,22 @@ contract StandardBounties {
   /// @param _issuerId the index of the issuer who is calling the function
   /// @param _approverId the index of the approver who is being changed
   /// @param _approver the address of the new approver
-  function changeApprover(
-    address _sender,
-    uint _bountyId,
-    uint _issuerId,
-    uint _approverId,
-    address payable _approver)
-    external
-    senderIsValid(_sender)
-    validateBountyArrayIndex(_bountyId)
-    onlyIssuer(_sender, _bountyId, _issuerId)
-    validateApproverArrayIndex(_bountyId, _approverId)
-  {
-    bounties[_bountyId].approvers[_approverId] = _approver;
+//   function changeApprover(
+//     address _sender,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint _approverId,
+//     address payable _approver)
+//     external
+//     senderIsValid(_sender)
+//     validateBountyArrayIndex(_bountyId)
+//     onlyIssuer(_sender, _bountyId, _issuerId)
+//     validateApproverArrayIndex(_bountyId, _approverId)
+//   {
+//     bounties[_bountyId].approvers[_approverId] = _approver;
 
-    emit BountyApproversUpdated(_bountyId, _sender, bounties[_bountyId].approvers);
-  }
+//     emit BountyApproversUpdated(_bountyId, _sender, bounties[_bountyId].approvers);
+//   }
 
   /// @dev changeIssuerAndApprover(): Allows any of the issuers to change a particular approver of the bounty
   /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the meta tx relayer)
@@ -654,67 +654,67 @@ contract StandardBounties {
   /// @param _issuerIdToChange the index of the issuer who is being changed
   /// @param _approverIdToChange the index of the approver who is being changed
   /// @param _issuer the address of the new approver
-  function changeIssuerAndApprover(
-    address _sender,
-    uint _bountyId,
-    uint _issuerId,
-    uint _issuerIdToChange,
-    uint _approverIdToChange,
-    address payable _issuer)
-    external
-    senderIsValid(_sender)
-    onlyIssuer(_sender, _bountyId, _issuerId)
-  {
-    require(_bountyId < numBounties);
-    require(_approverIdToChange < bounties[_bountyId].approvers.length);
-    require(_issuerIdToChange < bounties[_bountyId].issuers.length);
+//   function changeIssuerAndApprover(
+//     address _sender,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint _issuerIdToChange,
+//     uint _approverIdToChange,
+//     address payable _issuer)
+//     external
+//     senderIsValid(_sender)
+//     onlyIssuer(_sender, _bountyId, _issuerId)
+//   {
+//     require(_bountyId < numBounties);
+//     require(_approverIdToChange < bounties[_bountyId].approvers.length);
+//     require(_issuerIdToChange < bounties[_bountyId].issuers.length);
 
-    bounties[_bountyId].issuers[_issuerIdToChange] = _issuer;
-    bounties[_bountyId].approvers[_approverIdToChange] = _issuer;
+//     bounties[_bountyId].issuers[_issuerIdToChange] = _issuer;
+//     bounties[_bountyId].approvers[_approverIdToChange] = _issuer;
 
-    emit BountyIssuersUpdated(_bountyId, _sender, bounties[_bountyId].issuers);
-    emit BountyApproversUpdated(_bountyId, _sender, bounties[_bountyId].approvers);
-  }
+//     emit BountyIssuersUpdated(_bountyId, _sender, bounties[_bountyId].issuers);
+//     emit BountyApproversUpdated(_bountyId, _sender, bounties[_bountyId].approvers);
+//   }
 
   /// @dev changeData(): Allows any of the issuers to change the data the bounty
   /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the meta tx relayer)
   /// @param _bountyId the index of the bounty
   /// @param _issuerId the index of the issuer who is calling the function
   /// @param _data the new IPFS hash representing the JSON object storing the details of the bounty (see docs for schema details)
-  function changeData(
-    address _sender,
-    uint _bountyId,
-    uint _issuerId,
-    string memory _data)
-    public
-    senderIsValid(_sender)
-    validateBountyArrayIndex(_bountyId)
-    validateIssuerArrayIndex(_bountyId, _issuerId)
-    onlyIssuer(_sender, _bountyId, _issuerId)
-  {
-    emit BountyDataChanged(_bountyId, _sender, _data); // The new _data is emitted within an event rather than being stored on-chain for minimized gas costs
-  }
+//   function changeData(
+//     address _sender,
+//     uint _bountyId,
+//     uint _issuerId,
+//     string memory _data)
+//     public
+//     senderIsValid(_sender)
+//     validateBountyArrayIndex(_bountyId)
+//     validateIssuerArrayIndex(_bountyId, _issuerId)
+//     onlyIssuer(_sender, _bountyId, _issuerId)
+//   {
+//     emit BountyDataChanged(_bountyId, _sender, _data); // The new _data is emitted within an event rather than being stored on-chain for minimized gas costs
+//   }
 
   /// @dev changeDeadline(): Allows any of the issuers to change the deadline the bounty
   /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the meta tx relayer)
   /// @param _bountyId the index of the bounty
   /// @param _issuerId the index of the issuer who is calling the function
   /// @param _deadline the new timestamp which will become the deadline of the bounty
-  function changeDeadline(
-    address _sender,
-    uint _bountyId,
-    uint _issuerId,
-    uint _deadline)
-    external
-    senderIsValid(_sender)
-    validateBountyArrayIndex(_bountyId)
-    validateIssuerArrayIndex(_bountyId, _issuerId)
-    onlyIssuer(_sender, _bountyId, _issuerId)
-  {
-    bounties[_bountyId].deadline = _deadline;
+//   function changeDeadline(
+//     address _sender,
+//     uint _bountyId,
+//     uint _issuerId,
+//     uint _deadline)
+//     external
+//     senderIsValid(_sender)
+//     validateBountyArrayIndex(_bountyId)
+//     validateIssuerArrayIndex(_bountyId, _issuerId)
+//     onlyIssuer(_sender, _bountyId, _issuerId)
+//   {
+//     bounties[_bountyId].deadline = _deadline;
 
-    emit BountyDeadlineChanged(_bountyId, _sender, _deadline);
-  }
+//     emit BountyDeadlineChanged(_bountyId, _sender, _deadline);
+//   }
 
   /// @dev addIssuers(): Allows any of the issuers to add more issuers to the bounty
   /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the meta tx relayer)
@@ -800,7 +800,7 @@ contract StandardBounties {
                                                                _to,
                                                                _amount);
     } else {
-      revert();
+      revert('revert during token transfer');
     }
   }
 
