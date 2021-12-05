@@ -9,7 +9,7 @@ import '@openzeppelin/contracts/ownership/Ownable.sol';
 
 contract BucketFactory is Ownable {
 
-  event BucketCreated(address bucket, string name);
+  event BucketCreated(address bucket, string name, string data);
 
     StandardBounties public standardBounties;
 
@@ -24,6 +24,7 @@ contract BucketFactory is Ownable {
     function createBucket(
         address[] memory _owners,
         string memory _name,
+        string memory _data,
         ERC20 _token,
         Bucket _parent
     ) public {
@@ -34,6 +35,6 @@ contract BucketFactory is Ownable {
             standardBounties
         );
 
-        emit BucketCreated(address(bucket), _name);
+        emit BucketCreated(address(bucket), _name, _data);
     }
 }
