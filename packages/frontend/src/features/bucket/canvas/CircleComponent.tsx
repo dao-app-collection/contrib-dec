@@ -4,6 +4,7 @@ import { FC } from 'react'
 import styled, { css } from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Z_INDEX } from '../../../utils/general-settings'
+import Heading from '../../../components/Heading'
 
 export const interpolatePosition = (
   positionValue: SpringValue<number>,
@@ -18,10 +19,10 @@ export const interpolateBorderWidth = (borderWidth: number, radiusValue: Interpo
 
 const Counter = styled(animated.div)`
   align-items: center;
-  background: #b0ffcb;
-  border-radius: 50%;
+  background: #fff;
   border-radius: 72px;
-  box-shadow: 0px 0px 11px #4fff8b;
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px #ffffff;
   color: #000;
   display: flex;
   height: 38px;
@@ -53,6 +54,7 @@ const Circle = styled(animated.div).withConfig({
 })<{ depth: number; isChildCircle: boolean; isSelected: boolean }>`
   transition: background 0.3s ease, background-color 0.3s ease;
   will-change: background, background-color;
+  position: absolute;
 
   ${(props) =>
     props.depth === 0 &&
@@ -107,20 +109,19 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
 
   const isSelected = node.id === extraProps.zoomedId
   const isChildCircle = extraProps.currentDepth + 2 === node.depth
-  const isLastLevel = node.depth + 1 === extraProps.maxLevel
 
   let showInfo = extraProps.currentDepth + 1 === node.depth
 
-  if (isLastLevel && isSelected) {
+  if (isSelected && !node.data.gotChildren) {
     showInfo = true
   }
+
   return (
     <Circle
       depth={node.depth}
       isChildCircle={isChildCircle}
       isSelected={isSelected}
       style={{
-        position: 'absolute',
         top: interpolatePosition(style.y, style.radius),
         left: interpolatePosition(style.x, style.radius),
         height: size,
@@ -141,8 +142,8 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
             animate={{ opacity: 1, scale: 1, transition: { delay: 0.5 } }}
             exit={{ opacity: 0, scale: 0.7 }}
           >
-            <div> {node.data.name}</div>
-            <div>150K DDAO</div>
+            <Heading type="h3">{node.data.name}</Heading>
+            <div>{node.data.entity.allocation}K DDAO</div>
           </InfoInner>
         )}
       </AnimatePresence>

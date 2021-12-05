@@ -9,9 +9,7 @@ import CreateTaskButton from './CreateTaskButton'
 import useTasks from '../../hooks/useTasksFromBucket'
 import { useDao } from '../../context/DaoContext'
 
-const Container = styled.div`
-  min-height: 2000px;
-`
+const Container = styled.div``
 
 const TaskList: FC = () => {
   const tasks = useTasks()

@@ -9,10 +9,8 @@ import { Z_INDEX } from '../../utils/general-settings'
 const Container = styled.div`
   background-color: ${(props) => props.theme.bg.primary};
   border: 1px solid #565656;
-
   border-radius: 8px;
   color: ${(props) => props.theme.text.primary};
-
   min-height: 100vh;
   overflow: hidden;
   position: relative;

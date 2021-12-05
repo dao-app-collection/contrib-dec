@@ -15,6 +15,7 @@ export class BucketEntity {
   parent?: BucketEntity
   children: BucketEntity[] = []
   tasks: TaskEntity[] = []
+  allocation: number
 
   constructor(
     root: RootStore,
@@ -27,6 +28,7 @@ export class BucketEntity {
     this.url = parent ? `${parent.url}/${bucket.name}` : `/${bucket.name}`
     this.slug = parent ? [...parent.slug, bucket.name] : [bucket.name]
     this.parent = parent
+    this.allocation = bucket.name === 'design' ? 40 : 75
 
     makeObservable(this, {
       tasks: observable,

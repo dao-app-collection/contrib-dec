@@ -27,14 +27,20 @@ type DataItem = {
   color: string
   children: DataItem[]
   loc: number
+  gotChildren: boolean
+  entity: BucketEntity
 }
 
-const createChild = (b: BucketEntity): DataItem => ({
-  name: b.name,
-  children: b.children.map(createChild) || [],
-  color: '',
-  loc: b.level,
-})
+const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
+  return {
+    name: b.name,
+    children: b.children.map((c) => createChild(c, maxLevel)) || [],
+    color: '',
+    gotChildren: Boolean(b.children.length),
+    entity: b,
+    loc: b.allocation,
+  }
+}
 
 const BucketCanvas: FC = () => {
   const { buckets, selectedBucket, navigateTo } = useDao()
@@ -54,7 +60,8 @@ const BucketCanvas: FC = () => {
 
   const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
 
-  const data = createChild(buckets[0])
+  const data = createChild(buckets[0], maxLevel)
+
   const extraProps = {
     currentDepth,
     zoomedId,
@@ -69,9 +76,7 @@ const BucketCanvas: FC = () => {
         value="loc"
         enableLabels={false}
         padding={32}
-        labelsFilter={(e) => {
-          return e.node.depth === currentDepth + 1
-        }}
+        labelsFilter={(e) => e.node.depth === currentDepth + 1}
         tooltip={() => null as any}
         borderWidth={0}
         zoomedId={zoomedId}
