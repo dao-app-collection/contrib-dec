@@ -30,6 +30,7 @@ export type BucketPayload = {
   name: string
   owners: string[]
   tokenAddress: string
+  description: string
   // allocation: string
   // owners: string[]
 }

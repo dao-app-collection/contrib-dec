@@ -22,7 +22,12 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
   const allocationInput = useInput('')
 
   const handleSubmit = async () => {
-    if (titleInput.state && tokenAddressInput.state && ownersInput.state) {
+    if (
+      titleInput.state &&
+      tokenAddressInput.state &&
+      ownersInput.state &&
+      descriptionInput.state
+    ) {
       // const result = await ceramic.create({
       //   schema: CeramicSchema.BUCKET_META_DATA,
       //   data: {
@@ -39,6 +44,7 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
           name: titleInput.state,
           tokenAddress,
           owners,
+          description: descriptionInput.state,
         })
       } catch (e) {
         console.error(e)
@@ -69,14 +75,9 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
                 placeholder="Token address"
               />
             </Grid>
-            {/* <Grid xs={24}>
-              <Textarea
-                {...descriptionInput.bindings}
-                width="100%"
-                placeholder="Description"
-                disabled
-              />
-            </Grid> */}
+            <Grid xs={24}>
+              <Textarea {...descriptionInput.bindings} width="100%" placeholder="Description" />
+            </Grid>
             {/* <Grid xs={24}>
               <Select placeholder="Owners" multiple width="100%" initialValue={[]}>
                 {availableOwners.map((address) => (

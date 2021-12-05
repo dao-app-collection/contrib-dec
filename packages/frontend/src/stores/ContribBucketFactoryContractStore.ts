@@ -7,7 +7,7 @@ import {
 } from '../generated'
 
 type CreateBucket = ContribBucket['functions']['createBucket']
-
+type BucketCreatedEvent = ContribBucket['filters']['BucketCreated']
 export class ContribBucketFactoryContractStore extends ContractStore {
   creatingBucket = false
 
@@ -22,6 +22,10 @@ export class ContribBucketFactoryContractStore extends ContractStore {
       creatingBucket: observable,
       createBucket: observable,
     })
+
+    if (typeof window !== 'undefined') {
+      this.getEvents()
+    }
   }
 
   async createBucket(...params: Parameters<CreateBucket>): Promise<boolean> {
@@ -39,5 +43,14 @@ export class ContribBucketFactoryContractStore extends ContractStore {
         this.creatingBucket = false
       })
     }
+  }
+
+  getEvents = async () => {
+    const result = await this.contract?.queryFilter(
+      this.contract.filters.BucketCreated(null, null, null, null, null, null),
+      0,
+      'latest'
+    )
+    console.log(result)
   }
 }
