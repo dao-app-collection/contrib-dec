@@ -11,6 +11,7 @@ import 'hardhat-gas-reporter'
 
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-etherscan'
+import 'hardhat-abi-exporter'
 
 dotenv.config({ path: '../../.env' })
 
@@ -309,6 +310,13 @@ export default {
         },
       },
     ],
+  },
+  abiExporter: {
+    path: './data/abi',
+    clear: true,
+    flat: true,
+    only: [],
+    spacing: 2,
   },
   ovm: {
     solcVersion: '0.7.6',

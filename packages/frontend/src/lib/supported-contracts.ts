@@ -13,7 +13,7 @@ export type SupportedContractAddresses = {
 }
 
 export const CONTRIB_BUCKET_FACTORY_ADDRESSES: ContractAddresses = {
-  localhost: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+  localhost: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
   goerli: '0x32816Eb67c4b2b32BD50A3440D65C9A335F5C944',
 }
 

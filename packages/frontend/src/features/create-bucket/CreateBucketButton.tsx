@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react-lite'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import CreateBucketModal from './CreateBucketModal'
 import Button from '../../components/Button'
 import { useRootStore } from '../../context/RootStoreProvider'
 import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
+import { BucketPayload } from '../../types/all-types'
 
 const CreateBucketButton: React.FC = () => {
   const { contribBucketFactoryContractStore, web3Store } = useRootStore()
@@ -16,13 +17,15 @@ const CreateBucketButton: React.FC = () => {
     setVisible(true)
   }
 
-  const onCreate = () => {
+  const onCreate = async (payload: BucketPayload) => {
     if (web3Store.signerState.address) {
-      contribBucketFactoryContractStore.createBucket(
-        [web3Store.signerState.address],
-        'My Bucket',
+      const success = await contribBucketFactoryContractStore.createBucket(
+        payload.owners,
+        payload.name,
+        payload.tokenAddress,
         EMPTY_CONTRACT_ADDRESS
       )
+      setVisible(false)
     } else {
       web3Store.connect()
     }

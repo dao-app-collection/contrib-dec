@@ -84,10 +84,10 @@ export const DaoProvider: FC = observer(({ children }) => {
   return <DaoContext.Provider value={value}>{children}</DaoContext.Provider>
 })
 
-export const useDao = (): DaoContextInterface => {
+export const useDao = (): DaoContextInterface | null => {
   const Dao = useContext(DaoContext)
-  if (!Dao) {
-    throw new Error('Missing DaoContext.Provider')
-  }
+  // if (!Dao) {
+  //   throw new Error('Missing DaoContext.Provider')
+  // }
   return Dao
 }

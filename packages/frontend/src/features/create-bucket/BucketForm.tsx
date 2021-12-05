@@ -1,6 +1,7 @@
 import { useInput, Grid, Input, Modal, Select, Textarea } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
+import { ethers } from 'ethers'
 import { BucketPayload } from '../../types/all-types'
 import ceramic, { CeramicSchema } from '../../utils/services/ceramic'
 import Button from '../../components/Button'
@@ -14,23 +15,34 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
   ]
 
   const titleInput = useInput('')
-  const descriptionInput = useInput('')
+  const ownersInput = useInput('')
 
+  const descriptionInput = useInput('')
+  const tokenAddressInput = useInput('0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0')
   const allocationInput = useInput('')
 
   const handleSubmit = async () => {
-    if (titleInput.state && descriptionInput.state) {
-      const result = await ceramic.create({
-        schema: CeramicSchema.BUCKET_META_DATA,
-        data: {
-          title: titleInput.state,
-          description: descriptionInput.state,
-        },
-      })
+    if (titleInput.state && tokenAddressInput.state && ownersInput.state) {
+      // const result = await ceramic.create({
+      //   schema: CeramicSchema.BUCKET_META_DATA,
+      //   data: {
+      //     title: titleInput.state,
+      //     description: descriptionInput.state || '',
+      //   },
+      // })
 
-      onSubmit({
-        name: titleInput.state,
-      })
+      try {
+        const owners = ownersInput.state.split(',').map(ethers.utils.getAddress)
+        const tokenAddress = ethers.utils.getAddress(tokenAddressInput.state)
+
+        onSubmit({
+          name: titleInput.state,
+          tokenAddress,
+          owners,
+        })
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
   return (
@@ -44,12 +56,28 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
         >
           <Grid.Container gap={2}>
             <Grid xs={24}>
-              <Input clearable {...titleInput.bindings} width="100%" placeholder="Title" />
+              <Input clearable {...titleInput.bindings} width="100%" placeholder="Name" />
             </Grid>
             <Grid xs={24}>
-              <Textarea {...descriptionInput.bindings} width="100%" placeholder="Description" />
+              <Input clearable {...ownersInput.bindings} width="100%" placeholder="Owners" />
             </Grid>
             <Grid xs={24}>
+              <Input
+                clearable
+                {...tokenAddressInput.bindings}
+                width="100%"
+                placeholder="Token address"
+              />
+            </Grid>
+            {/* <Grid xs={24}>
+              <Textarea
+                {...descriptionInput.bindings}
+                width="100%"
+                placeholder="Description"
+                disabled
+              />
+            </Grid> */}
+            {/* <Grid xs={24}>
               <Select placeholder="Owners" multiple width="100%" initialValue={[]}>
                 {availableOwners.map((address) => (
                   <Select.Option key={address} value={address}>
@@ -57,17 +85,20 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
                   </Select.Option>
                 ))}
               </Select>
-            </Grid>
+            </Grid> */}
 
-            <Grid xs={24}>
+            <Grid />
+
+            {/* <Grid xs={24}>
               <Input
                 clearable
                 {...allocationInput.bindings}
                 placeholder="Allocation"
                 labelRight="ETH"
                 width="100%"
+                disabled
               />
-            </Grid>
+            </Grid> */}
 
             <Grid xs={24}>
               <Button htmlType="submit" modifier="dao">
