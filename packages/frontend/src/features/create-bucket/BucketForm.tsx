@@ -6,19 +6,19 @@ import { BucketPayload } from '../../types/all-types'
 import ceramic, { CeramicSchema } from '../../utils/services/ceramic'
 import Button from '../../components/Button'
 
-type Props = { onClose: () => void; onSubmit: (payload: BucketPayload) => void }
+type Props = {
+  owners?: string
+  tokenAddress?: string
+  onClose: () => void
+  onSubmit: (payload: BucketPayload) => void
+}
 
-const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
-  const availableOwners = [
-    '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-    '0xCCCFd6e51aad88F6F4ce6aB8827279cffFb92266',
-  ]
-
+const BucketForm: FC<Props> = ({ onClose, onSubmit, owners, tokenAddress }) => {
   const titleInput = useInput('')
-  const ownersInput = useInput('')
+  const ownersInput = useInput(owners || '')
 
   const descriptionInput = useInput('')
-  const tokenAddressInput = useInput('0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0')
+  const tokenAddressInput = useInput(tokenAddress || '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0')
   const allocationInput = useInput('')
 
   const handleSubmit = async () => {
@@ -65,7 +65,13 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
               <Input clearable {...titleInput.bindings} width="100%" placeholder="Name" />
             </Grid>
             <Grid xs={24}>
-              <Input clearable {...ownersInput.bindings} width="100%" placeholder="Owners" />
+              <Input
+                clearable
+                {...ownersInput.bindings}
+                disabled={Boolean(owners)}
+                width="100%"
+                placeholder="Owners"
+              />
             </Grid>
             <Grid xs={24}>
               <Input
@@ -73,6 +79,7 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit }) => {
                 {...tokenAddressInput.bindings}
                 width="100%"
                 placeholder="Token address"
+                disabled
               />
             </Grid>
             <Grid xs={24}>

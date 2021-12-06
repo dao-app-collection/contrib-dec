@@ -25,7 +25,15 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       {selectedBucket && (
         <Modal.Subtitle>You will create a sub-bucket of {selectedBucket.name}</Modal.Subtitle>
       )}
-      {creating ? <Loading /> : <BucketForm onClose={onClose} onSubmit={onSubmit} />}
+      {creating ? (
+        <Loading />
+      ) : (
+        <BucketForm
+          owners={selectedBucket?.owners.join(',')}
+          onClose={onClose}
+          onSubmit={onSubmit}
+        />
+      )}
     </Modal>
   )
 }

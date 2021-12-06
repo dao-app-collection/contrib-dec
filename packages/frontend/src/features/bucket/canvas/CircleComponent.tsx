@@ -63,7 +63,8 @@ const Circle = styled(animated.div).withConfig({
     props.depth === 0 &&
     css`
       box-shadow: inset 0px 0px 7px 4px rgb(25 0 95 / 62%);
-      opacity: 1;
+      cursor: pointer
+      opacity: 1;;
     `}
   ${(props) =>
     props.isNextLevel &&
@@ -79,6 +80,12 @@ const Circle = styled(animated.div).withConfig({
       box-shadow: inset 0px -1.85837px 50.176px rgba(255, 255, 255, 0.31);
       box-sizing: border-box;
       opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        cursor: pointer;
+        opacity: 0.65;
+      }
     `}
 
 
