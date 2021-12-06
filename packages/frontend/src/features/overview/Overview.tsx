@@ -1,5 +1,6 @@
 import { Text } from '@geist-ui/react'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
+import FundBucket from '../bucket/FundBucket'
 import CreateBucketButton from '../create-bucket/CreateBucketButton'
 
 const Overview: React.FC = () => {
@@ -8,8 +9,9 @@ const Overview: React.FC = () => {
   return (
     <div>
       <CreateBucketButton />
-
       <Text p>{selectedBucket?.description}</Text>
+
+      <FundBucket />
     </div>
   )
 }

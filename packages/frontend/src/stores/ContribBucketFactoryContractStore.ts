@@ -8,7 +8,8 @@ import {
 } from '../generated'
 
 type CreateBucket = ContribBucket['functions']['createBucket']
-type BucketCreatedEvent = ContribBucket['filters']['BucketCreated']
+type FundBucket = ContribBucket['functions']['fundBucket']
+
 export class ContribBucketFactoryContractStore extends ContractStore {
   creatingBucket = false
 
@@ -30,6 +31,25 @@ export class ContribBucketFactoryContractStore extends ContractStore {
   }
 
   async createBucket(...params: Parameters<CreateBucket>): Promise<boolean> {
+    try {
+      runInAction(() => {
+        this.creatingBucket = true
+      })
+      const tx = await this.sendTransaction<CreateBucket>('createBucket', params)
+      await tx.wait()
+      await this.root.bucketStore.fetchBuckets()
+      return true
+    } catch (error) {
+      this.root.uiStore.errorToast(`Error calling createBucket`, error)
+      return false
+    } finally {
+      runInAction(() => {
+        this.creatingBucket = false
+      })
+    }
+  }
+
+  async fundBucket(...params: Parameters<CreateBucket>): Promise<boolean> {
     try {
       runInAction(() => {
         this.creatingBucket = true
