@@ -15,8 +15,10 @@ export type SupportedContractAddresses = {
 export const CONTRIB_BUCKET_FACTORY_ADDRESSES: ContractAddresses = {
   localhost: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
   goerli: '0x32816Eb67c4b2b32BD50A3440D65C9A335F5C944',
+  rinkeby: '0x3614e6e9cA8D5710c379Ff9C4e56e3FfC10cB01e',
 }
 
+// should this be in the config?
 export const BUCKET_ADDRESSES: ContractAddresses = {
   localhost: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
   goerli: '0x32816Eb67c4b2b32BD50A3440D65C9A335F5C944',

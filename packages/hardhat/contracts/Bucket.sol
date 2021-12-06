@@ -105,7 +105,6 @@ contract Bucket is Ownable {
         fundTask(bountyId, _depositAmount);
     }
 
-  /// @dev fulfillAndAccept(): Allows any of the approvers to fulfill and accept a submission simultaneously
   /// @param _bountyId the index of the bounty
   /// @param _fulfillers the array of addresses which will receive payouts for the submission
   /// @param _data the IPFS hash corresponding to a JSON object which contains the details of the submission (see docs for schema details)

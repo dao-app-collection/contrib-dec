@@ -1,6 +1,7 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/types'
 import chalk from 'chalk'
+import hre from 'hardhat'
 
 const name = 'BucketFactory'
 
@@ -11,14 +12,20 @@ const func: DeployFunction = async ({
   const { deploy } = deployments
   const { deployer } = await getNamedAccounts()
 
-  // TODO: update to reuse existing SB when not on local
-  const sbResult = await deploy('StandardBounties', {
-    from: deployer,
-  })
+  // rinkeby address
+  let standardBountiesAddress = '0x6ac6baf770b3ffe2ddb3c5797e47c17cebef2ec4'
+
+  if (hre.network.name === 'hardhat') {
+    const sbResult = await deploy('StandardBounties', {
+      from: deployer,
+    })
+
+    standardBountiesAddress = sbResult.address
+  }
 
   const deployResult = await deploy('BucketFactory', {
     from: deployer,
-    args: [sbResult.address],
+    args: [standardBountiesAddress],
   })
 
   deployments.log(' 📄', chalk.cyan(name), 'deployed to:', chalk.magenta(deployResult.address))
