@@ -3,8 +3,8 @@ import { createContext, FC, useContext, useEffect, useMemo, useState } from 'rea
 import { observer } from 'mobx-react-lite'
 import { useRootStore } from './RootStoreProvider'
 import { DAOEntity } from '../stores/entities/DAO.entity'
-import { BucketEntity } from '../stores/entities/Bucket.entity'
 import { TaskEntity } from '../stores/entities/Task.entity'
+import { BucketEntity } from '../stores/entities/Bucket.entity'
 
 type DaoContextInterface = {
   navigateTo: (bucket: BucketEntity) => void
@@ -24,11 +24,18 @@ export const DaoProvider: FC = observer(({ children }) => {
   const dao = useMemo(() => new DAOEntity(store), [])
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
+  // eslint-disable-next-line prefer-destructuring
+  const buckets = store.bucketStore.buckets
   const [slug, setSlug] = useState(router.query.slug)
   const [currentTask, setCurrentTask] = useState<TaskEntity | null>(null)
 
+  const slugStr = typeof slug === 'string' ? slug : slug?.join('')
+  const selectedBucket = useMemo(
+    () => buckets.find((bucket) => bucket.slug.join('') === slugStr),
+    [slugStr]
+  )
+
   useEffect(() => {
-    dao.init(slug as string[])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dao])
 
@@ -36,8 +43,7 @@ export const DaoProvider: FC = observer(({ children }) => {
     setSlug(router.query.slug)
   }, [router.query.slug])
 
-  const slugStr = typeof slug === 'string' ? slug : slug?.join('')
-  const selectedBucket = dao.buckets.find((bucket) => bucket.slug.join('') === slugStr)
+  // const selectedBucket = dao.buckets.find((bucket) => bucket.slug.join('') === slugStr)
 
   useEffect(() => {
     const task = selectedBucket?.tasks.find((t) => t.id.toLowerCase() === router.query.task)
@@ -75,7 +81,7 @@ export const DaoProvider: FC = observer(({ children }) => {
   const value: DaoContextInterface = {
     navigateTo,
     dao,
-    buckets: dao.buckets,
+    buckets,
     selectedBucket,
     openTask,
     currentTask,

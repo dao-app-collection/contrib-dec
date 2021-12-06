@@ -27,7 +27,6 @@ export class RootStore {
     this.clockStore = new ClockStore(this)
     this.web3Store = new Web3Store(this)
     this.contribBucketFactoryContractStore = new ContribBucketFactoryContractStore(this)
-    this.contribBucketFactoryContractStore = new ContribBucketFactoryContractStore(this)
     this.bucketStore = new BucketStore(this)
     this.multicallStore = new MulticallStore(this)
     this.usdcStore = new Erc20Store(this, 'USDC', 'usdcStore')

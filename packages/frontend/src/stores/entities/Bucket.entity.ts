@@ -3,32 +3,35 @@ import { TaskEntity } from './Task.entity'
 import { TheGraphBucket } from '../../types/all-types'
 import { RootStore } from '../RootStore'
 import { mockTasks } from '../../utils/mocked'
+import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
+import { slugify } from '../../utils/buckets-utils'
 
 export class BucketEntity {
   root: RootStore
   loading = true
   id: string
   name: string
+  nameAsSlug: string
   level: number
-  url: string
-  slug: string[]
+  url = ''
+  slug: string[] = []
   parent?: BucketEntity
   children: BucketEntity[] = []
   tasks: TaskEntity[] = []
   allocation: number
+  parentAddress?: string
+  token: string
 
-  constructor(
-    root: RootStore,
-    { bucket, level, parent }: { bucket: TheGraphBucket; level: number; parent?: BucketEntity }
-  ) {
+  constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
-    this.id = bucket.id
-    this.name = bucket.name
-    this.level = level
-    this.url = parent ? `${parent.url}/${bucket.name}` : `/${bucket.name}`
-    this.slug = parent ? [...parent.slug, bucket.name] : [bucket.name]
-    this.parent = parent
-    this.allocation = bucket.name === 'design' ? 40 : 75
+    this.id = data.id
+    this.name = data.name
+    this.nameAsSlug = slugify(data.name)
+    this.token = data.token
+
+    this.level = 0
+    this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent
+    this.allocation = 70
 
     makeObservable(this, {
       tasks: observable,
@@ -37,8 +40,38 @@ export class BucketEntity {
     this.init()
   }
 
-  setChildren = (children: BucketEntity[]): void => {
-    this.children = children
+  addChild = (child: BucketEntity): void => {
+    this.children.push(child)
+  }
+
+  setLevel = (level: number): void => {
+    this.level = level
+  }
+
+  setParent = (parent: BucketEntity): void => {
+    this.parent = parent
+  }
+
+  setStructure = () => {
+    if (this.parent) {
+      // eslint-disable-next-line prefer-destructuring
+      let parent: BucketEntity | void = this.parent
+      const slug = []
+
+      while (parent) {
+        if (parent) {
+          slug.unshift(parent.nameAsSlug)
+          parent = parent.parent
+        }
+      }
+
+      slug.push(this.nameAsSlug)
+      this.slug = slug
+      this.url = `/${slug.join('/')}`
+    } else {
+      this.url = `/${this.nameAsSlug}`
+      this.slug = [this.nameAsSlug]
+    }
   }
 
   init = (): void => {

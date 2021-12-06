@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 import Div100vh from 'react-div-100vh'
 import { Page } from '@geist-ui/react'
+import React from 'react'
 import CreateBucketButton from '../features/create-bucket/CreateBucketButton'
 import { centered } from '../theme/utils'
+import AvailableBuckets from '../features/landing/AvailableBuckets'
 
 const Wrapper = styled(Div100vh)`
   ${centered};
@@ -11,9 +13,8 @@ const Wrapper = styled(Div100vh)`
 const Index: React.FC = () => {
   return (
     <Page>
-      <Wrapper>
-        <CreateBucketButton />
-      </Wrapper>
+      <AvailableBuckets />
+      <CreateBucketButton />
     </Page>
   )
 }
