@@ -1,3 +1,4 @@
+import { useRouter } from 'next/dist/client/router'
 import { useState } from 'react'
 import { useRootStore } from '../context/RootStoreProvider'
 import { EMPTY_CONTRACT_ADDRESS } from '../lib/constants'
@@ -37,7 +38,6 @@ const useCreateBucket = ({
           parentBucket ? parentBucket.token : payload.tokenAddress,
           parentBucket ? parentBucket.id : EMPTY_CONTRACT_ADDRESS
         )
-        console.log('tx::', tx)
       } catch (e) {
         console.error(e)
       } finally {

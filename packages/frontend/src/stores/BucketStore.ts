@@ -27,6 +27,15 @@ export class BucketStore {
   init = async (): Promise<void> => {
     try {
       await ceramic.authenticate()
+      this.fetchBuckets()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  fetchBuckets = async (): Promise<void> => {
+    console.log('fetch buckets')
+    try {
       const events = await this.root.contribBucketFactoryContractStore.getEvents()
 
       const result: any[] = await Promise.all(

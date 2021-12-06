@@ -21,6 +21,7 @@ export class BucketEntity {
   allocation: number
   parentAddress?: string
   token: string
+  description: string
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
@@ -28,6 +29,7 @@ export class BucketEntity {
     this.name = data.name
     this.nameAsSlug = slugify(data.name)
     this.token = data.token
+    this.description = data.data.description
 
     this.level = 0
     this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent

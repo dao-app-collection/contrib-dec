@@ -22,7 +22,7 @@ const Inner = styled.div`
 export type TabId = 'overview' | 'tasks' | 'members' | 'suggestions'
 
 const BucketInner: FC = () => {
-  const [activeTab, setActiveTab] = useState<TabId>('tasks')
+  const [activeTab, setActiveTab] = useState<TabId>('overview')
   const selected = useSelectedBucket()
 
   if (!selected) {
