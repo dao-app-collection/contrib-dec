@@ -51,21 +51,22 @@ const InfoInner = styled(motion.div)`
 const Circle = styled(animated.div).withConfig({
   shouldForwardProp: (prop, defaultValidatorFn) =>
     !['isChildCircle', 'isSelected'].includes(prop) && defaultValidatorFn(prop),
-})<{ depth: number; isChildCircle: boolean; isSelected: boolean }>`
+})<{ depth: number; isNextLevel: boolean; isSelected: boolean }>`
   transition: background 0.3s ease, background-color 0.3s ease;
   will-change: background, background-color;
   position: absolute;
+  box-sizing: border-box;
+
+  opacity: 0.3;
 
   ${(props) =>
     props.depth === 0 &&
     css`
-      /* background: transparent;
-      border: none; */
       box-shadow: inset 0px 0px 7px 4px rgb(25 0 95 / 62%);
+      opacity: 1;
     `}
-
   ${(props) =>
-    props.depth > 0 &&
+    props.isNextLevel &&
     css`
       background: linear-gradient(
         154.57deg,
@@ -77,22 +78,17 @@ const Circle = styled(animated.div).withConfig({
       background-color: transparent;
       box-shadow: inset 0px -1.85837px 50.176px rgba(255, 255, 255, 0.31);
       box-sizing: border-box;
+      opacity: 1;
     `}
 
 
-    ${(props) =>
+  ${(props) =>
     props.isSelected &&
     props.depth !== 0 &&
     css`
       border: 12px solid #ffffff;
       box-shadow: inset 0px -3.02075px 55.5603px rgba(255, 255, 255, 0.31);
-    `}
-    
-  ${(props) =>
-    props.isChildCircle &&
-    css`
-      background: rgba(57, 32, 126, 0.33);
-      box-shadow: none;
+      opacity: 1;
     `}
 `
 
@@ -109,7 +105,7 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
 
   const isSelected = node.id === extraProps.zoomedId
   const isChildCircle = extraProps.currentDepth + 2 === node.depth
-
+  const isNextLevel = extraProps.currentDepth + 1 === node.depth
   let showInfo = extraProps.currentDepth + 1 === node.depth
 
   if (isSelected && !node.data.gotChildren) {
@@ -119,13 +115,15 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
   return (
     <Circle
       depth={node.depth}
-      isChildCircle={isChildCircle}
       isSelected={isSelected}
+      isNextLevel={isNextLevel}
       style={{
         top: interpolatePosition(style.y, style.radius),
         left: interpolatePosition(style.x, style.radius),
         height: size,
         width: size,
+        backgroundColor: style.color,
+
         borderRadius: style.radius,
       }}
       onMouseEnter={handlers.onMouseEnter}

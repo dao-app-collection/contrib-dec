@@ -35,7 +35,7 @@ const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
   return {
     name: b.name,
     children: b.children.map((c) => createChild(c, maxLevel)) || [],
-    color: '',
+    color: 'hsl(256, 60%, 27%)',
     gotChildren: Boolean(b.children.length),
     entity: b,
     loc: b.allocation,
@@ -82,6 +82,9 @@ const BucketCanvas: FC = () => {
         zoomedId={zoomedId}
         motionConfig="slow"
         circleComponent={CircleComponent(extraProps)}
+        colors="#321c6f"
+        childColor={{ from: 'color', modifiers: [['brighter', 0.2]] }}
+        inheritColorFromParent
         onClick={(node) => {
           if (node.depth === currentDepth) {
             return
