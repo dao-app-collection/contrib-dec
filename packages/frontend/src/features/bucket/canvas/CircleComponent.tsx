@@ -104,7 +104,6 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
   })
 
   const isSelected = node.id === extraProps.zoomedId
-  const isChildCircle = extraProps.currentDepth + 2 === node.depth
   const isNextLevel = extraProps.currentDepth + 1 === node.depth
   let showInfo = extraProps.currentDepth + 1 === node.depth
 
@@ -141,7 +140,9 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
             exit={{ opacity: 0, scale: 0.7 }}
           >
             <Heading type="h3">{node.data.name}</Heading>
-            <div>{node.data.entity.allocation}K DDAO</div>
+            <div>
+              {node.data.entity.allocation.toNumber()} {node.data.entity.tokenSymbol}
+            </div>
           </InfoInner>
         )}
       </AnimatePresence>

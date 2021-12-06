@@ -3,13 +3,16 @@ import { useState } from 'react'
 import CreateBucketModal from './CreateBucketModal'
 import Button from '../../components/Button'
 import { useRootStore } from '../../context/RootStoreProvider'
-import useSelectedBucket from '../../hooks/useSelectedBucket'
+import { BucketEntity } from '../../stores/entities/Bucket.entity'
 
-const CreateBucketButton: React.FC = () => {
+type Props = {
+  selectedBucket?: BucketEntity
+}
+
+const CreateBucketButton: React.FC<Props> = ({ selectedBucket }) => {
   const { contribBucketFactoryContractStore, web3Store } = useRootStore()
   const label = web3Store.signerState.address ? 'Create Bucket' : 'Connect Wallet to create Bucket'
   const [visible, setVisible] = useState(false)
-  const selectedBucket = useSelectedBucket()
 
   const onClick = () => {
     setVisible(true)

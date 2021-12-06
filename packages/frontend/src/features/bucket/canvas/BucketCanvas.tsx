@@ -31,21 +31,21 @@ type DataItem = {
   entity: BucketEntity
 }
 
-const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
-  return {
-    name: b.name,
-    children: b.children.map((c) => createChild(c, maxLevel)) || [],
-    color: 'hsl(256, 60%, 27%)',
-    gotChildren: Boolean(b.children.length),
-    entity: b,
-    loc: b.allocation,
-  }
-}
-
 const BucketCanvas: FC = () => {
   const { buckets, selectedBucket, navigateTo } = useDao()
   const [zoomedId, setZoomedId] = useState<string | null>(null)
   const [currentDepth, setDepth] = useState(0)
+
+  const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
+    return {
+      name: b.name,
+      children: b.children.map((c) => createChild(c, maxLevel)) || [],
+      color: 'hsl(256, 60%, 27%)',
+      gotChildren: Boolean(b.children.length),
+      entity: b,
+      loc: b.allocation?.toNumber() || 20,
+    }
+  }
 
   useEffect(() => {
     if (selectedBucket && selectedBucket.id !== zoomedId) {
@@ -59,7 +59,6 @@ const BucketCanvas: FC = () => {
   }
 
   const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
-
   const data = createChild(buckets[0], maxLevel)
 
   const extraProps = {
@@ -67,6 +66,7 @@ const BucketCanvas: FC = () => {
     zoomedId,
     maxLevel,
   }
+
   return (
     <Container>
       <ResponsiveCirclePackingHtml

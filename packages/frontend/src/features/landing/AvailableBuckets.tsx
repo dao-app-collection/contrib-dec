@@ -55,7 +55,9 @@ const AvailableBuckets: FC = () => {
           </strong>
         )}
         onClick={(node) => {
-          router.push(node.data.url)
+          if (node.data.url) {
+            router.push(node.data.url)
+          }
         }}
         margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
         labelSkipSize={12}

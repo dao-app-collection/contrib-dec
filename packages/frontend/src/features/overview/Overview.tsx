@@ -1,19 +1,26 @@
 import { Text } from '@geist-ui/react'
+import { observer } from 'mobx-react-lite'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import FundBucket from '../bucket/FundBucket'
 import CreateBucketButton from '../create-bucket/CreateBucketButton'
+import CreateSubBucketButton from '../create-bucket/CreateSubBucketButton'
 
 const Overview: React.FC = () => {
   const selectedBucket = useSelectedBucket()
-  console.log(selectedBucket)
+  if (!selectedBucket) {
+    return null
+  }
+
   return (
     <div>
-      <CreateBucketButton />
+      <CreateSubBucketButton />
       <Text p>{selectedBucket?.description}</Text>
-
+      <Text p>
+        Allocation: {selectedBucket?.allocation?.toString()} {selectedBucket.tokenSymbol}
+      </Text>
       <FundBucket />
     </div>
   )
 }
 
-export default Overview
+export default observer(Overview)

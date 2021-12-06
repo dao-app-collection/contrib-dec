@@ -21,6 +21,7 @@ const useFundBucket = ({ bucket }: { bucket?: BucketEntity }): UseFundBucketValu
       setIsCreating(true)
       try {
         const amountAsBN = ethers.utils.parseEther(amount.toString())
+        await bucket?.fund(amountAsBN)
       } catch (e) {
         console.error(e)
       } finally {

@@ -1,5 +1,6 @@
 import { Button, Input, Spacer } from '@geist-ui/react'
 import Decimal from 'decimal.js'
+import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -13,26 +14,31 @@ const FundBucket: FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm()
 
-  if (!canFund) {
+  if (!bucket) {
+    return null
+  }
+  if (bucket.level === 1) {
     return null
   }
 
-  const onSubmit = (data: { amount: string }) => {
-    fundBucket(new Decimal(data.amount))
+  const onSubmit = async (data: { amount: string }) => {
+    await fundBucket(new Decimal(data.amount))
+    reset()
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input width="100%" {...register('amount')} required labelRight="ETH" />
+      <Input width="100%" {...register('amount')} disabled={!canFund} required labelRight="ETH" />
 
       <Spacer h={1} />
-      <Button width="100%" loading={isFunding} htmlType="submit">
+      <Button width="100%" disabled={!canFund} loading={isFunding} htmlType="submit">
         Fund
       </Button>
     </form>
   )
 }
 
-export default FundBucket
+export default observer(FundBucket)

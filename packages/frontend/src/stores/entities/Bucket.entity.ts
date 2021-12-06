@@ -1,10 +1,16 @@
-import { makeObservable, observable } from 'mobx'
+import { makeObservable, observable, runInAction } from 'mobx'
+import { BigNumber } from '@ethersproject/bignumber'
+import { ethers } from 'ethers'
+import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
 import { TheGraphBucket } from '../../types/all-types'
 import { RootStore } from '../RootStore'
 import { mockTasks } from '../../utils/mocked'
 import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
 import { slugify } from '../../utils/buckets-utils'
+import { Bucket__factory } from '../../generated/factories/Bucket__factory'
+
+import { ERC20__factory } from '../../generated/factories/ERC20__factory'
 
 export class BucketEntity {
   root: RootStore
@@ -18,26 +24,27 @@ export class BucketEntity {
   parent?: BucketEntity
   children: BucketEntity[] = []
   tasks: TaskEntity[] = []
-  allocation: number
   parentAddress?: string
   token: string
   description: string
   owners: string[]
+  tokenSymbol = 'ETH'
+  allocation = new Decimal('1230')
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
-    this.id = data.id
+    this.id = ethers.utils.getAddress(data.id)
+    this.token = ethers.utils.getAddress(data.token)
     this.name = data.name
     this.nameAsSlug = slugify(data.name)
-    this.token = data.token
     this.description = data.data.description
     this.owners = data.owners
     this.level = 0
     this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent
-    this.allocation = 70
 
     makeObservable(this, {
       tasks: observable,
+      allocation: observable,
     })
 
     this.init()
@@ -81,5 +88,42 @@ export class BucketEntity {
     this.tasks = mockTasks
       .filter((task) => task.bucket === this.id)
       .map((task) => new TaskEntity(this.root, { task }))
+
+    this.getAllocation()
+  }
+
+  getAllocation = async (): Promise<void> => {
+    const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.coreProvider)
+    const allocation = await erc20Contract.balanceOf(this.id)
+
+    runInAction(() => {
+      this.allocation = new Decimal(ethers.utils.formatEther(allocation))
+    })
+  }
+
+  fund = async (amount: BigNumber): Promise<void> => {
+    if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
+      const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.signer)
+      const INFINITE = BigNumber.from(
+        '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+      )
+
+      const allowance = await erc20Contract.allowance(
+        this.root.web3Store.signerState.address,
+        this.id
+      )
+
+      if (allowance.lt(amount)) {
+        await erc20Contract.approve(ethers.utils.getAddress(this.id), INFINITE)
+      }
+
+      const contract = Bucket__factory.connect(
+        ethers.utils.getAddress(this.id),
+        this.root.web3Store.signer
+      )
+
+      await contract.fundBucket(amount)
+      await this.getAllocation()
+    }
   }
 }

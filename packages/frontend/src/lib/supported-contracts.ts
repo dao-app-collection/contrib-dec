@@ -4,7 +4,7 @@ type ContractAddresses = {
   [key in SupportedNetworks]?: string
 }
 
-export type SupportedContractName = 'USDC' | 'CONTRIB_BUCKET_FACTORY'
+export type SupportedContractName = 'USDC' | 'CONTRIB_BUCKET_FACTORY' | 'BUCKET'
 
 export type SupportedErc20Token = 'USDC'
 
@@ -13,6 +13,11 @@ export type SupportedContractAddresses = {
 }
 
 export const CONTRIB_BUCKET_FACTORY_ADDRESSES: ContractAddresses = {
+  localhost: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+  goerli: '0x32816Eb67c4b2b32BD50A3440D65C9A335F5C944',
+}
+
+export const BUCKET_ADDRESSES: ContractAddresses = {
   localhost: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
   goerli: '0x32816Eb67c4b2b32BD50A3440D65C9A335F5C944',
 }
@@ -26,6 +31,7 @@ export const USDC_ADDRESSES: ContractAddresses = {
 export const supportedContracts: SupportedContractAddresses = {
   USDC: USDC_ADDRESSES,
   CONTRIB_BUCKET_FACTORY: CONTRIB_BUCKET_FACTORY_ADDRESSES,
+  BUCKET: BUCKET_ADDRESSES,
 }
 
 export const getContractAddress = (
