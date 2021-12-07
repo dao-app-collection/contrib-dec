@@ -8,7 +8,6 @@ import {
 } from '../generated'
 
 type CreateBucket = ContribBucket['functions']['createBucket']
-type FundBucket = ContribBucket['functions']['fundBucket']
 
 export class ContribBucketFactoryContractStore extends ContractStore {
   creatingBucket = false

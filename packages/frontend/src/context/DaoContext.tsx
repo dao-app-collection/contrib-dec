@@ -15,7 +15,7 @@ type DaoContextInterface = {
   openTask: (task?: TaskEntity) => void
 }
 
-const DaoContext = createContext<DaoContextInterface | null>(null)
+const DaoContext = createContext<DaoContextInterface>({} as DaoContextInterface)
 
 export const DaoProvider: FC = observer(({ children }) => {
   const router = useRouter()

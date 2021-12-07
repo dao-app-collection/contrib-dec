@@ -1,6 +1,5 @@
 import { computed, makeObservable, observable, runInAction } from 'mobx'
-import { BigNumber } from '@ethersproject/bignumber'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
 import { TheGraphBucket } from '../../types/all-types'
@@ -135,5 +134,10 @@ export class BucketEntity {
       await contract.fundBucket(amount)
       await this.getAllocation()
     }
+  }
+
+  get signerIsOwner(): boolean {
+    if (!this.root.web3Store.signerState.address) return false
+    return this.owners.includes(this.root.web3Store.signerState.address)
   }
 }
