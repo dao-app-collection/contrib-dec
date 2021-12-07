@@ -7,7 +7,7 @@ import Button from '../../components/Button'
 import { Erc20Store } from '../../stores/entities/Erc20.entity'
 
 type Props = {
-  owners?: string
+  owners?: string[]
   defaultOwner?: string
   tokenAddress?: string
   onClose: () => void
@@ -19,9 +19,9 @@ const OWNERS =
 
 const WEENUS_RINKENY_ADDRESS = '0xaFF4481D10270F50f203E0763e2597776068CBc5'
 
-const BucketForm: FC<Props> = ({ onSubmit, owners, tokenAddress, defaultOwner = '' }) => {
+const BucketForm: FC<Props> = ({ onSubmit, owners = [], tokenAddress, defaultOwner = OWNERS }) => {
   const titleInput = useInput('')
-  const ownersInput = useInput(owners || OWNERS)
+  const ownersInput = useInput(owners.join(',') || OWNERS)
 
   const descriptionInput = useInput('')
   const tokenAddressInput = useInput(tokenAddress || WEENUS_RINKENY_ADDRESS)
@@ -70,7 +70,7 @@ const BucketForm: FC<Props> = ({ onSubmit, owners, tokenAddress, defaultOwner = 
               <Input
                 clearable
                 {...ownersInput.bindings}
-                disabled={Boolean(owners)}
+                // disabled={Boolean(owners)}
                 width="100%"
                 placeholder="Owners"
               />
@@ -81,7 +81,7 @@ const BucketForm: FC<Props> = ({ onSubmit, owners, tokenAddress, defaultOwner = 
                 {...tokenAddressInput.bindings}
                 width="100%"
                 placeholder="Token address"
-                disabled={Boolean(tokenAddress)}
+                // disabled={Boolean(tokenAddress)}
               />
             </Grid>
             <Grid xs={24}>

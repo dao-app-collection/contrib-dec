@@ -20,7 +20,6 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
   const { createBucket, creating } = useCreateBucket({ parentBucket: selectedBucket })
   const onSubmit = async (payload: BucketPayload) => {
     const success = await createBucket(payload)
-    console.log({ success, payload })
     if (success) {
       onClose()
     }
@@ -36,8 +35,8 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       ) : (
         <BucketForm
           defaultOwner={rootStore.web3Store.signerState.address}
-          owners={selectedBucket?.owners.join(',')}
-          tokenAddress={selectedBucket.token.address}
+          owners={selectedBucket?.owners}
+          tokenAddress={selectedBucket?.token.address}
           onClose={onClose}
           onSubmit={onSubmit}
         />

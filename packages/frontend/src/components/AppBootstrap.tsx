@@ -6,7 +6,6 @@ import { useEffect } from 'react'
 import GlobalStyle from '../theme/GlobalStyle'
 import { darkTheme } from '../theme/dark-theme'
 import { useRootStore } from '../context/RootStoreProvider'
-import ceramic from '../utils/services/ceramic'
 
 const AppBootstrap: React.FC = ({ children }) => {
   const { uiStore, localStorageStore, bucketStore } = useRootStore()

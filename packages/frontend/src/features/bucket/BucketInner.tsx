@@ -3,6 +3,7 @@ import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import BucketNav from './BucketNav'
+import BucketSelect from './BucketSelect'
 import Tabs from '../../components/Tabs'
 import TaskList from '../tasks/TaskList'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
@@ -63,6 +64,7 @@ const BucketInner: FC = () => {
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
       <Inner>{tabList[activeTab]}</Inner>
+      <BucketSelect />
     </>
   )
 }

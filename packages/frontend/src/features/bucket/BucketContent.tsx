@@ -11,6 +11,8 @@ const Container = styled.div`
   border: 1px solid #565656;
   border-radius: 8px;
   color: ${(props) => props.theme.text.primary};
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   overflow: hidden;
   position: relative;
