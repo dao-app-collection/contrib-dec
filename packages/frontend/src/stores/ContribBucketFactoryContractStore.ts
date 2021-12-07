@@ -8,18 +8,17 @@ import {
 } from '../generated'
 
 type CreateBucket = ContribBucket['functions']['createBucket']
-type FundBucket = ContribBucket['functions']['fundBucket']
 
 export class ContribBucketFactoryContractStore extends ContractStore {
   creatingBucket = false
 
   constructor(root: RootStore) {
-    super(
+    super({
       root,
-      'CONTRIB_BUCKET_FACTORY',
-      'contribBucketFactoryContractStore',
-      ContribBucketFactoryAbi__factory
-    )
+      contractName: 'CONTRIB_BUCKET_FACTORY',
+      storeKey: 'contribBucketFactoryContractStore',
+      factory: ContribBucketFactoryAbi__factory,
+    })
     makeObservable(this, {
       creatingBucket: observable,
       createBucket: observable,

@@ -12,7 +12,8 @@ type CallOptions = {
 type GasOptions = { gasLimit: BigNumber; gasPrice?: BigNumber }
 
 export class ContractStore {
-  contractName: SupportedContractName
+  contractName: SupportedContractName | undefined
+  contractAddress: string | undefined
   storeKey: keyof RootStore
   address?: string
   root: RootStore
@@ -21,14 +22,22 @@ export class ContractStore {
   factory: Factory
   storage: Storage
 
-  constructor(
-    root: RootStore,
-    contractName: SupportedContractName,
-    storeKey: keyof RootStore,
+  constructor({
+    root,
+    contractName,
+    contractAddress,
+    storeKey,
+    factory,
+  }: {
+    root: RootStore
+    contractName?: SupportedContractName
+    contractAddress?: string
+    storeKey: keyof RootStore & string
     factory: Factory
-  ) {
+  }) {
     this.root = root
     this.contractName = contractName
+    this.contractAddress = contractAddress
     this.storeKey = storeKey
     this.factory = factory
     this.abi = factory.abi
@@ -46,7 +55,8 @@ export class ContractStore {
 
   init(): void {
     const network = this.root.web3Store.network.name
-    const address = getContractAddress(this.contractName, network)
+    const address =
+      this.contractAddress ?? (this.contractName && getContractAddress(this.contractName, network))
 
     if (typeof address === 'undefined') {
       // throw Error(`no address for ${this.contractName} on ${network}`)

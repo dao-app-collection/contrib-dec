@@ -1,8 +1,8 @@
 import { computed, makeObservable, observable, runInAction } from 'mobx'
-import { BigNumber } from '@ethersproject/bignumber'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
+import { Erc20Store } from './Erc20.entity'
 import { TheGraphBucket } from '../../types/all-types'
 import { RootStore } from '../RootStore'
 import { mockTasks } from '../../utils/mocked'
@@ -43,6 +43,7 @@ export class BucketEntity {
     this.level = 0
     this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent
 
+    console.log({ token: this.token })
     makeObservable(this, {
       tasks: observable,
       allocation: observable,
@@ -118,6 +119,7 @@ export class BucketEntity {
   fund = async (amount: BigNumber): Promise<void> => {
     if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
       const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.signer)
+      // const erc20Contract = new Erc20Store(this.root, this.token)
       const INFINITE = BigNumber.from(
         '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
       )
@@ -139,5 +141,10 @@ export class BucketEntity {
       await contract.fundBucket(amount)
       await this.getAllocation()
     }
+  }
+
+  get signerIsOwner(): boolean {
+    if (!this.root.web3Store.signerState.address) return false
+    return this.owners.includes(this.root.web3Store.signerState.address)
   }
 }
