@@ -15,14 +15,21 @@ const TaskList: FC = () => {
   const tasks = useTasks()
   const { openTask, currentTask } = useDao()
 
+  const renderTasks = () => {
+    if (tasks.length === 0) {
+      return <p>No tasks created yet.</p>
+    }
+
+    return tasks.map((task) => (
+      <TaskListItem openTask={() => openTask(task)} key={task.id} task={task} />
+    ))
+  }
+
   return (
     <Container>
       <CreateTaskButton />
       <Spacer h={1} />
-      {tasks.map((task) => (
-        <TaskListItem openTask={() => openTask(task)} key={task.id} task={task} />
-      ))}
-
+      {renderTasks()}
       <TaskModal task={currentTask} onClose={() => openTask()} />
     </Container>
   )
