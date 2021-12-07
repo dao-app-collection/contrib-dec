@@ -3,7 +3,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import { ResponsiveTreeMap } from '@nivo/treemap'
 import styled from 'styled-components'
-import { Loading, Tree } from '@geist-ui/react'
+import { Loading, Spacer, Tree } from '@geist-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import { useRootStore } from '../../context/RootStoreProvider'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
@@ -52,31 +52,35 @@ const AvailableBuckets: FC = () => {
       <Tree.File key={bucket.id} name={bucket.name} onClick={() => router.push(bucket.url)} />
     )
   return (
-    <Container>
-      <ResponsiveTreeMap
-        data={data}
-        identity="name"
-        value="allocation"
-        tooltip={({ node }) => (
-          <strong style={{ color: node.color }}>
-            {node.pathComponents.filter((_, i) => i > 0).join(' / ')}: {node.formattedValue} DDAO
-          </strong>
-        )}
-        onClick={(node) => {
-          if (node.data.url) {
-            router.push(node.data.url)
-          }
-        }}
-        margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-        labelSkipSize={12}
-        labelTextColor={{ from: 'color', modifiers: [['darker', 1.2]] }}
-        parentLabelTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
-        colors={{ scheme: 'purple_red' }}
-        borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
-      />
+    <div>
+      <Container>
+        <ResponsiveTreeMap
+          data={data}
+          identity="name"
+          value="allocation"
+          tooltip={({ node }) => (
+            <strong style={{ color: node.color }}>
+              {node.pathComponents.filter((_, i) => i > 0).join(' / ')}: {node.formattedValue} DDAO
+            </strong>
+          )}
+          onClick={(node) => {
+            if (node.data.url) {
+              router.push(node.data.url)
+            }
+          }}
+          margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+          labelSkipSize={12}
+          labelTextColor={{ from: 'color', modifiers: [['darker', 1.2]] }}
+          parentLabelTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
+          colors={{ scheme: 'purple_red' }}
+          borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
+        />
+      </Container>
+      <Spacer h={2} />
 
       <Tree>{data.children.map(renderFile)}</Tree>
-    </Container>
+      <Spacer h={2} />
+    </div>
   )
 }
 

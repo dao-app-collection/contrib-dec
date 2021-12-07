@@ -31,9 +31,8 @@ export class BucketStore {
 
   fetchBuckets = async (): Promise<void> => {
     try {
-      console.log('fetch events')
       const events = await this.root.contribBucketFactoryContractStore.getEvents()
-      console.log(events)
+
       const blackListed = ['0xd9Af3a4773A650c9686C9643920B469B937F4690']
       const result: any[] = await Promise.all(
         events

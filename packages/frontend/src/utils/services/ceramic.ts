@@ -111,4 +111,10 @@ export default new Ceramic()
 // }
 // '
 
+// only update by task owner
+// type Meta = {
+//   assignes: string[], // apply to       address payable[] memory  _fulfillers,
+//   applications: [] // chose from
+// }
+
 // ceramic commits streamID
