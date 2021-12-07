@@ -20,13 +20,26 @@ export class Erc20Store extends ContractStore {
   approving = false
   symbolOverride?: string
 
-  constructor(
-    root: RootStore,
-    tokenName: SupportedErc20Token,
-    storeKey: keyof RootStore,
+  constructor({
+    root,
+    tokenName,
+    tokenAddress,
+    storeKey,
+    symbolOverride,
+  }: {
+    root: RootStore
+    tokenName?: SupportedErc20Token
+    tokenAddress?: string
+    storeKey: keyof RootStore & string
     symbolOverride?: string
-  ) {
-    super(root, tokenName, storeKey, Erc20Abi__factory)
+  }) {
+    super({
+      root,
+      contractName: tokenName,
+      contractAddress: tokenAddress,
+      storeKey,
+      factory: Erc20Abi__factory,
+    })
     if (symbolOverride) this.symbolOverride = symbolOverride
     makeObservable(this, {
       transferring: observable,
