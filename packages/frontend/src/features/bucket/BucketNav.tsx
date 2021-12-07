@@ -1,9 +1,12 @@
 import { Breadcrumbs } from '@geist-ui/react'
+import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
+import BucketEditAction from './BucketEditAction'
 import Heading from '../../components/Heading'
 import { useDao } from '../../context/DaoContext'
+import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 import { notEmpty } from '../../utils/array-utils'
 
 const Container = styled.div`
@@ -42,6 +45,7 @@ const Link = styled.a`
 
 const BucketNav: FC = () => {
   const { selectedBucket, navigateTo } = useDao()
+  const isOwner = useIsBucketOwner()
 
   const items = []
   let parent = selectedBucket?.parent
@@ -88,8 +92,9 @@ const BucketNav: FC = () => {
           </Breadcrumbs>
         )}
       </div>
+      {true && <BucketEditAction />}
     </Container>
   )
 }
 
-export default BucketNav
+export default observer(BucketNav)

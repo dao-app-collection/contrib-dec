@@ -1,4 +1,3 @@
-import { useRouter } from 'next/dist/client/router'
 import { useState } from 'react'
 import { useRootStore } from '../context/RootStoreProvider'
 import { EMPTY_CONTRACT_ADDRESS } from '../lib/constants'

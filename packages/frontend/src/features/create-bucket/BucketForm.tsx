@@ -1,17 +1,32 @@
-import { useInput, Grid, Input, Modal, Select, Textarea } from '@geist-ui/react'
+import { useInput, Grid, Input, Modal, Select, Textarea, Spacer, Divider } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
+import { useForm } from 'react-hook-form'
 import { ethers } from 'ethers'
-import { BucketPayload } from '../../types/all-types'
+import { BucketColors, BucketPayload } from '../../types/all-types'
 import Button from '../../components/Button'
-import { Erc20Store } from '../../stores/entities/Erc20.entity'
+
+type FormData = {
+  name: string
+  description: string
+  tokenAddress: string
+  owners: string
+  discord?: string
+  website?: string
+  logo?: string
+
+  colorPrimary?: string
+  colorInverted?: string
+  colorAccent?: string
+}
 
 type Props = {
   owners?: string[]
   defaultOwner?: string
   tokenAddress?: string
-  onClose: () => void
   onSubmit: (payload: BucketPayload) => void
+  edit?: boolean
+  defaultValues: Partial<FormData>
 }
 
 const OWNERS =
@@ -19,103 +34,109 @@ const OWNERS =
 
 const WEENUS_RINKENY_ADDRESS = '0xaFF4481D10270F50f203E0763e2597776068CBc5'
 
-const BucketForm: FC<Props> = ({ onSubmit, owners = [], tokenAddress, defaultOwner = OWNERS }) => {
-  const titleInput = useInput('')
-  const ownersInput = useInput(owners.join(',') || OWNERS)
+const BucketForm: FC<Props> = ({
+  onSubmit,
+  owners,
+  tokenAddress,
+  defaultOwner = OWNERS,
+  defaultValues,
+  edit,
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      owners: owners?.join(',') || defaultOwner,
+      tokenAddress: tokenAddress || WEENUS_RINKENY_ADDRESS,
+      ...defaultValues,
+    },
+  })
 
-  const descriptionInput = useInput('')
-  const tokenAddressInput = useInput(tokenAddress || WEENUS_RINKENY_ADDRESS)
-
-  const handleSubmit = async () => {
-    if (
-      titleInput.state &&
-      tokenAddressInput.state &&
-      ownersInput.state &&
-      descriptionInput.state
-    ) {
-      // const result = await ceramic.create({
-      //   schema: CeramicSchema.BUCKET_META_DATA,
-      //   data: {
-      //     title: titleInput.state,
-      //     description: descriptionInput.state || '',
-      //   },
-      // })
-
-      try {
-        onSubmit({
-          name: titleInput.state,
-          tokenAddress: ethers.utils.getAddress(tokenAddressInput.state),
-          owners: ownersInput.state.split(',').map(ethers.utils.getAddress),
-          description: descriptionInput.state,
-        })
-      } catch (e) {
-        console.error(e)
-      }
+  const _onSubmit = handleSubmit((data) => {
+    try {
+      onSubmit({
+        name: data.name,
+        description: data.description,
+        tokenAddress: ethers.utils.getAddress(data.tokenAddress),
+        owners: data.owners.split(',').map(ethers.utils.getAddress),
+      })
+    } catch (e) {
+      console.error(e)
     }
-  }
+  })
+
   return (
     <>
       <Modal.Content>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            handleSubmit()
-          }}
-        >
-          <Grid.Container gap={2}>
-            <Grid xs={24}>
-              <Input clearable {...titleInput.bindings} width="100%" placeholder="Name" />
-            </Grid>
-            <Grid xs={24}>
-              <Input
-                clearable
-                {...ownersInput.bindings}
-                // disabled={Boolean(owners)}
-                width="100%"
-                placeholder="Owners"
-              />
-            </Grid>
-            <Grid xs={24}>
-              <Input
-                clearable
-                {...tokenAddressInput.bindings}
-                width="100%"
-                placeholder="Token address"
-                // disabled={Boolean(tokenAddress)}
-              />
-            </Grid>
-            <Grid xs={24}>
-              <Textarea {...descriptionInput.bindings} width="100%" placeholder="Description" />
-            </Grid>
-            {/* <Grid xs={24}>
-              <Select placeholder="Owners" multiple width="100%" initialValue={[]}>
-                {availableOwners.map((address) => (
-                  <Select.Option key={address} value={address}>
-                    {address}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Grid> */}
+        <form onSubmit={_onSubmit}>
+          <Input clearable {...register('name', { required: true })} width="100%" disabled={edit}>
+            Name
+          </Input>
 
-            <Grid />
+          <Spacer h={1} />
 
-            {/* <Grid xs={24}>
-              <Input
-                clearable
-                {...allocationInput.bindings}
-                placeholder="Allocation"
-                labelRight="ETH"
-                width="100%"
-                disabled
-              />
-            </Grid> */}
+          <Textarea
+            {...register('description', { required: true })}
+            width="100%"
+            placeholder="Description"
+          />
+          <Spacer h={1} />
+          <Input
+            {...(register('owners'), { required: true })}
+            disabled={edit}
+            width="100%"
+            placeholder="Owners"
+          >
+            Owners
+          </Input>
+          <Spacer h={1} />
+          <Input
+            {...register('tokenAddress', { required: true })}
+            disabled={edit}
+            // disabled={Boolean(owners)}
+            width="100%"
+            placeholder="Token address"
+          >
+            Token address
+          </Input>
+          <Spacer h={1} />
+          <Divider h={1} />
+          <Spacer h={1} />
+          <Input clearable {...register('colorPrimary')} width="100%">
+            Color primary
+          </Input>
 
-            <Grid xs={24}>
-              <Button htmlType="submit" modifier="dao">
-                Create
-              </Button>
-            </Grid>
-          </Grid.Container>
+          <Spacer h={1} />
+          <Input clearable {...register('colorInverted')} width="100%">
+            Color inverted
+          </Input>
+
+          <Spacer h={1} />
+          <Input clearable {...register('colorAccent')} width="100%">
+            Color accent
+          </Input>
+
+          <Spacer h={1} />
+          <Input clearable {...register('discord')} width="100%">
+            Discord
+          </Input>
+
+          <Spacer h={1} />
+          <Input clearable {...register('website')} width="100%">
+            Website
+          </Input>
+
+          <Spacer h={1} />
+          <Input clearable {...register('logo')} width="100%">
+            Logo .png link
+          </Input>
+
+          <Spacer h={2} />
+          <Button htmlType="submit" modifier="dao">
+            {edit ? 'Update' : 'Create'}
+          </Button>
         </form>
       </Modal.Content>
     </>

@@ -20,7 +20,6 @@ const useCreateBucket = ({
 
   const createBucket = async (payload: BucketPayload) => {
     if (web3Store.signerState.address) {
-      console.log('____payload', payload)
       let success = false
       setIsCreating(true)
       try {
@@ -31,13 +30,14 @@ const useCreateBucket = ({
             description: payload.description,
           },
         })
-        console.log('ceramicId', ceramicId)
 
         const tx = await contribBucketFactoryContractStore.createBucket(
           payload.owners,
           payload.name,
           ceramicId,
-          parentBucket ? parentBucket.token.address : payload.tokenAddress,
+          parentBucket && parentBucket.token.address
+            ? parentBucket.token.address
+            : payload.tokenAddress,
           parentBucket ? parentBucket.id : EMPTY_CONTRACT_ADDRESS
         )
         success = true

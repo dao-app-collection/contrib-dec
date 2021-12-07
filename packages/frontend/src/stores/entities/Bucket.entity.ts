@@ -34,7 +34,6 @@ export class BucketEntity {
   data: BucketMetaData = {}
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
-    console.log('--D::D:', data)
     this.root = root
     this.id = ethers.utils.getAddress(data.id)
     this.name = data.name
@@ -80,7 +79,6 @@ export class BucketEntity {
       runInAction(() => {
         this.data = data
       })
-      console.log('----fdata', data)
     } catch (e) {
       console.error(e)
     }

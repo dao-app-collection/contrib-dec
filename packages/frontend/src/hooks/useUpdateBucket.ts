@@ -22,7 +22,9 @@ const useUpdateBucket = ({ bucket }: { bucket?: BucketEntity }): UseUpdateBucket
       setIsCreating(true)
       try {
         await ceramic.update(bucket.ceramicId, payload)
+        bucket.load()
       } catch (e) {
+        console.error(e)
       } finally {
         setIsCreating(false)
       }

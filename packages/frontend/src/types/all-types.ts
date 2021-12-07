@@ -9,9 +9,19 @@ export type TheGraphBucket = {
   ceramicId: string
 }
 
+export type BucketColors = {
+  primary: string
+  inverted: string
+  accent: string
+}
+
 export type BucketMetaData = {
-  title: string
+  name: string
   description: string
+  website?: string
+  discord?: string
+  logo?: string
+  colors?: BucketColors
 }
 
 export type TheGraphTask = {
@@ -34,11 +44,10 @@ export type PopulatedBucket = TheGraphBucket & {
 
 export type PopulatedTask = TheGraphTask
 
-export type BucketPayload = {
+export type BucketPayload = BucketMetaData & {
   name: string
   owners: string[]
   tokenAddress: string
-  description: string
   // allocation: string
   // owners: string[]
 }

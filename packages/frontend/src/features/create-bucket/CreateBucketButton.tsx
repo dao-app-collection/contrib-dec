@@ -15,7 +15,11 @@ const CreateBucketButton: React.FC<Props> = ({ selectedBucket }) => {
   const [visible, setVisible] = useState(false)
 
   const onClick = () => {
-    setVisible(true)
+    if (web3Store.signerState.address) {
+      setVisible(true)
+    } else {
+      web3Store.connect()
+    }
   }
 
   return (

@@ -16,7 +16,6 @@ type Props = {
 
 const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
   const rootStore = useRootStore()
-
   const { createBucket, creating } = useCreateBucket({ parentBucket: selectedBucket })
   const onSubmit = async (payload: BucketPayload) => {
     const success = await createBucket(payload)
@@ -24,6 +23,7 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       onClose()
     }
   }
+
   return (
     <Modal visible={visible} onClose={onClose}>
       <Modal.Title>Create new bucket</Modal.Title>
@@ -37,6 +37,7 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
           defaultOwner={rootStore.web3Store.signerState.address}
           owners={selectedBucket?.owners}
           tokenAddress={selectedBucket?.token.address}
+          colors={selectedBucket?.data.colors}
           onClose={onClose}
           onSubmit={onSubmit}
         />
