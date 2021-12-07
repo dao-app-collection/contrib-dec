@@ -34,24 +34,26 @@ export class BucketStore {
       console.log('fetch events')
       const events = await this.root.contribBucketFactoryContractStore.getEvents()
       console.log(events)
+      const blackListed = ['0xd9Af3a4773A650c9686C9643920B469B937F4690']
       const result: any[] = await Promise.all(
-        events.map(async (event) => {
-          if (!event.args) {
-            return null
-          }
+        events
+          .filter((event) => !blackListed.includes(event.args?.bucket))
+          .map(async (event) => {
+            if (!event.args) {
+              return null
+            }
 
-          console.log(event.args.data, 'CERMII')
-          const data = await ceramic.read(event.args.data)
-          console.log(data, 'DDAATTA')
-          return {
-            owners: event.args.owners,
-            id: event.args.bucket,
-            name: event.args.name,
-            token: event.args.token,
-            parent: event.args.parent,
-            data,
-          }
-        })
+            const data = await ceramic.read(event.args.data)
+
+            return {
+              owners: event.args.owners,
+              id: event.args.bucket,
+              name: event.args.name,
+              token: event.args.token,
+              parent: event.args.parent,
+              data,
+            }
+          })
       )
 
       const entities = result.filter(notEmpty).map(

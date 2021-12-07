@@ -29,7 +29,7 @@ export class BucketEntity {
   description: string
   owners: string[]
   tokenSymbol = 'ETH'
-  allocation = new Decimal('1230')
+  allocation = new Decimal('0')
   _topLevel?: BucketEntity
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
@@ -103,12 +103,16 @@ export class BucketEntity {
   }
 
   getAllocation = async (): Promise<void> => {
-    const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.coreProvider)
-    const allocation = await erc20Contract.balanceOf(this.id)
+    try {
+      const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.coreProvider)
+      const allocation = await erc20Contract.balanceOf(this.id)
 
-    runInAction(() => {
-      this.allocation = new Decimal(ethers.utils.formatEther(allocation))
-    })
+      runInAction(() => {
+        this.allocation = new Decimal(ethers.utils.formatEther(allocation))
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   fund = async (amount: BigNumber): Promise<void> => {
