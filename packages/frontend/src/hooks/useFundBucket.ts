@@ -12,7 +12,7 @@ type UseFundBucketValue = {
 }
 
 const useFundBucket = ({ bucket }: { bucket?: BucketEntity }): UseFundBucketValue => {
-  const { contribBucketFactoryContractStore, web3Store } = useRootStore()
+  const { web3Store } = useRootStore()
   const [isFunding, setIsCreating] = useState(false)
   const canFund = useIsBucketOwner(bucket)
 

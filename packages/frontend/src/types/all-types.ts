@@ -1,5 +1,4 @@
 import { Dayjs } from 'dayjs'
-import { BucketMetaDataInput } from '../utils/services/ceramic'
 
 export type TheGraphBucket = {
   parent?: string
@@ -7,7 +6,12 @@ export type TheGraphBucket = {
   id: string
   owners: string[]
   token: string
-  data: BucketMetaDataInput['data']
+  ceramicId: string
+}
+
+export type BucketMetaData = {
+  title: string
+  description: string
 }
 
 export type TheGraphTask = {

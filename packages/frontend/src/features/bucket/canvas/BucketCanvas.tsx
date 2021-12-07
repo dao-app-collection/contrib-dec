@@ -26,7 +26,7 @@ type DataItem = {
   name: string
   color: string
   children: DataItem[]
-  loc: number
+  size: number
   gotChildren: boolean
   entity: {
     allocation: number
@@ -57,15 +57,16 @@ const BucketCanvas: FC = () => {
   }
 
   const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
+    const symbol = b.token.symbol() || ''
     return {
       name: b.name,
       children: b.children.map((c) => createChild(c, maxLevel)) || [],
       color: 'hsl(256, 60%, 27%)',
       gotChildren: Boolean(b.children.length),
-      size: b.allocation?.toNumber() || 10,
+      size: b.allocation?.toNumber() || 1,
       entity: {
         allocation: b.allocation?.toNumber() || 0,
-        tokenSymbol: b.tokenSymbol,
+        tokenSymbol: typeof symbol === 'string' ? symbol : symbol[0],
       },
     }
   }

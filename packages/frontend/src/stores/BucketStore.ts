@@ -34,33 +34,26 @@ export class BucketStore {
       const events = await this.root.contribBucketFactoryContractStore.getEvents()
 
       const blackListed = ['0xd9Af3a4773A650c9686C9643920B469B937F4690']
-      const result: any[] = await Promise.all(
-        events
-          .filter((event) => !blackListed.includes(event.args?.bucket))
-          .map(async (event) => {
-            if (!event.args) {
-              return null
-            }
+      const result = events
+        .filter((event) => !blackListed.includes(event.args?.bucket))
+        // .filter((event) => event.args)
+        .map(
+          (event) =>
+            new BucketEntity(this.root, {
+              data: {
+                owners: event.args.owners,
+                id: event.args.bucket,
+                name: event.args.name,
+                token: event.args.token,
+                parent: event.args.parent,
+                ceramicId: event.args.data,
+              },
+            })
+        )
 
-            const data = await ceramic.read(event.args.data)
+      const entities = result.filter(notEmpty)
 
-            return {
-              owners: event.args.owners,
-              id: event.args.bucket,
-              name: event.args.name,
-              token: event.args.token,
-              parent: event.args.parent,
-              data,
-            }
-          })
-      )
-
-      const entities = result.filter(notEmpty).map(
-        (bucket) =>
-          new BucketEntity(this.root, {
-            data: bucket,
-          })
-      )
+      await Promise.all(entities.map((entity) => entity.load()))
 
       const buckets = buildBucketEntityStructure(entities)
       runInAction(() => {

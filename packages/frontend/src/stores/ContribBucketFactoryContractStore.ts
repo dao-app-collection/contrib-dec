@@ -6,6 +6,7 @@ import {
   ContribBucketFactoryAbi as ContribBucket,
   ContribBucketFactoryAbi__factory,
 } from '../generated'
+import { BucketCreatedEvent } from '../generated/ContribBucketFactoryAbi'
 
 type CreateBucket = ContribBucket['functions']['createBucket']
 
@@ -67,13 +68,13 @@ export class ContribBucketFactoryContractStore extends ContractStore {
     }
   }
 
-  getEvents = async (): Promise<ethers.Event[]> => {
+  getEvents = async (): Promise<BucketCreatedEvent[]> => {
     const result = await this.contract?.queryFilter(
       this.contract.filters.BucketCreated(null, null, null, null, null, null),
       0,
       'latest'
     )
 
-    return result || []
+    return (result || []) as BucketCreatedEvent[]
   }
 }

@@ -3,7 +3,7 @@ import { BigNumber, ethers } from 'ethers'
 import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
 import { Erc20Store } from './Erc20.entity'
-import { TheGraphBucket } from '../../types/all-types'
+import { BucketMetaData, TheGraphBucket } from '../../types/all-types'
 import { RootStore } from '../RootStore'
 import { mockTasks } from '../../utils/mocked'
 import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
@@ -11,6 +11,7 @@ import { slugify } from '../../utils/buckets-utils'
 import { Bucket__factory } from '../../generated/factories/Bucket__factory'
 
 import { ERC20__factory } from '../../generated/factories/ERC20__factory'
+import ceramic from '../../utils/services/ceramic'
 
 export class BucketEntity {
   root: RootStore
@@ -26,17 +27,19 @@ export class BucketEntity {
   tasks: TaskEntity[] = []
   token: Erc20Store
   parentAddress?: string
-  description: string
   owners: string[]
-  allocation = new Decimal('0')
   _topLevel?: BucketEntity
+  ceramicId: string
+
+  data: BucketMetaData = {}
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
+    console.log('--D::D:', data)
     this.root = root
     this.id = ethers.utils.getAddress(data.id)
     this.name = data.name
     this.nameAsSlug = slugify(data.name)
-    this.description = data.data.description
+    this.ceramicId = data.ceramicId
     this.owners = data.owners
     this.level = 0
     this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent
@@ -44,21 +47,43 @@ export class BucketEntity {
       root: this.root,
       tokenAddress: ethers.utils.getAddress(data.token),
       storeKey: `${data.name}token`,
-      symbolOverride: 'ETH',
+      // symbolOverride: 'ETH',
     })
 
     makeObservable(this, {
-      tasks: observable,
-      allocation: observable,
-      children: observable,
       topLevel: computed,
+      allocation: computed,
+      tasks: observable,
+      children: observable,
+      data: observable,
     })
-
-    this.init()
   }
 
   get topLevel(): BucketEntity | void {
     return this.level === 1 ? this : this._topLevel
+  }
+
+  get allocation(): Decimal {
+    const balance = this.token.balanceOf(this.id)
+
+    if (balance) {
+      return new Decimal(ethers.utils.formatEther(balance[0]))
+    }
+
+    return new Decimal('0')
+  }
+
+  load = async () => {
+    try {
+      const data = await ceramic.read(this.ceramicId)
+
+      runInAction(() => {
+        this.data = data
+      })
+      console.log('----fdata', data)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   addChild = (child: BucketEntity): void => {
@@ -108,22 +133,19 @@ export class BucketEntity {
 
   getAllocation = async (): Promise<void> => {
     try {
-      const allocation = await this.token.balanceOf(this.id)
-
-      if (allocation !== undefined) {
-        const [balance] = allocation
-        runInAction(() => {
-          this.allocation = new Decimal(ethers.utils.formatEther(balance))
-        })
-      }
+      await this.token.balanceOf(this.id)
     } catch (e) {
       console.error(e)
     }
   }
 
   fund = async (amount: BigNumber): Promise<void> => {
-    if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
-      const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.signer)
+    if (
+      this.root.web3Store.signer &&
+      this.root.web3Store.signerState.address &&
+      this.token.address
+    ) {
+      const erc20Contract = ERC20__factory.connect(this.token.address, this.root.web3Store.signer)
       // const erc20Contract = new Erc20Store(this.root, this.token)
       const INFINITE = BigNumber.from(
         '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'

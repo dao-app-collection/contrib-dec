@@ -4,6 +4,7 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
 import { DID } from 'dids'
 import { TileDocument } from '@ceramicnetwork/stream-tile'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
+import { BucketMetaData } from '../../types/all-types'
 
 const API_URL = 'https://ceramic-clay.3boxlabs.com' // 'https://gateway.ceramic.network'
 
@@ -14,10 +15,7 @@ export enum CeramicSchema {
 
 export type BucketMetaDataInput = {
   schema: CeramicSchema.BUCKET_META_DATA
-  data: {
-    title: string
-    description: string
-  }
+  data: BucketMetaData
 }
 
 export type TaskMetaDataInput = {
@@ -84,11 +82,10 @@ class Ceramic {
     }
   }
 
-  update = async () => {
-    // await doc2.update({
-    //   title: 'Client Document',
-    //   description: 'This document is now also updated from the http client',
-    // })
+  update = async (streamId: string, data: BucketMetaData) => {
+    const doc = await TileDocument.load(this.ceramic, streamId)
+
+    await doc.update(data)
   }
 }
 

@@ -14,8 +14,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ceramicnetwork/3id-did-resolver": "^1.4.10",
     "@ceramicnetwork/cli": "^1.9.0",
     "@ceramicnetwork/http-client": "^1.5.0",
+    "@ceramicnetwork/stream-tile": "^1.5.1",
     "@geist-ui/react": "2.2.0",
     "@geist-ui/react-icons": "1.0.1",
     "@nivo/bar": "^0.74.0",
