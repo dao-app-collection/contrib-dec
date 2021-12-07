@@ -230,4 +230,37 @@ describe('Bucket', function () {
       .to.emit(Token, 'Transfer')
       .withArgs(StandardBounties.address, assignee.address, depositAmount)
   })
+
+  it('should allocate funds to child bucket', async function () {
+    const [owner, assignee] = await ethers.getSigners()
+
+    const Bucket = await createBucket(
+      [owner.address],
+      'dev',
+      'this is the bucket data',
+      Token.address,
+      '0x0000000000000000000000000000000000000000',
+      owner
+    )
+
+    const depositAmount = 100
+    // approve token spend
+    await Token.approve(Bucket.address, depositAmount)
+    // fund bucket
+    await Bucket.fundBucket(depositAmount)
+
+    const ChildBucket = await createBucket(
+      [owner.address],
+      'dev-child',
+      'this is the bucket data',
+      Token.address,
+      Bucket.address,
+      owner
+    )
+
+    await Bucket.allocateFunds(ChildBucket.address, depositAmount / 2)
+
+    await expect(await Token.balanceOf(Bucket.address)).to.equal(depositAmount / 2)
+    await expect(await Token.balanceOf(ChildBucket.address)).to.equal(depositAmount / 2)
+  })
 })
