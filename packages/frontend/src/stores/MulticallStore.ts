@@ -65,6 +65,7 @@ export class MulticallStore {
       this.multicall.call(cloneDeep(this.contractCallContexts)).then((results) => {
         Object.values(results).forEach((res) => {
           Object.entries(res).forEach(([store, val]) => {
+            console.log('multicalls', { res, store, val })
             const rootKey = store as keyof RootStore
             const typedVal = val as ContractCallReturnContext
             runInAction(() => {
@@ -80,6 +81,13 @@ export class MulticallStore {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   if (deepEqual(curReturnValues, normalizedReturnValues)) return
+                  console.log('new value!!!', {
+                    curReturnValues,
+                    normalizedReturnValues,
+                    storage: targetStore.storage,
+                    methodName,
+                    paramStr,
+                  })
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   targetStore.storage[methodName][paramStr] = normalizedReturnValues

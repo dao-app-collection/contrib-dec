@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { makeObservable, observable, runInAction, computed } from 'mobx'
+import { makeObservable, observable, runInAction } from 'mobx'
 import { utils, BigNumber } from 'ethers'
 import { RootStore } from '../RootStore'
 import { ContractStore } from '../ContractStore'
@@ -50,29 +50,29 @@ export class Erc20Store extends ContractStore {
       allowance: observable,
       balanceOf: observable,
       approve: observable,
-      formattedSignerBalance: computed,
+      formattedSignerBalance: observable,
       transfer: observable,
-      balanceOfSigner: computed,
-      decimalsNumber: computed,
+      balanceOfSigner: observable,
+      decimalsNumber: observable,
       signerAllowance: observable,
       needsToAllowTokens: observable,
       signerNeedsMoreTokens: observable,
     })
   }
 
-  symbol(): ContractReturn<TokenSymbol> {
+  symbol(): Promise<ContractReturn<TokenSymbol>> {
     return this.call<TokenSymbol>('symbol', [], { subscribe: false })
   }
 
-  decimals(): ContractReturn<Decimals> {
+  decimals(): Promise<ContractReturn<Decimals>> {
     return this.call<Decimals>('decimals', [], { subscribe: false })
   }
 
-  allowance(...params: Parameters<Allowance>): ContractReturn<Allowance> {
+  allowance(...params: Parameters<Allowance>): Promise<ContractReturn<Allowance>> {
     return this.call<Allowance>('allowance', params)
   }
 
-  balanceOf(...params: Parameters<BalanceOf>): ContractReturn<BalanceOf> {
+  balanceOf(...params: Parameters<BalanceOf>): Promise<ContractReturn<BalanceOf>> {
     return this.call<BalanceOf>('balanceOf', params)
   }
 
@@ -97,51 +97,51 @@ export class Erc20Store extends ContractStore {
     }
   }
 
-  signerAllowance(spenderAddress: string): BigNumber | undefined {
+  async signerAllowance(spenderAddress: string): Promise<BigNumber | undefined> {
     const { address: signerAddress } = this.root.web3Store.signerState
     if (!signerAddress) return undefined
-    const allowanceRes = this.allowance(signerAddress, spenderAddress)
+    const allowanceRes = await this.allowance(signerAddress, spenderAddress)
     if (allowanceRes === undefined) return undefined
     const [allowance] = allowanceRes
     return allowance
   }
 
-  get balanceOfSigner(): BigNumber | undefined {
+  async balanceOfSigner(): Promise<BigNumber | undefined> {
     const { address } = this.root.web3Store.signerState
     if (!address) return undefined
-    const balanceRes = this.balanceOf(address)
+    const balanceRes = await this.balanceOf(address)
     if (balanceRes === undefined) return undefined
     const [balance] = balanceRes
     return balance
   }
 
-  get symbolString(): string | undefined {
-    const symbolRes = this.symbol()
+  async symbolString(): Promise<string | undefined> {
+    const symbolRes = await this.symbol()
     if (symbolRes === undefined) return undefined
     return symbolRes[0]
   }
 
-  get decimalsString(): string | undefined {
-    const decimalsRes = this.decimals()
+  async decimalsString(): Promise<string | undefined> {
+    const decimalsRes = await this.decimals()
     if (decimalsRes === undefined) return undefined
     const [decimals] = decimalsRes
     return decimals.toString()
   }
 
-  get decimalsNumber(): number | undefined {
+  async decimalsNumber(): Promise<number | undefined> {
     const { address } = this.root.web3Store.signerState
     if (!address) return undefined
-    const decimalsRes = this.decimals()
+    const decimalsRes = await this.decimals()
     if (decimalsRes === undefined) return undefined
     const [decimals] = decimalsRes
     return decimals
   }
 
-  get formattedSignerBalance(): string | undefined {
+  async formattedSignerBalance(): Promise<string | undefined> {
     const { address } = this.root.web3Store.signerState
     if (!address) return undefined
-    const decimalsRes = this.decimals()
-    const balanceRes = this.balanceOf(address)
+    const decimalsRes = await this.decimals()
+    const balanceRes = await this.balanceOf(address)
     if (decimalsRes === undefined || balanceRes === undefined) return undefined
     const [decimals] = decimalsRes
     const [balance] = balanceRes
@@ -164,20 +164,21 @@ export class Erc20Store extends ContractStore {
     }
   }
 
-  needsToAllowTokens(
+  async needsToAllowTokens(
     address: string | undefined,
     amount: BigNumber | undefined
-  ): boolean | undefined {
+  ): Promise<boolean | undefined> {
     if (!amount) return undefined
     if (!address) return undefined
-    const allowance = this.signerAllowance(address)
+    const allowance = await this.signerAllowance(address)
     if (allowance === undefined || amount === undefined) return undefined
     return allowance.lt(amount)
   }
 
-  signerNeedsMoreTokens(amount: BigNumber | undefined): boolean | undefined {
+  async signerNeedsMoreTokens(amount: BigNumber | undefined): Promise<boolean | undefined> {
     if (!amount) return undefined
-    if (!this.balanceOfSigner) return undefined
-    return this.balanceOfSigner?.lt(amount)
+    const balanceOfSigner = await this.balanceOfSigner()
+    if (!balanceOfSigner) return undefined
+    return balanceOfSigner?.lt(amount)
   }
 }

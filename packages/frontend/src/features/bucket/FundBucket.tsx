@@ -4,12 +4,16 @@ import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
 import { useForm } from 'react-hook-form'
+import { BigNumber } from 'ethers'
+import { useRootStore } from '../../context/RootStoreProvider'
 import useFundBucket from '../../hooks/useFundBucket'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 
 const FundBucket: FC = () => {
   const bucket = useSelectedBucket()
+  const { web3Store } = useRootStore()
   const { canFund, isFunding, fundBucket } = useFundBucket({ bucket })
+
   const {
     register,
     handleSubmit,
@@ -25,6 +29,13 @@ const FundBucket: FC = () => {
   }
 
   const onSubmit = async (data: { amount: string }) => {
+    const shouldAllowTokens = bucket?.token.needsToAllowTokens(
+      web3Store.signerState.address,
+      BigNumber.from(data.amount)
+    )
+
+    console.log({ shouldAllowTokens })
+
     await fundBucket(new Decimal(data.amount))
     reset()
   }

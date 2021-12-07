@@ -43,7 +43,7 @@ export class BucketEntity {
     this.token = new Erc20Store({
       root: this.root,
       tokenAddress: ethers.utils.getAddress(data.token),
-      storeKey: `${data.name}token`,
+      storeKey: `${data.name.replace(/ /g, '')}token`.toLowerCase(),
       symbolOverride: 'ETH',
     })
 
@@ -52,6 +52,7 @@ export class BucketEntity {
       allocation: observable,
       children: observable,
       topLevel: computed,
+      token: observable,
     })
 
     this.init()
@@ -109,6 +110,7 @@ export class BucketEntity {
   getAllocation = async (): Promise<void> => {
     try {
       const allocation = await this.token.balanceOf(this.id)
+      console.log('Getting allocation', allocation)
 
       if (allocation !== undefined) {
         const [balance] = allocation
@@ -123,19 +125,23 @@ export class BucketEntity {
 
   fund = async (amount: BigNumber): Promise<void> => {
     if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
-      const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.signer)
+      // const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.signer)
       // const erc20Contract = new Erc20Store(this.root, this.token)
       const INFINITE = BigNumber.from(
         '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
       )
 
-      const allowance = await erc20Contract.allowance(
+      const resAllowance = await this.token.allowance(
         this.root.web3Store.signerState.address,
         this.id
       )
 
+      console.log({ resAllowance })
+      if (resAllowance === undefined) return
+      const [allowance] = resAllowance
+
       if (allowance.lt(amount)) {
-        await erc20Contract.approve(ethers.utils.getAddress(this.id), INFINITE)
+        await this.token.approve(ethers.utils.getAddress(this.id), INFINITE)
       }
 
       const contract = Bucket__factory.connect(
@@ -144,7 +150,7 @@ export class BucketEntity {
       )
 
       await contract.fundBucket(amount)
-      await this.getAllocation()
+      // await this.getAllocation()
     }
   }
 

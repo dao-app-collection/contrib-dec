@@ -50,6 +50,16 @@ export class ContractStore {
       getWriteContract: action,
       generateGasOptions: action,
     })
+
+    const rootStoreKeys = Object.entries(this.root).map(([key]) => key)
+    const isEntity = !rootStoreKeys.includes(this.storeKey)
+
+    if (isEntity) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.root[storeKey] = this
+    }
+
     this.init()
   }
 
@@ -115,11 +125,11 @@ export class ContractStore {
     )
   }
 
-  call<T extends ContractFunction>(
+  async call<T extends ContractFunction>(
     methodName: string,
     params: Parameters<T>,
     options: CallOptions = { subscribe: true }
-  ): ContractReturn<T> | undefined {
+  ): Promise<ContractReturn<T> | undefined> {
     const paramStr = JSON.stringify(params)
 
     // Init storageProperty if required
@@ -129,48 +139,46 @@ export class ContractStore {
 
     // If cached, return cached
     const cur = this.storage[methodName][paramStr]
+    console.log('calling call', { methodName, params, cur, storage: this.storage, self: this })
     if (cur !== undefined) return cur
-
-    // Logic to execute after we get the initial value
-    const onFirstSet = (res: ContractReturn<T>): void => {
-      runInAction(() => {
-        // Set the value
-        this.storage[methodName][paramStr] = res
-
-        if (options.subscribe) {
-          // Automatically get updates for this value with the multicall,
-          // and set up removing the call when this call becomes unobserved
-          if (!this.address) throw Error(`contract ${this.contractName} not initialized`)
-          const call: ContractCallContext = {
-            reference: this.storeKey,
-            contractAddress: this.address,
-            abi: this.abi,
-            calls: [{ reference: methodName, methodName, methodParameters: params }],
-          }
-
-          console.log({
-            methodName,
-            res,
-            params,
-            storeKey: this.storeKey,
-            storage: this.storage,
-          })
-
-          this.root.multicallStore.addCall(call)
-          onBecomeUnobserved(this.storage[methodName], paramStr, () => {
-            runInAction(() => {
-              this.root.multicallStore.removeCall(call)
-              delete this.storage[methodName][paramStr]
-            })
-          })
-        }
-      })
-    }
 
     // Make first call to SC to get the value
     if (!this.contract) return undefined
-    this.contract.functions[methodName](...params).then(onFirstSet)
+    const res: ContractReturn<T> = await this.contract.functions[methodName](...params)
+    runInAction(() => {
+      // Set the value
+      this.storage[methodName][paramStr] = res
 
-    return undefined
+      if (options.subscribe) {
+        // Automatically get updates for this value with the multicall,
+        // and set up removing the call when this call becomes unobserved
+        if (!this.address) throw Error(`contract ${this.contractName} not initialized`)
+        const call: ContractCallContext = {
+          reference: this.storeKey,
+          contractAddress: this.address,
+          abi: this.abi,
+          calls: [{ reference: methodName, methodName, methodParameters: params }],
+        }
+
+        console.log({
+          methodName,
+          res,
+          params,
+          storeKey: this.storeKey,
+          storage: this.storage,
+          self: this,
+        })
+
+        this.root.multicallStore.addCall(call)
+        onBecomeUnobserved(this.storage[methodName], paramStr, () => {
+          runInAction(() => {
+            this.root.multicallStore.removeCall(call)
+            delete this.storage[methodName][paramStr]
+          })
+        })
+      }
+    })
+
+    return res
   }
 }

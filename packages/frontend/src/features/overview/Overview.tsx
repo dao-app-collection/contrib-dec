@@ -16,7 +16,7 @@ const Overview: React.FC = () => {
       <CreateSubBucketButton />
       <Text p>{selectedBucket?.description}</Text>
       <Text p>
-        Allocation: {selectedBucket?.allocation?.toString()} {selectedBucket.tokenSymbol}
+        Allocation: {selectedBucket.test} {selectedBucket.tokenSymbol}
       </Text>
       <FundBucket />
     </div>
