@@ -36,14 +36,8 @@ export const DaoProvider: FC = observer(({ children }) => {
   )
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dao])
-
-  useEffect(() => {
     setSlug(router.query.slug)
   }, [router.query.slug])
-
-  // const selectedBucket = dao.buckets.find((bucket) => bucket.slug.join('') === slugStr)
 
   useEffect(() => {
     const task = selectedBucket?.tasks.find((t) => t.id.toLowerCase() === router.query.task)
@@ -90,10 +84,10 @@ export const DaoProvider: FC = observer(({ children }) => {
   return <DaoContext.Provider value={value}>{children}</DaoContext.Provider>
 })
 
-export const useDao = (): DaoContextInterface | null => {
+export const useDao = (): DaoContextInterface => {
   const Dao = useContext(DaoContext)
   if (!Dao) {
-    // throw new Error('Missing DaoContext.Provider')
+    throw new Error('Missing DaoContext.Provider')
   }
   return Dao
 }

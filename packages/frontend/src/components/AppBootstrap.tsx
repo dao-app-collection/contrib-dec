@@ -9,11 +9,15 @@ import { useRootStore } from '../context/RootStoreProvider'
 import ceramic from '../utils/services/ceramic'
 
 const AppBootstrap: React.FC = ({ children }) => {
-  const { uiStore, localStorageStore } = useRootStore()
+  const { uiStore, localStorageStore, bucketStore } = useRootStore()
 
   useEffect(() => {
     localStorageStore.load()
   }, [localStorageStore])
+
+  useEffect(() => {
+    bucketStore.init()
+  }, [])
 
   return (
     <>

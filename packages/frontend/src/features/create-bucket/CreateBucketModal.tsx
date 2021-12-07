@@ -6,6 +6,7 @@ import BucketForm from './BucketForm'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
 import useCreateBucket from '../../hooks/useCreateBucket'
 import { BucketPayload } from '../../types/all-types'
+import { useRootStore } from '../../context/RootStoreProvider'
 
 type Props = {
   visible: boolean
@@ -14,10 +15,15 @@ type Props = {
 }
 
 const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
+  const rootStore = useRootStore()
+
   const { createBucket, creating } = useCreateBucket({ parentBucket: selectedBucket })
   const onSubmit = async (payload: BucketPayload) => {
-    await createBucket(payload)
-    onClose()
+    const success = await createBucket(payload)
+    console.log({ success, payload })
+    if (success) {
+      onClose()
+    }
   }
   return (
     <Modal visible={visible} onClose={onClose}>
@@ -29,7 +35,9 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
         <Loading />
       ) : (
         <BucketForm
+          defaultOwner={rootStore.web3Store.signerState.address}
           owners={selectedBucket?.owners.join(',')}
+          tokenAddress={selectedBucket?.token}
           onClose={onClose}
           onSubmit={onSubmit}
         />

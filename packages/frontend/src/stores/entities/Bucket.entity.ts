@@ -1,4 +1,4 @@
-import { makeObservable, observable, runInAction } from 'mobx'
+import { computed, makeObservable, observable, runInAction } from 'mobx'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ethers } from 'ethers'
 import Decimal from 'decimal.js'
@@ -30,6 +30,7 @@ export class BucketEntity {
   owners: string[]
   tokenSymbol = 'ETH'
   allocation = new Decimal('1230')
+  _topLevel?: BucketEntity
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
@@ -45,9 +46,15 @@ export class BucketEntity {
     makeObservable(this, {
       tasks: observable,
       allocation: observable,
+      children: observable,
+      topLevel: computed,
     })
 
     this.init()
+  }
+
+  get topLevel(): BucketEntity | void {
+    return this.level === 1 ? this : this._topLevel
   }
 
   addChild = (child: BucketEntity): void => {
@@ -67,14 +74,17 @@ export class BucketEntity {
       // eslint-disable-next-line prefer-destructuring
       let parent: BucketEntity | void = this.parent
       const slug = []
+      let lastParent
 
       while (parent) {
         if (parent) {
+          lastParent = parent
           slug.unshift(parent.nameAsSlug)
           parent = parent.parent
         }
       }
 
+      this._topLevel = lastParent
       slug.push(this.nameAsSlug)
       this.slug = slug
       this.url = `/${slug.join('/')}`

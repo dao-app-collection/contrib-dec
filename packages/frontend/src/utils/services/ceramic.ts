@@ -5,10 +5,10 @@ import { DID } from 'dids'
 import { TileDocument } from '@ceramicnetwork/stream-tile'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
 
-const API_URL = 'http://localhost:7007' // 'https://gateway.ceramic.network'
+const API_URL = 'https://ceramic-clay.3boxlabs.com' // 'https://gateway.ceramic.network'
 
 export enum CeramicSchema {
-  BUCKET_META_DATA = 'k3y52l7qbv1frybyiobf1gh32oucpo8o76aciaa2ehcq4s1qyuv85hxs87s3wuscg',
+  BUCKET_META_DATA = 'k3y52l7qbv1fryfanod9dhaqx4ktq9vavxeunj6db6lko4qyttn3gsw663xon6l8g',
   TASK_META_DATA = 'k6zn3rc3v8qin1nhs5janurq194ioqf45aeumk07spnm19d0ob0v0iqywc2otkluxtg8vxtcp321881rtw6vdol15chnpt6r2obrdmyhaisfaodlbxdyjpy',
 }
 

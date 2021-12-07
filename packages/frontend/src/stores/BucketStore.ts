@@ -13,10 +13,6 @@ export class BucketStore {
   constructor(root: RootStore) {
     this.root = root
 
-    if (typeof window !== 'undefined') {
-      this.init()
-    }
-
     makeAutoObservable(this, {
       buckets: observable,
       loading: observable,
@@ -34,16 +30,19 @@ export class BucketStore {
   }
 
   fetchBuckets = async (): Promise<void> => {
-    console.log('fetch buckets')
     try {
+      console.log('fetch events')
       const events = await this.root.contribBucketFactoryContractStore.getEvents()
-
+      console.log(events)
       const result: any[] = await Promise.all(
         events.map(async (event) => {
           if (!event.args) {
             return null
           }
+
+          console.log(event.args.data, 'CERMII')
           const data = await ceramic.read(event.args.data)
+          console.log(data, 'DDAATTA')
           return {
             owners: event.args.owners,
             id: event.args.bucket,

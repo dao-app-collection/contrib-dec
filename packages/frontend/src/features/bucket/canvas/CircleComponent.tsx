@@ -148,7 +148,7 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
           >
             <Heading type="h3">{node.data.name}</Heading>
             <div>
-              {node.data.entity.allocation.toNumber()} {node.data.entity.tokenSymbol}
+              {node.data.entity.allocation} {node.data.entity.tokenSymbol}
             </div>
           </InfoInner>
         )}

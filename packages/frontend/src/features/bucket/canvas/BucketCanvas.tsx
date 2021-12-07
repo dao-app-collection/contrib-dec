@@ -28,24 +28,16 @@ type DataItem = {
   children: DataItem[]
   loc: number
   gotChildren: boolean
-  entity: BucketEntity
+  entity: {
+    allocation: number
+    tokenSymbol: string
+  }
 }
 
 const BucketCanvas: FC = () => {
   const { buckets, selectedBucket, navigateTo } = useDao()
   const [zoomedId, setZoomedId] = useState<string | null>(null)
   const [currentDepth, setDepth] = useState(0)
-
-  const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
-    return {
-      name: b.name,
-      children: b.children.map((c) => createChild(c, maxLevel)) || [],
-      color: 'hsl(256, 60%, 27%)',
-      gotChildren: Boolean(b.children.length),
-      entity: b,
-      loc: b.allocation?.toNumber() || 20,
-    }
-  }
 
   useEffect(() => {
     if (selectedBucket && selectedBucket.id !== zoomedId) {
@@ -58,8 +50,28 @@ const BucketCanvas: FC = () => {
     return null
   }
 
+  const topLevel = selectedBucket?.topLevel
+
+  if (!topLevel) {
+    return null
+  }
+
+  const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
+    return {
+      name: b.name,
+      children: b.children.map((c) => createChild(c, maxLevel)) || [],
+      color: 'hsl(256, 60%, 27%)',
+      gotChildren: Boolean(b.children.length),
+      size: b.allocation?.toNumber() || 10,
+      entity: {
+        allocation: b.allocation?.toNumber() || 0,
+        tokenSymbol: b.tokenSymbol,
+      },
+    }
+  }
+
   const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
-  const data = createChild(buckets[0], maxLevel)
+  const data = createChild(topLevel, maxLevel)
 
   const extraProps = {
     currentDepth,
@@ -73,7 +85,7 @@ const BucketCanvas: FC = () => {
         data={data}
         margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
         id="name"
-        value="loc"
+        value="size"
         enableLabels={false}
         padding={32}
         labelsFilter={(e) => e.node.depth === currentDepth + 1}

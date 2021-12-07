@@ -3,7 +3,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import { ResponsiveTreeMap } from '@nivo/treemap'
 import styled from 'styled-components'
-import { Loading } from '@geist-ui/react'
+import { Loading, Tree } from '@geist-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import { useRootStore } from '../../context/RootStoreProvider'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
@@ -43,6 +43,14 @@ const AvailableBuckets: FC = () => {
     children: buckets.filter((bucket) => bucket.level === 1).map(createChild),
   }
 
+  const renderFile = (bucket: BucketEntity) =>
+    bucket.children.length ? (
+      <Tree.Folder key={bucket.id} name={bucket.name}>
+        {bucket.children.map(renderFile)}
+      </Tree.Folder>
+    ) : (
+      <Tree.File key={bucket.id} name={bucket.name} onClick={() => router.push(bucket.url)} />
+    )
   return (
     <Container>
       <ResponsiveTreeMap
@@ -66,6 +74,8 @@ const AvailableBuckets: FC = () => {
         colors={{ scheme: 'purple_red' }}
         borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
       />
+
+      <Tree>{data.children.map(renderFile)}</Tree>
     </Container>
   )
 }

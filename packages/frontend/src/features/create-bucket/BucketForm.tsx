@@ -3,23 +3,22 @@ import * as React from 'react'
 import { FC } from 'react'
 import { ethers } from 'ethers'
 import { BucketPayload } from '../../types/all-types'
-import ceramic, { CeramicSchema } from '../../utils/services/ceramic'
 import Button from '../../components/Button'
 
 type Props = {
   owners?: string
+  defaultOwner?: string
   tokenAddress?: string
   onClose: () => void
   onSubmit: (payload: BucketPayload) => void
 }
 
-const BucketForm: FC<Props> = ({ onClose, onSubmit, owners, tokenAddress }) => {
+const BucketForm: FC<Props> = ({ onSubmit, owners, tokenAddress, defaultOwner = '' }) => {
   const titleInput = useInput('')
-  const ownersInput = useInput(owners || '')
+  const ownersInput = useInput(owners || defaultOwner)
 
   const descriptionInput = useInput('')
-  const tokenAddressInput = useInput(tokenAddress || '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0')
-  const allocationInput = useInput('')
+  const tokenAddressInput = useInput(tokenAddress || '')
 
   const handleSubmit = async () => {
     if (
@@ -37,13 +36,10 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit, owners, tokenAddress }) => {
       // })
 
       try {
-        const owners = ownersInput.state.split(',').map(ethers.utils.getAddress)
-        const tokenAddress = ethers.utils.getAddress(tokenAddressInput.state)
-
         onSubmit({
           name: titleInput.state,
-          tokenAddress,
-          owners,
+          tokenAddress: ethers.utils.getAddress(tokenAddressInput.state),
+          owners: ownersInput.state.split(',').map(ethers.utils.getAddress),
           description: descriptionInput.state,
         })
       } catch (e) {
@@ -79,7 +75,7 @@ const BucketForm: FC<Props> = ({ onClose, onSubmit, owners, tokenAddress }) => {
                 {...tokenAddressInput.bindings}
                 width="100%"
                 placeholder="Token address"
-                disabled
+                disabled={Boolean(tokenAddress)}
               />
             </Grid>
             <Grid xs={24}>

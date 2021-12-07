@@ -7,7 +7,7 @@ import { BucketPayload } from '../types/all-types'
 import ceramic, { CeramicSchema } from '../utils/services/ceramic'
 
 type UseCreateBucketValue = {
-  createBucket: (payload: BucketPayload) => Promise<void>
+  createBucket: (payload: BucketPayload) => Promise<boolean>
   creating: boolean
 }
 
@@ -21,6 +21,8 @@ const useCreateBucket = ({
 
   const createBucket = async (payload: BucketPayload) => {
     if (web3Store.signerState.address) {
+      console.log('____payload', payload)
+      let success = false
       setIsCreating(true)
       try {
         const ceramicId = await ceramic.create({
@@ -30,6 +32,7 @@ const useCreateBucket = ({
             description: payload.description,
           },
         })
+        console.log('ceramicId', ceramicId)
 
         const tx = await contribBucketFactoryContractStore.createBucket(
           payload.owners,
@@ -38,14 +41,17 @@ const useCreateBucket = ({
           parentBucket ? parentBucket.token : payload.tokenAddress,
           parentBucket ? parentBucket.id : EMPTY_CONTRACT_ADDRESS
         )
+        success = true
       } catch (e) {
         console.error(e)
       } finally {
         setIsCreating(false)
       }
-    } else {
-      web3Store.connect()
+      return success
     }
+
+    web3Store.connect()
+    return false
   }
 
   return {
