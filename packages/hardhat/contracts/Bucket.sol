@@ -131,4 +131,8 @@ contract Bucket is Ownable {
             _tokenAmounts
         );
     }
+
+    function allocateFunds(address _to, uint256 _amount) onlyBucketOwners external {
+        require(token.transfer(_to, _amount));
+    }
 }
