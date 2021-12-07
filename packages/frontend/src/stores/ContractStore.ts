@@ -64,6 +64,8 @@ export class ContractStore {
     }
     this.address = address
     this.contract = this.factory.connect(this.address, this.root.web3Store.coreProvider)
+
+    console.log('init contract', { address: this.address, contract: this.contract })
   }
 
   async sendTransaction<T extends ContractFunction>(
@@ -145,6 +147,7 @@ export class ContractStore {
             abi: this.abi,
             calls: [{ reference: methodName, methodName, methodParameters: params }],
           }
+
           this.root.multicallStore.addCall(call)
           onBecomeUnobserved(this.storage[methodName], paramStr, () => {
             runInAction(() => {

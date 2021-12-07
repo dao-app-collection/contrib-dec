@@ -24,26 +24,29 @@ export class BucketEntity {
   parent?: BucketEntity
   children: BucketEntity[] = []
   tasks: TaskEntity[] = []
+  token: Erc20Store
   parentAddress?: string
-  token: string
   description: string
   owners: string[]
-  tokenSymbol = 'ETH'
   allocation = new Decimal('0')
   _topLevel?: BucketEntity
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
     this.id = ethers.utils.getAddress(data.id)
-    this.token = ethers.utils.getAddress(data.token)
     this.name = data.name
     this.nameAsSlug = slugify(data.name)
     this.description = data.data.description
     this.owners = data.owners
     this.level = 0
     this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent
+    this.token = new Erc20Store({
+      root: this.root,
+      tokenAddress: ethers.utils.getAddress(data.token),
+      storeKey: `${data.name}token`,
+      symbolOverride: 'ETH',
+    })
 
-    console.log({ token: this.token })
     makeObservable(this, {
       tasks: observable,
       allocation: observable,
@@ -105,11 +108,11 @@ export class BucketEntity {
 
   getAllocation = async (): Promise<void> => {
     try {
-      const erc20Contract = ERC20__factory.connect(this.token, this.root.web3Store.coreProvider)
-      const allocation = await erc20Contract.balanceOf(this.id)
+      const allocation = await this.token.balanceOf(this.id)
 
+      console.log({ allocation })
       runInAction(() => {
-        this.allocation = new Decimal(ethers.utils.formatEther(allocation))
+        // this.allocation = new Decimal(ethers.utils.formatEther(allocation))
       })
     } catch (e) {
       console.error(e)

@@ -30,7 +30,7 @@ export class Erc20Store extends ContractStore {
     root: RootStore
     tokenName?: SupportedErc20Token
     tokenAddress?: string
-    storeKey: keyof RootStore & string
+    storeKey: any & keyof RootStore
     symbolOverride?: string
   }) {
     super({
