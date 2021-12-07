@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { useForm } from 'react-hook-form'
+import { Grid, Input, Textarea, Button, useInput } from '@geist-ui/react'
 import { FC } from 'react'
-import { Input, Textarea, Button } from '@geist-ui/react'
 import dayjs from 'dayjs'
 import { TaskPayload } from '../../types/all-types'
+import { useRootStore } from '../../context/RootStoreProvider'
 
 type Props = {
   initialData: any
@@ -13,27 +13,48 @@ type Props = {
 
 type FieldValues = { title: string; description: string }
 const TaskForm: FC<Props> = ({ onSubmit, initialData, lockedFields }) => {
-  const { register, handleSubmit, reset, formState } = useForm<FieldValues>()
-  const { isDirty, isSubmitting, errors } = formState
+  const { uiStore } = useRootStore()
+  const titleInput = useInput('')
+  const descriptionInput = useInput('')
 
-  const _onSubmit = (data: FieldValues) => {
-    onSubmit({
-      title: data.title,
-      description: data.description,
-      deadline: dayjs().add(10, 'day'),
-      approvers: [],
-      issuers: [],
-    })
+  const handleSubmit = async () => {
+    if (titleInput.state && descriptionInput.state) {
+      try {
+        onSubmit({
+          title: titleInput.state,
+          description: descriptionInput.state,
+          deadline: dayjs().add(10, 'day'),
+          approvers: [],
+          issuers: [],
+        })
+      } catch (e) {
+        uiStore.errorToast('Error creating task', e)
+      }
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit(_onSubmit)}>
-      <Input {...register('title', { required: true })} placeholder="Title" />
-      <Textarea {...register('description', { required: true })} placeholder="Description" />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleSubmit()
+      }}
+    >
+      <Grid.Container gap={2}>
+        <Grid xs={24}>
+          <Input clearable {...titleInput.bindings} width="100%" placeholder="Title" />
+        </Grid>
+        <Grid xs={24}>
+          <Textarea {...descriptionInput.bindings} width="100%" placeholder="Description" />
+        </Grid>
 
-      {/* <span>{errors.name?.message}</span> */}
-
-      <Button htmlType="submit">submit</Button>
+        {/* <span>{errors.name?.message}</span> */}
+        <Grid xs={24}>
+          <Button htmlType="submit" width="100%">
+            Create task
+          </Button>
+        </Grid>
+      </Grid.Container>
     </form>
   )
 }

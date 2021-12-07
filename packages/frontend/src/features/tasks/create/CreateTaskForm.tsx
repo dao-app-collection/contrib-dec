@@ -4,11 +4,7 @@ import { TaskPayload } from '../../../types/all-types'
 import TaskForm from '../TaskForm'
 import ceramic, { CeramicSchema } from '../../../utils/services/ceramic'
 
-type Props = {
-  onSubmit: (payload: TaskPayload) => void
-}
-
-const CreateTaskForm: FC<Props> = (props) => {
+const CreateTaskForm: FC = () => {
   const onCreate = async (payload: TaskPayload) => {
     try {
       const ceramicId = await ceramic.create({

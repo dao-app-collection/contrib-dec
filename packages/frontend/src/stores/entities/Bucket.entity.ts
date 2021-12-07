@@ -30,7 +30,7 @@ export class BucketEntity {
   owners: string[]
   _topLevel?: BucketEntity
   ceramicId: string
-
+  creatingTask = false
   data: BucketMetaData = {}
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
@@ -165,6 +165,38 @@ export class BucketEntity {
 
       await contract.fundBucket(amount)
       await this.getAllocation()
+    }
+  }
+
+  createTask = async ({
+    data,
+    deadline,
+    issuers,
+    approvers,
+  }: {
+    data: string
+    deadline: number
+    issuers: string[]
+    approvers: string[]
+  }): Promise<void> => {
+    if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
+      runInAction(() => {
+        this.creatingTask = true
+      })
+      try {
+        const contract = Bucket__factory.connect(
+          ethers.utils.getAddress(this.id),
+          this.root.web3Store.signer
+        )
+
+        await contract.createTask(data, deadline, issuers, approvers)
+      } catch (e) {
+        this.root.uiStore.errorToast('Error creating task', e)
+      } finally {
+        runInAction(() => {
+          this.creatingTask = false
+        })
+      }
     }
   }
 

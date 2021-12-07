@@ -77,4 +77,14 @@ export class ContribBucketFactoryContractStore extends ContractStore {
 
     return (result || []) as BucketCreatedEvent[]
   }
+
+  getTaskEvents = async (): Promise<ethers.Event[]> => {
+    const result = await this.contract?.queryFilter(
+      this.contract.filters.BountyIssued(null, null, null, null, null, null),
+      0,
+      'latest'
+    )
+
+    return result || []
+  }
 }
