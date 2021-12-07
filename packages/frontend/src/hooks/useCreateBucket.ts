@@ -38,7 +38,7 @@ const useCreateBucket = ({
           payload.owners,
           payload.name,
           ceramicId,
-          parentBucket ? parentBucket.token : payload.tokenAddress,
+          parentBucket ? parentBucket.token.address : payload.tokenAddress,
           parentBucket ? parentBucket.id : EMPTY_CONTRACT_ADDRESS
         )
         success = true

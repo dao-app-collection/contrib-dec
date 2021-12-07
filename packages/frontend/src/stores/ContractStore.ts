@@ -148,6 +148,14 @@ export class ContractStore {
             calls: [{ reference: methodName, methodName, methodParameters: params }],
           }
 
+          console.log({
+            methodName,
+            res,
+            params,
+            storeKey: this.storeKey,
+            storage: this.storage,
+          })
+
           this.root.multicallStore.addCall(call)
           onBecomeUnobserved(this.storage[methodName], paramStr, () => {
             runInAction(() => {

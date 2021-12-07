@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { ethers } from 'ethers'
 import { BucketPayload } from '../../types/all-types'
 import Button from '../../components/Button'
+import { Erc20Store } from '../../stores/entities/Erc20.entity'
 
 type Props = {
   owners?: string
@@ -13,12 +14,17 @@ type Props = {
   onSubmit: (payload: BucketPayload) => void
 }
 
+const OWNERS =
+  '0xf6B186049232cd426E18DD068a205d50c398a2D8,0xa50F556168a2A67EeABD5BAf821212a6F0c8Fe1E,0xC174C9CC0A6686B7F347c7c40cf330486785158d'
+
+const WEENUS_RINKENY_ADDRESS = '0xaFF4481D10270F50f203E0763e2597776068CBc5'
+
 const BucketForm: FC<Props> = ({ onSubmit, owners, tokenAddress, defaultOwner = '' }) => {
   const titleInput = useInput('')
-  const ownersInput = useInput(owners || defaultOwner)
+  const ownersInput = useInput(owners || OWNERS)
 
   const descriptionInput = useInput('')
-  const tokenAddressInput = useInput(tokenAddress || '')
+  const tokenAddressInput = useInput(tokenAddress || WEENUS_RINKENY_ADDRESS)
 
   const handleSubmit = async () => {
     if (

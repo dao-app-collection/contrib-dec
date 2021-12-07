@@ -62,9 +62,7 @@ export class MulticallStore {
   call(): void {
     runInAction(() => {
       if (!this.multicall) throw Error('multicall must be initialized')
-      console.log('hjereeee', { contractCalls: this.contractCallContexts })
       this.multicall.call(cloneDeep(this.contractCallContexts)).then((results) => {
-        console.log({ results })
         Object.values(results).forEach((res) => {
           Object.entries(res).forEach(([store, val]) => {
             const rootKey = store as keyof RootStore

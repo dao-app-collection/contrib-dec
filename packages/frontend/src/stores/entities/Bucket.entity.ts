@@ -110,10 +110,12 @@ export class BucketEntity {
     try {
       const allocation = await this.token.balanceOf(this.id)
 
-      console.log({ allocation })
-      runInAction(() => {
-        // this.allocation = new Decimal(ethers.utils.formatEther(allocation))
-      })
+      if (allocation !== undefined) {
+        const [balance] = allocation
+        runInAction(() => {
+          this.allocation = new Decimal(ethers.utils.formatEther(balance))
+        })
+      }
     } catch (e) {
       console.error(e)
     }

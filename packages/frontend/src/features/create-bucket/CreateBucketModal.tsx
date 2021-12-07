@@ -37,7 +37,7 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
         <BucketForm
           defaultOwner={rootStore.web3Store.signerState.address}
           owners={selectedBucket?.owners.join(',')}
-          tokenAddress={selectedBucket?.token}
+          tokenAddress={selectedBucket.token.address}
           onClose={onClose}
           onSubmit={onSubmit}
         />
