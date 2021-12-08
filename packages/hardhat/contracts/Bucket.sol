@@ -65,7 +65,7 @@ contract Bucket is Ownable {
     ) public onlyBucketOwners returns (uint256) {
         address payable sender = address(uint160(address(this)));
 
-        return standardBounties.issueBounty(
+        uint256 bountyId = standardBounties.issueBounty(
             sender,
             _issuers,
             _approvers,
@@ -74,6 +74,10 @@ contract Bucket is Ownable {
             address(token),
             20
         );
+
+        emit TaskCreated(bountyId, _data, _deadline, _issuers, _approvers);
+
+        return bountyId;
     }
 
     /// @param _bountyId the index of the bounty
@@ -135,4 +139,6 @@ contract Bucket is Ownable {
     function allocateFunds(address _to, uint256 _amount) onlyBucketOwners external {
         require(token.transfer(_to, _amount));
     }
+
+    event TaskCreated(uint256 id, string data, uint256 deadline, address payable[] issuers, address[] approvers);
 }

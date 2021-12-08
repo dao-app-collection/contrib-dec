@@ -97,10 +97,13 @@ describe('Bucket', function () {
     const issuers = [owner.address]
     const approvers = [owner.address]
 
-    await expect(Bucket.createTask(data, deadline, issuers, approvers)).to.emit(
-      StandardBounties,
-      'BountyIssued'
-    )
+    const createTaskTx = Bucket.createTask(data, deadline, issuers, approvers)
+
+    await expect(createTaskTx).to.emit(StandardBounties, 'BountyIssued')
+
+    await expect(createTaskTx)
+      .to.emit(Bucket, 'TaskCreated')
+      .withArgs(0, data, deadline, issuers, approvers)
   })
 
   it('should create and fund a task', async function () {
