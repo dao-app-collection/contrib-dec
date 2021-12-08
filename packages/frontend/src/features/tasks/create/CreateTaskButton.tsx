@@ -1,17 +1,19 @@
-import { Modal } from '@geist-ui/react'
-import * as React from 'react'
-import { FC, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import CreateTaskForm from './CreateTaskForm'
+import { useState } from 'react'
+import CreateTaskModal from './CreateTaskModal'
 import Button from '../../../components/Button'
 import { useDao } from '../../../context/DaoContext'
+import { BucketEntity } from '../../../stores/entities/Bucket.entity'
 
-const CreateTaskButton: FC = () => {
+type Props = {
+  selectedBucket?: BucketEntity
+}
+
+const CreateTaskButton: React.FC<Props> = () => {
   const { selectedBucket } = useDao()
   const [visible, setVisible] = useState(false)
-  const onClose = () => setVisible(false)
 
-  if (!selectedBucket?.signerIsOwner) {
+  if (!selectedBucket) {
     return null
   }
 
@@ -22,14 +24,13 @@ const CreateTaskButton: FC = () => {
   return (
     <>
       <Button onClick={onClick} width="100%" modifier="dao" loading={selectedBucket.creatingTask}>
-        Create Task
+        Create task
       </Button>
-      <Modal visible={visible} onClose={onClose}>
-        <Modal.Title>Create new task</Modal.Title>
-        <Modal.Content>
-          <CreateTaskForm />
-        </Modal.Content>
-      </Modal>
+      <CreateTaskModal
+        visible={visible}
+        onClose={() => setVisible(false)}
+        selectedBucket={selectedBucket}
+      />
     </>
   )
 }

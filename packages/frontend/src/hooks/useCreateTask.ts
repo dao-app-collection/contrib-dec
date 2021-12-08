@@ -4,38 +4,60 @@ import { ethers } from 'ethers'
 import useIsBucketOwner from './useIsBucketOwner'
 import { useRootStore } from '../context/RootStoreProvider'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
+import { TaskPayload } from '../types/all-types'
+import ceramic, { CeramicSchema } from '../utils/services/ceramic'
 
 type UseFundBucketValue = {
-  fundBucket: (amount: Decimal) => Promise<void>
-  isFunding: boolean
+  createTask: (payload: TaskPayload) => Promise<boolean>
+  isCreating: boolean
   canFund: boolean
 }
 
-const useCreateTask = ({ bucket }: { bucket?: BucketEntity }): UseFundBucketValue => {
-  const { contribBucketFactoryContractStore, web3Store } = useRootStore()
-  const [isFunding, setIsCreating] = useState(false)
-  const canFund = useIsBucketOwner(bucket)
+const useCreateTask = ({
+  selectedBucket,
+}: {
+  selectedBucket?: BucketEntity
+}): UseFundBucketValue => {
+  const { contribBucketFactoryContractStore, web3Store, uiStore } = useRootStore()
+  const [isCreating, setIsCreating] = useState(false)
+  const canFund = useIsBucketOwner(selectedBucket)
 
-  const fundBucket = async (amount: Decimal) => {
+  const createTask = async (payload: TaskPayload) => {
     if (web3Store.signerState.address) {
+      let success = false
       setIsCreating(true)
       try {
-        const amountAsBN = ethers.utils.parseEther(amount.toString())
-        await bucket?.fund(amountAsBN)
+        const ceramicId = await ceramic.create({
+          schema: CeramicSchema.TASK_META_DATA,
+          data: {
+            title: payload.title,
+            description: payload.description,
+          },
+        })
+
+        const tx = await selectedBucket?.createTask({
+          data: ceramicId,
+          deadline: payload.deadline.unix(),
+          issuers: payload.issuers,
+          approvers: payload.approvers,
+        })
+        success = true
       } catch (e) {
-        console.error(e)
+        uiStore.errorToast('Create task error', e)
       } finally {
         setIsCreating(false)
       }
-    } else {
-      web3Store.connect()
+      return success
     }
+
+    web3Store.connect()
+    return false
   }
 
   return {
-    isFunding,
+    isCreating,
     canFund,
-    fundBucket,
+    createTask,
   }
 }
 
