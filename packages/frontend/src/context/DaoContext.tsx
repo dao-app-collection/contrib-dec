@@ -6,6 +6,7 @@ import { useRootStore } from './RootStoreProvider'
 import { DAOEntity } from '../stores/entities/DAO.entity'
 import { TaskEntity } from '../stores/entities/Task.entity'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
+import SEO from '../components/SEO'
 
 const DAOStyle = createGlobalStyle<{ primary: string }>`
   html {
@@ -88,9 +89,14 @@ export const DaoProvider: FC = observer(({ children }) => {
     currentTask,
   }
 
+  const parents = selectedBucket?.getTreeUp() || []
+  const title = selectedBucket ? parents.map((b) => b.name || b.name).join(' - ') : 'Loading ...'
+  console.log(parents)
+
   return (
     <DaoContext.Provider value={value}>
       <DAOStyle primary={selectedBucket?.color || ''} />
+      <SEO title={title} />
       {children}
     </DaoContext.Provider>
   )

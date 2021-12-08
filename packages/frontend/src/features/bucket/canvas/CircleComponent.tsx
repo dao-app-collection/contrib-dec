@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { lighten } from 'polished'
 import { Z_INDEX } from '../../../utils/general-settings'
-import Heading from '../../../components/Heading'
 
 export const interpolatePosition = (
   positionValue: SpringValue<number>,

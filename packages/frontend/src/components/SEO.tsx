@@ -11,12 +11,10 @@ type Props = {
   image?: string
 }
 
-const defaultDescription =
-  'Limit orders along with sorely missed, specialised tools, that allow us to navigate DEXs with much better range of utility is severely lacking in the current Defi landscape.'
-const defaultTitle = 'Mate'
+const defaultDescription = 'DAO contribution and experience, validated on-chain.'
 
 const SEO: FC<Props> = ({ description, meta = [], keywords = [], title, image }) => {
-  const metaTitle = `${title || defaultTitle} | Mate `
+  const metaTitle = title
   const metaDescription = description || defaultDescription
 
   //   let metaImage = `${config.SITE_URL}/meta-images/default.png`

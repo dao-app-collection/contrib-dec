@@ -47,21 +47,11 @@ const BucketNav: FC = () => {
   const { selectedBucket, navigateTo } = useDao()
   const isOwner = useIsBucketOwner(selectedBucket)
 
-  const items = []
-  let parent = selectedBucket?.parent
-
   if (!selectedBucket) {
     return null
   }
 
-  while (parent) {
-    if (parent) {
-      items.unshift(parent)
-      parent = parent.parent
-    }
-  }
-
-  items.push(selectedBucket)
+  const items = selectedBucket.getTreeUp()
 
   return (
     <Container>

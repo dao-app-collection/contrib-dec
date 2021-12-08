@@ -117,6 +117,22 @@ export class BucketEntity {
     this.color = _color || '#321c6f'
   }
 
+  getTreeUp = (): BucketEntity[] => {
+    const items = []
+    let parent = this?.parent
+
+    while (parent) {
+      if (parent) {
+        items.unshift(parent)
+        parent = parent.parent
+      }
+    }
+
+    items.push(this)
+
+    return items
+  }
+
   addChild = (child: BucketEntity): void => {
     this.children.push(child)
   }
