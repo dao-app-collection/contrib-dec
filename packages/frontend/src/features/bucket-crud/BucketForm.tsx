@@ -6,6 +6,7 @@ import { ethers } from 'ethers'
 import { BucketPayload, Field, FormFieldType } from '../../types/all-types'
 import Button from '../../components/Button'
 import FormField from '../../components/form/FormField'
+import { OWNERS } from '../../lib/constants'
 
 type FormData = {
   name: string
@@ -23,12 +24,6 @@ type Props = {
   edit?: boolean
   defaultValues: Partial<FormData>
 }
-
-const OWNERS = [
-  '0xf6B186049232cd426E18DD068a205d50c398a2D8',
-  '0xa50F556168a2A67EeABD5BAf821212a6F0c8Fe1E',
-  '0xC174C9CC0A6686B7F347c7c40cf330486785158d',
-]
 
 const WEENUS_RINKENY_ADDRESS = '0xaFF4481D10270F50f203E0763e2597776068CBc5'
 

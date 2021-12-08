@@ -10,7 +10,7 @@ import ceramic, { CeramicSchema } from '../utils/services/ceramic'
 type UseFundBucketValue = {
   createTask: (payload: TaskPayload) => Promise<boolean>
   isCreating: boolean
-  canFund: boolean
+  canCreateTask: boolean
 }
 
 const useCreateTask = ({
@@ -18,11 +18,12 @@ const useCreateTask = ({
 }: {
   selectedBucket?: BucketEntity
 }): UseFundBucketValue => {
-  const { contribBucketFactoryContractStore, web3Store, uiStore } = useRootStore()
+  const { web3Store, uiStore } = useRootStore()
   const [isCreating, setIsCreating] = useState(false)
-  const canFund = useIsBucketOwner(selectedBucket)
+  const canCreateTask = useIsBucketOwner(selectedBucket)
 
   const createTask = async (payload: TaskPayload) => {
+    console.log('gets here!', { payload })
     if (web3Store.signerState.address) {
       let success = false
       setIsCreating(true)
@@ -35,11 +36,13 @@ const useCreateTask = ({
           },
         })
 
+        console.log({ ceramicId })
+
         const tx = await selectedBucket?.createTask({
           data: ceramicId,
           deadline: payload.deadline.unix(),
-          issuers: payload.issuers,
-          approvers: payload.approvers,
+          issuers: selectedBucket.owners,
+          approvers: selectedBucket.owners,
         })
         success = true
       } catch (e) {
@@ -56,7 +59,7 @@ const useCreateTask = ({
 
   return {
     isCreating,
-    canFund,
+    canCreateTask,
     createTask,
   }
 }

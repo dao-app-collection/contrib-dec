@@ -4,6 +4,7 @@ import CreateTaskModal from './CreateTaskModal'
 import Button from '../../../components/Button'
 import { useDao } from '../../../context/DaoContext'
 import { BucketEntity } from '../../../stores/entities/Bucket.entity'
+import useCreateTask from '../../../hooks/useCreateTask'
 
 type Props = {
   selectedBucket?: BucketEntity
@@ -11,9 +12,10 @@ type Props = {
 
 const CreateTaskButton: React.FC<Props> = () => {
   const { selectedBucket } = useDao()
+  const { canCreateTask } = useCreateTask({ selectedBucket })
   const [visible, setVisible] = useState(false)
 
-  if (!selectedBucket) {
+  if (!selectedBucket || !canCreateTask) {
     return null
   }
 
