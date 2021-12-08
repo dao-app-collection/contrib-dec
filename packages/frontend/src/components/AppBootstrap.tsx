@@ -8,7 +8,7 @@ import { darkTheme } from '../theme/dark-theme'
 import { useRootStore } from '../context/RootStoreProvider'
 
 const AppBootstrap: React.FC = ({ children }) => {
-  const { uiStore, localStorageStore, bucketStore } = useRootStore()
+  const { uiStore, localStorageStore, bucketStore, taskStore } = useRootStore()
 
   useEffect(() => {
     localStorageStore.load()
@@ -16,6 +16,10 @@ const AppBootstrap: React.FC = ({ children }) => {
 
   useEffect(() => {
     bucketStore.init()
+  }, [])
+
+  useEffect(() => {
+    taskStore.init()
   }, [])
 
   return (
