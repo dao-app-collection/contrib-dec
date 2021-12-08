@@ -6,13 +6,10 @@ import { TaskPayload } from '../../types/all-types'
 import { useRootStore } from '../../context/RootStoreProvider'
 
 type Props = {
-  initialData: any
   onSubmit: (payload: TaskPayload) => void
-  lockedFields: string[]
 }
 
-type FieldValues = { title: string; description: string }
-const TaskForm: FC<Props> = ({ onSubmit, initialData, lockedFields }) => {
+const TaskForm: FC<Props> = ({ onSubmit }) => {
   const { uiStore } = useRootStore()
   const titleInput = useInput('')
   const descriptionInput = useInput('')
@@ -48,7 +45,6 @@ const TaskForm: FC<Props> = ({ onSubmit, initialData, lockedFields }) => {
           <Textarea {...descriptionInput.bindings} width="100%" placeholder="Description" />
         </Grid>
 
-        {/* <span>{errors.name?.message}</span> */}
         <Grid xs={24}>
           <Button htmlType="submit" width="100%">
             Create task
