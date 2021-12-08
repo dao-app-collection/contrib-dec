@@ -36,7 +36,7 @@ const UpdateBucketModal: FC<Props> = ({ onClose, visible }) => {
     discord: selectedBucket?.data?.discord,
     website: selectedBucket?.data?.website,
     logo: selectedBucket?.data?.logo,
-    colorPrimary: selectedBucket?.data?.primaryColor,
+    primaryColor: selectedBucket?.data?.primaryColor,
   }
 
   return (

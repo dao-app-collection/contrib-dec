@@ -65,7 +65,6 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
         discord: data.discord || '',
         website: data.website || '',
         logo: data.logo || '',
-
         owners: ownersCorrect as string[],
         tokenAddress: ethers.utils.getAddress(data.tokenAddress),
       })

@@ -44,7 +44,7 @@ const Overview: React.FC = () => {
         Discord: {selectedBucket?.data.discord}
         Website: {selectedBucket?.data.website}
         Color: {selectedBucket?.data.primaryColor}
-        Logo: {selectedBucket?.data.logo}
+        Logo: {selectedBucket?.data.logo && <img src={selectedBucket?.data.logo} />}
       </Text>
       <Text p>
         Allocation: {selectedBucket?.allocation?.toString()} {selectedBucket.token.symbol()}

@@ -23,21 +23,17 @@ const useCreateBucket = ({
       let success = false
       setIsCreating(true)
       try {
+        const { owners, tokenAddress, ...meta } = payload
         const ceramicId = await ceramic.create({
           schema: CeramicSchema.BUCKET_META_DATA,
-          data: {
-            title: payload.name,
-            description: payload.description,
-          },
+          data: meta,
         })
 
         const tx = await contribBucketFactoryContractStore.createBucket(
-          payload.owners,
+          owners,
           payload.name,
           ceramicId,
-          parentBucket && parentBucket.token.address
-            ? parentBucket.token.address
-            : payload.tokenAddress,
+          tokenAddress || parentBucket?.token.address || EMPTY_CONTRACT_ADDRESS,
           parentBucket ? parentBucket.id : EMPTY_CONTRACT_ADDRESS
         )
         success = true

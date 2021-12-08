@@ -3,6 +3,7 @@ import { FC } from 'react'
 import FormInput from './FormInput'
 import FormTextarea from './FormTextarea'
 import FormMultiselect from './FormMultiselect'
+import FormFileImage from './FormFileImage'
 import { Field, FormFieldType } from '../../types/all-types'
 
 type Props = Field & {
@@ -20,6 +21,10 @@ const FormField: FC<Props> = ({ type = 'input', ...props }) => {
 
   if (type === 'multiselect') {
     return <FormMultiselect {...props} />
+  }
+
+  if (type === 'file') {
+    return <FormFileImage {...props} />
   }
   return null
 }

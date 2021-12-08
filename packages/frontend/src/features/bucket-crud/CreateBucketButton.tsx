@@ -11,7 +11,6 @@ type Props = {
 
 const CreateBucketButton: React.FC<Props> = ({ selectedBucket }) => {
   const { web3Store, contribBucketFactoryContractStore } = useRootStore()
-
   const label = web3Store.signerState.address ? 'Create Bucket' : 'Connect Wallet to create Bucket'
   const [visible, setVisible] = useState(false)
 
