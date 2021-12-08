@@ -1,8 +1,9 @@
-import { Loading, Modal } from '@geist-ui/react'
+import { Loading } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
 import BucketForm from './BucketForm'
+import Modal from '../../components/Modal'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
 import useCreateBucket from '../../hooks/useCreateBucket'
 import { BucketPayload } from '../../types/all-types'
@@ -23,6 +24,20 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       onClose()
     }
   }
+
+  return (
+    <Modal
+      title="Create new bucket"
+      subText={
+        selectedBucket ? `You will create a sub-bucket of ${selectedBucket.name}` : undefined
+      }
+      loading={creating}
+      visible={visible}
+      onClose={onClose}
+    >
+      <BucketForm />
+    </Modal>
+  )
 
   return (
     <Modal visible={visible} onClose={onClose}>

@@ -1,4 +1,5 @@
 import { Dayjs } from 'dayjs'
+import { UseFormRegister } from 'react-hook-form'
 
 export type TheGraphBucket = {
   parent?: string
@@ -21,7 +22,7 @@ export type BucketMetaData = {
   website?: string
   discord?: string
   logo?: string
-  colors?: BucketColors
+  primaryColor?: string
 }
 
 export type TheGraphTask = {
@@ -74,3 +75,13 @@ export type TaskPayload = {
 //   allocation: BigNumber
 //   assigned?: string
 // }
+
+export type Field = {
+  name: string
+  label: string
+  required?: boolean
+
+  register: UseFormRegister<any>
+}
+
+export type FormFieldType = 'input' | 'textarea' | 'multiselect' | 'file'

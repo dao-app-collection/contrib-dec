@@ -5,7 +5,7 @@ import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import useUpdateBucket from '../../hooks/useUpdateBucket'
 import FundBucket from '../bucket/FundBucket'
-import CreateSubBucketButton from '../create-bucket/CreateSubBucketButton'
+import CreateSubBucketButton from '../bucket-crud/CreateSubBucketButton'
 
 const Overview: React.FC = () => {
   const selectedBucket = useSelectedBucket()

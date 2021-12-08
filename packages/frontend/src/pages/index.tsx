@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Div100vh from 'react-div-100vh'
 import { Page } from '@geist-ui/react'
 import React from 'react'
-import CreateBucketButton from '../features/create-bucket/CreateBucketButton'
+import CreateBucketButton from '../features/bucket-crud/CreateBucketButton'
 import { centered } from '../theme/utils'
 import AvailableBuckets from '../features/landing/AvailableBuckets'
 

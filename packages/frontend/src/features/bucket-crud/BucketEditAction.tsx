@@ -2,9 +2,9 @@ import { Loading, Modal } from '@geist-ui/react'
 import * as React from 'react'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
+import BucketForm from './BucketForm'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import useUpdateBucket from '../../hooks/useUpdateBucket'
-import BucketForm from '../create-bucket/BucketForm'
 
 const Container = styled.div`
   margin-left: auto;
