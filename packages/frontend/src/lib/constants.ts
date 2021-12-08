@@ -24,6 +24,13 @@ export const APP_NAME = 'prePO'
 // MY INFURA_ID, SWAP THIS FROM https://infura.io/dashboard/ethereum
 export const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad'
 
+// Contrib
+export const OWNERS = [
+  '0xf6B186049232cd426E18DD068a205d50c398a2D8',
+  '0xa50F556168a2A67EeABD5BAf821212a6F0c8Fe1E',
+  '0xC174C9CC0A6686B7F347c7c40cf330486785158d',
+]
+
 export type SupportedNetworks =
   | 'localhost'
   | 'mainnet'
