@@ -88,11 +88,9 @@ export const DaoProvider: FC = observer(({ children }) => {
     currentTask,
   }
 
-  console.log('------selectedBucket', selectedBucket)
-
   return (
     <DaoContext.Provider value={value}>
-      <DAOStyle primary={selectedBucket?.color} />
+      <DAOStyle primary={selectedBucket?.color || ''} />
       {children}
     </DaoContext.Provider>
   )

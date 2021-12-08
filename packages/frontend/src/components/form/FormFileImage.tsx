@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { FC, useState } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import CreatableSelect from 'react-select/creatable'
+import { useFormContext } from 'react-hook-form'
 import { Spinner } from '@geist-ui/react'
-import InputLabel from './InputLabel'
 import { Field } from '../../types/all-types'
 import { ipfsClient } from '../../utils/services/ipfs'
 
@@ -38,7 +36,7 @@ const FormFileImage: FC<Props> = ({ label, name, ...props }) => {
   return (
     <div style={{ width: '100%' }}>
       <input type="file" name="Asset" className="my-4" onChange={onChange} />
-      {fileUrl && <img width="350" src={fileUrl} />}
+      {fileUrl && <img width="200" src={fileUrl} />}
     </div>
   )
 }

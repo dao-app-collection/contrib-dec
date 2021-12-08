@@ -93,15 +93,11 @@ export class BucketEntity {
   }
 
   setColor = () => {
-    if (this.name === 'ROME DAO') {
-      console.log('setColor', this, this.data)
-    }
     if (!this.data) {
       return
     }
 
     if (this.data?.primaryColor) {
-      console.log('PRIMAR', this.data.primaryColor)
       this.color = this.data.primaryColor
       return
     }

@@ -1,6 +1,6 @@
 import { animated, to, SpringValue, Interpolation } from '@react-spring/web'
 import { CircleProps, useNodeMouseHandlers } from '@nivo/circle-packing'
-import { FC } from 'react'
+import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { lighten } from 'polished'
@@ -35,6 +35,21 @@ const Counter = styled(animated.div)`
   width: 38px;
 `
 
+const Logo = styled(animated.div)`
+  border-radius: 50%;
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -50%);
+
+  img {
+    height: 100%;
+    object-fit: fill;
+    width: 100%;
+  }
+`
+
 const InfoInner = styled(motion.div)`
   align-items: center;
   color: ${(props) => props.theme.dao.inverted};
@@ -57,31 +72,29 @@ const Circle = styled(animated.div).withConfig({
   will-change: background, background-color;
   position: absolute;
   box-sizing: border-box;
-
   opacity: 0.3;
+  border-style: solid;
+  border-color: white;
 
   ${(props) =>
     props.depth === 0 &&
     css`
       box-shadow: inset 0px 0px 7px 4px  ${lighten(0.62)(props.color)}   ;
       cursor: pointer
-      opacity: 1;;
+      opacity: 1;
     `}
 
   ${(props) =>
     props.isNextLevel &&
     css`
-      /* background: linear-gradient(
-        154.57deg,
-        #6035d6 2.94%,
-        #6035d6 2.95%,
-        rgba(123, 75, 255, 0) 105.2%
-      ); */
-      background: linear-gradient(154.57deg, ${props.color} 2.94%, rgba(123, 75, 255, 0) 105.2%);
-
+      background: radial-gradient(
+          53.81% 53.81% at 49.97% 49.97%,
+          rgba(255, 255, 255, 0) 75.16%,
+          rgba(255, 255, 255, 0.11) 100%
+        ),
+        linear-gradient(148.2deg, rgba(255, 255, 255, 0.3) 12.74%, rgba(255, 255, 255, 0.01) 54.91%);
       background-color: transparent;
-
-      box-shadow: inset 0px -1.85837px 50.176px rgba(255, 255, 255, 0.31);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       box-sizing: border-box;
       opacity: 1;
       transition: opacity 0.3s ease;
@@ -96,13 +109,13 @@ const Circle = styled(animated.div).withConfig({
   ${(props) =>
     props.isSelected &&
     css`
-      border: 12px solid #ffffff;
       box-shadow: inset 0px -3.02075px 55.5603px rgba(255, 255, 255, 0.31);
+      box-shadow: 0px -1.85837px 33px rgba(255, 255, 255, 0.37);
       opacity: 1;
     `}
 `
 
-const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
+const CircleComponent = (circleProps: CircleProps<any>) => {
   const { node, style, onMouseEnter, onMouseMove, onMouseLeave, onClick } = circleProps
   const size = interpolateSize(style.radius, 2)
   // eslint-disable-next-line
@@ -113,9 +126,11 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
     onClick,
   })
 
-  const isSelected = node.id === extraProps.zoomedId
-  const isNextLevel = extraProps.currentDepth + 1 === node.depth
-  let showInfo = extraProps.currentDepth + 1 === node.depth
+  const { isSelected, currentDepth } = node.data //  node.id === extraProps.zoomedId
+  const isNextLevel = currentDepth + 1 === node.depth
+  let showInfo = currentDepth + 1 === node.depth
+  const logo = node.data.entity?.logo
+  const logoSize = interpolateSize(style.radius, 0.3)
 
   if (isSelected && !node.data.gotChildren) {
     showInfo = true
@@ -134,6 +149,7 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
         width: size,
         backgroundColor: style.color,
         borderRadius: style.radius,
+        borderWidth: interpolateBorderWidth(isSelected ? 12 : 1, style.radius),
       }}
       onMouseEnter={handlers.onMouseEnter}
       onMouseMove={handlers.onMouseMove}
@@ -141,6 +157,16 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
       onClick={handlers.onClick}
     >
       <AnimatePresence>
+        {logo && (
+          <Logo
+            style={{
+              height: logoSize,
+              width: logoSize,
+            }}
+          >
+            <img src={logo} alt={node.data.name} />
+          </Logo>
+        )}
         {showInfo && <Counter key="counter">4</Counter>}
         {showInfo && (
           <InfoInner
@@ -159,4 +185,5 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
     </Circle>
   )
 }
+
 export default CircleComponent

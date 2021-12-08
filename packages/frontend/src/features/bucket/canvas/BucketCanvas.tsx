@@ -16,7 +16,6 @@ const Container = styled.div`
   left: 420px;
   position: fixed;
   right: 0;
-  top: 0;
 
   @media (max-width: ${pixelSizes.tablet}) {
     left: 0;
@@ -29,7 +28,10 @@ type DataItem = {
   children: DataItem[]
   size: number
   gotChildren: boolean
+  isSelected: boolean
+  currentDepth: number
   entity: {
+    logo?: string
     allocation: number
     tokenSymbol: string
   }
@@ -57,35 +59,34 @@ const BucketCanvas: FC = () => {
     return null
   }
 
-  const createChild = (b: BucketEntity, maxLevel: number): DataItem => {
+  const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
+
+  const createChild = (b: BucketEntity): DataItem => {
     const symbol = b.token.symbol() || ''
+
     return {
       name: b.name,
-      children: b.children.map((c) => createChild(c, maxLevel)) || [],
+      children: b.children.map((c) => createChild(c)) || [],
       color: toJS(b.color),
       gotChildren: Boolean(b.children.length),
       size: b.allocation?.toNumber() || 1,
+      isSelected: b.name === zoomedId,
+      currentDepth,
       entity: {
+        logo: b.data?.logo,
         allocation: b.allocation?.toNumber() || 0,
         tokenSymbol: typeof symbol === 'string' ? symbol : symbol[0],
       },
     }
   }
 
-  const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
-  const data = createChild(topLevel, maxLevel)
-
-  const extraProps = {
-    currentDepth,
-    zoomedId,
-    maxLevel,
-  }
+  const data = createChild(topLevel)
 
   return (
     <Container>
       <ResponsiveCirclePackingHtml
         data={data}
-        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        margin={{ top: 120, right: 20, bottom: 120, left: 20 }}
         id="name"
         value="size"
         enableLabels={false}
@@ -95,7 +96,7 @@ const BucketCanvas: FC = () => {
         borderWidth={0}
         zoomedId={zoomedId}
         motionConfig="slow"
-        circleComponent={CircleComponent(extraProps)}
+        circleComponent={CircleComponent}
         colors={selectedBucket.color}
         childColor={{ from: 'color', modifiers: [['brighter', 0.4]] }}
         inheritColorFromParent
