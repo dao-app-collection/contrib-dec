@@ -6,6 +6,7 @@ import { BrowserStore } from './BrowserStore'
 import { ClockStore } from './ClockStore'
 import { ContribBucketFactoryContractStore } from './ContribBucketFactoryContractStore'
 import { BucketStore } from './BucketStore'
+import { TaskStore } from './TaskStore'
 
 export class RootStore {
   uiStore: UiStore
@@ -16,6 +17,7 @@ export class RootStore {
   multicallStore: MulticallStore
   localStorageStore: LocalStorageStore
   bucketStore: BucketStore
+  taskStore: TaskStore
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(toast: any) {
@@ -26,6 +28,7 @@ export class RootStore {
     this.web3Store = new Web3Store(this)
     this.contribBucketFactoryContractStore = new ContribBucketFactoryContractStore(this)
     this.bucketStore = new BucketStore(this)
+    this.taskStore = new TaskStore(this)
     this.multicallStore = new MulticallStore(this)
   }
 }

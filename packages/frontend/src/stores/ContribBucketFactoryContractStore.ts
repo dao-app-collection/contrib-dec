@@ -5,6 +5,7 @@ import { ContractStore } from './ContractStore'
 import {
   ContribBucketFactoryAbi as ContribBucket,
   ContribBucketFactoryAbi__factory,
+  StandardBounties__factory,
 } from '../generated'
 import { BucketCreatedEvent } from '../generated/ContribBucketFactoryAbi'
 
@@ -27,6 +28,7 @@ export class ContribBucketFactoryContractStore extends ContractStore {
 
     if (typeof window !== 'undefined') {
       this.getEvents()
+      this.getTaskEvents()
     }
   }
 
@@ -79,8 +81,13 @@ export class ContribBucketFactoryContractStore extends ContractStore {
   }
 
   getTaskEvents = async (): Promise<ethers.Event[]> => {
-    const result = await this.contract?.queryFilter(
-      this.contract.filters.BountyIssued(null, null, null, null, null, null),
+    const strandardContract = StandardBounties__factory.connect(
+      '0x6ac6baf770b3ffe2ddb3c5797e47c17cebef2ec4',
+      this.root.web3Store.coreProvider
+    )
+
+    const result = await strandardContract.queryFilter(
+      strandardContract.filters.BountyIssued(null, null, null, null, null, null),
       0,
       'latest'
     )
