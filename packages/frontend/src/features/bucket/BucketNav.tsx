@@ -45,7 +45,7 @@ const Link = styled.a`
 
 const BucketNav: FC = () => {
   const { selectedBucket, navigateTo } = useDao()
-  const isOwner = useIsBucketOwner()
+  const isOwner = useIsBucketOwner(selectedBucket)
 
   const items = []
   let parent = selectedBucket?.parent
@@ -92,7 +92,7 @@ const BucketNav: FC = () => {
           </Breadcrumbs>
         )}
       </div>
-      {true && <BucketEditAction />}
+      {isOwner && <BucketEditAction />}
     </Container>
   )
 }

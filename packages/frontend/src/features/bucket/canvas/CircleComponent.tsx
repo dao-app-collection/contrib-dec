@@ -58,6 +58,7 @@ const InfoInner = styled(motion.div)`
   font-size: 22px;
   height: 100%;
   justify-content: center;
+  pointer-events: none;
   position: relative;
   text-align: center;
   width: 100%;
@@ -126,11 +127,13 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
     onClick,
   })
 
-  const { isSelected, currentDepth } = node.data //  node.id === extraProps.zoomedId
+  const { isSelected, currentDepth } = node.data
   const isNextLevel = currentDepth + 1 === node.depth
   let showInfo = currentDepth + 1 === node.depth
   const logo = node.data.entity?.logo
   const logoSize = interpolateSize(style.radius, 0.3)
+  const titleSize = interpolateSize(style.radius, 0.2)
+  const textSize = interpolateSize(style.radius, 0.15)
 
   if (isSelected && !node.data.gotChildren) {
     showInfo = true
@@ -175,19 +178,19 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
           </Logo>
         )}
         {showInfo && <Counter key="counter">4</Counter>}
-        {showInfo && (
-          <InfoInner
-            key="inner"
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1, transition: { delay: 0.5 } }}
-            exit={{ opacity: 0 }}
-          >
-            <Heading type="h3">{node.data.name}</Heading>
-            <div>
-              {node.data.entity.allocation} {node.data.entity.tokenSymbol}
-            </div>
-          </InfoInner>
-        )}
+
+        <InfoInner
+          animate={showInfo ? 'show' : 'hide'}
+          variants={{
+            hide: { opacity: 0, scale: 0.7 },
+            show: { opacity: 1, scale: 1, transition: { delay: 0.5 } },
+          }}
+        >
+          <animated.h3 style={{ fontSize: titleSize }}>{node.data.name}</animated.h3>
+          <animated.div style={{ fontSize: textSize }}>
+            {node.data.entity.allocation} {node.data.entity.tokenSymbol}
+          </animated.div>
+        </InfoInner>
       </AnimatePresence>
     </Circle>
   )

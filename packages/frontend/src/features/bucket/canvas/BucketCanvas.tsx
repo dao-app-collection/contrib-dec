@@ -37,18 +37,6 @@ type DataItem = {
   }
 }
 
-const StatsComponent = () => {
-  const [data, setData] = React.useState()
-
-  React.useEffect(() => {
-    try {
-      axios.get('https://usemate.com/api/v1/stats').then((res) => setData(res.data))
-    } catch (e) {
-      // error
-    }
-  }, [])
-}
-
 const BucketCanvas: FC = () => {
   const { buckets, selectedBucket, navigateTo } = useDao()
   const [zoomedId, setZoomedId] = useState<string | null>(null)
@@ -70,8 +58,6 @@ const BucketCanvas: FC = () => {
   if (!topLevel) {
     return null
   }
-
-  const maxLevel = Math.max(...buckets.map((bucket) => bucket.level))
 
   const createChild = (b: BucketEntity): DataItem => {
     const symbol = b.token.symbol() || ''
@@ -113,13 +99,20 @@ const BucketCanvas: FC = () => {
         childColor={{ from: 'color', modifiers: [['brighter', 0.4]] }}
         inheritColorFromParent
         onClick={(node) => {
-          if (node.depth === currentDepth) {
+          let id: string
+          let depth
+          if (zoomedId !== node.id) {
+            id = node.id
+            depth = node.depth
+          } else if (selectedBucket.parent) {
+            id = selectedBucket.parent.name
+            depth = selectedBucket.parent.level - 1
+          } else {
             return
           }
 
-          const id = zoomedId === node.id ? null : node.id
           setZoomedId(id)
-          setDepth(id ? node.depth : 0)
+          setDepth(depth)
 
           if (id) {
             const bucket = buckets.find((b) => b.name === id)
@@ -127,8 +120,6 @@ const BucketCanvas: FC = () => {
             if (bucket) {
               navigateTo(bucket)
             }
-          } else {
-            navigateTo(buckets[0])
           }
         }}
       />
