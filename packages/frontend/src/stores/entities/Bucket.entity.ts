@@ -114,7 +114,7 @@ export class BucketEntity {
       }
     }
 
-    this.color = _color || ''
+    this.color = _color || '#321c6f'
   }
 
   addChild = (child: BucketEntity): void => {

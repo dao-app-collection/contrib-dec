@@ -37,6 +37,18 @@ type DataItem = {
   }
 }
 
+const StatsComponent = () => {
+  const [data, setData] = React.useState()
+
+  React.useEffect(() => {
+    try {
+      axios.get('https://usemate.com/api/v1/stats').then((res) => setData(res.data))
+    } catch (e) {
+      // error
+    }
+  }, [])
+}
+
 const BucketCanvas: FC = () => {
   const { buckets, selectedBucket, navigateTo } = useDao()
   const [zoomedId, setZoomedId] = useState<string | null>(null)

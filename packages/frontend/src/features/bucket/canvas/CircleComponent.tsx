@@ -79,7 +79,7 @@ const Circle = styled(animated.div).withConfig({
   ${(props) =>
     props.depth === 0 &&
     css`
-      box-shadow: inset 0px 0px 7px 4px  ${lighten(0.62)(props.color)}   ;
+      box-shadow: inset 0px 0px 7px 4px  ${props.color && lighten(0.62)(props.color)}   ;
       cursor: pointer
       opacity: 1;
     `}
@@ -136,6 +136,13 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
     showInfo = true
   }
 
+  let borderWidth = 0
+  if (isSelected) {
+    borderWidth = 12
+  } else if (currentDepth === node.depth) {
+    borderWidth = 1
+  }
+
   return (
     <Circle
       depth={node.depth}
@@ -149,7 +156,7 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
         width: size,
         backgroundColor: style.color,
         borderRadius: style.radius,
-        borderWidth: interpolateBorderWidth(isSelected ? 12 : 1, style.radius),
+        borderWidth: interpolateBorderWidth(borderWidth, style.radius),
       }}
       onMouseEnter={handlers.onMouseEnter}
       onMouseMove={handlers.onMouseMove}
@@ -173,7 +180,7 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
             key="inner"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1, transition: { delay: 0.5 } }}
-            exit={{ opacity: 0, scale: 0.7 }}
+            exit={{ opacity: 0 }}
           >
             <Heading type="h3">{node.data.name}</Heading>
             <div>
