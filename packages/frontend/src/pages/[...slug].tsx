@@ -1,9 +1,9 @@
-import { Loading } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import { FC } from 'react'
+import React, { FC } from 'react'
 import DAOLayout from '../components/DAOLayout'
+import PageLoader from '../components/PageLoader'
 import { DaoProvider } from '../context/DaoContext'
 import { useRootStore } from '../context/RootStoreProvider'
 import BucketPage from '../features/bucket/BucketPage'
@@ -20,7 +20,7 @@ const SlugPage: FC = (props) => {
   const store = useRootStore()
 
   if (store.bucketStore.loading) {
-    return <Loading />
+    return <PageLoader />
   }
 
   return (

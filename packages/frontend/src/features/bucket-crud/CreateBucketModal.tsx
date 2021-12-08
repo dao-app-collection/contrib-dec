@@ -29,7 +29,7 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
     tokenAddress: selectedBucket?.tokenAddress,
     discord: selectedBucket?.data?.discord,
     website: selectedBucket?.data?.website,
-    logo: selectedBucket?.data?.logo,
+    // logo: selectedBucket?.data?.logo,
     colorPrimary: selectedBucket?.data?.primaryColor,
   }
 
