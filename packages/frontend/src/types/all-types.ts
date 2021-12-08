@@ -80,6 +80,7 @@ export type Field = {
   name: string
   label: string
   required?: boolean
+  disabled?: boolean
 
   register: UseFormRegister<any>
 }

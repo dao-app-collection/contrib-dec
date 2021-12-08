@@ -5,7 +5,7 @@ import { BucketMetaData } from '../types/all-types'
 import ceramic from '../utils/services/ceramic'
 
 type UseUpdateBucketValue = {
-  updateBucket: (payload: BucketMetaData) => Promise<void>
+  updateBucket: (payload: BucketMetaData) => Promise<boolean>
   isUpdating: boolean
 }
 
@@ -15,20 +15,26 @@ const useUpdateBucket = ({ bucket }: { bucket?: BucketEntity }): UseUpdateBucket
 
   const updateBucket = async (payload: BucketMetaData) => {
     if (!bucket) {
-      return
+      return false
     }
 
     if (web3Store.signerState.address && bucket.owners.includes(web3Store.signerState.address)) {
+      let success = false
       setIsCreating(true)
       try {
         await ceramic.update(bucket.ceramicId, payload)
-        bucket.load()
+        await bucket.load()
+        success = true
       } catch (e) {
         console.error(e)
       } finally {
         setIsCreating(false)
       }
+
+      return success
     }
+
+    return false
   }
 
   return {

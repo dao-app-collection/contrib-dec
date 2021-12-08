@@ -7,7 +7,6 @@ import Modal from '../../components/Modal'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
 import useCreateBucket from '../../hooks/useCreateBucket'
 import { BucketPayload } from '../../types/all-types'
-import { useRootStore } from '../../context/RootStoreProvider'
 
 type Props = {
   visible: boolean
@@ -16,13 +15,22 @@ type Props = {
 }
 
 const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
-  const rootStore = useRootStore()
   const { createBucket, creating } = useCreateBucket({ parentBucket: selectedBucket })
   const onSubmit = async (payload: BucketPayload) => {
     const success = await createBucket(payload)
+
     if (success) {
       onClose()
     }
+  }
+
+  const defaultValues = {
+    owners: selectedBucket?.owners,
+    tokenAddress: selectedBucket?.tokenAddress,
+    discord: selectedBucket?.data?.discord,
+    website: selectedBucket?.data?.website,
+    logo: selectedBucket?.data?.logo,
+    colorPrimary: selectedBucket?.data?.primaryColor,
   }
 
   return (
@@ -35,28 +43,7 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       visible={visible}
       onClose={onClose}
     >
-      <BucketForm />
-    </Modal>
-  )
-
-  return (
-    <Modal visible={visible} onClose={onClose}>
-      <Modal.Title>Create new bucket</Modal.Title>
-      {selectedBucket && (
-        <Modal.Subtitle>You will create a sub-bucket of {selectedBucket.name}</Modal.Subtitle>
-      )}
-      {creating ? (
-        <Loading />
-      ) : (
-        <BucketForm
-          defaultOwner={rootStore.web3Store.signerState.address}
-          owners={selectedBucket?.owners}
-          tokenAddress={selectedBucket?.token.address}
-          colors={selectedBucket?.data.colors}
-          onClose={onClose}
-          onSubmit={onSubmit}
-        />
-      )}
+      <BucketForm onSubmit={onSubmit} defaultValues={defaultValues} />
     </Modal>
   )
 }

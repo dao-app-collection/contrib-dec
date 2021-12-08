@@ -22,12 +22,12 @@ const Overview: React.FC = () => {
   }
 
   const handleBlur = () => {
-    if (selectedBucket.data.description !== newDesc) {
-      updateBucket({
-        title: selectedBucket.name,
-        description: newDesc,
-      })
-    }
+    // if (selectedBucket.data.description !== newDesc) {
+    //   updateBucket({
+    //     title: selectedBucket.name,
+    //     description: newDesc,
+    //   })
+    // }
   }
 
   return (
@@ -41,6 +41,10 @@ const Overview: React.FC = () => {
         onBlur={handleBlur}
       >
         {selectedBucket?.data.description}
+        Discord: {selectedBucket?.data.discord}
+        Website: {selectedBucket?.data.website}
+        Color: {selectedBucket?.data.primaryColor}
+        Logo: {selectedBucket?.data.logo}
       </Text>
       <Text p>
         Allocation: {selectedBucket?.allocation?.toString()} {selectedBucket.token.symbol()}

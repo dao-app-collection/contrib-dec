@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
-// import BucketEditAction from '../bucket-crud/BucketEditAction'
+import BucketEditAction from '../bucket-crud/BucketEditAction'
 import Heading from '../../components/Heading'
 import { useDao } from '../../context/DaoContext'
 import useIsBucketOwner from '../../hooks/useIsBucketOwner'
@@ -92,7 +92,7 @@ const BucketNav: FC = () => {
           </Breadcrumbs>
         )}
       </div>
-      {/* {true && <BucketEditAction />} */}
+      {true && <BucketEditAction />}
     </Container>
   )
 }

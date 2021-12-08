@@ -9,7 +9,7 @@ import { BucketMetaData } from '../../types/all-types'
 const API_URL = 'https://ceramic-clay.3boxlabs.com' // 'https://gateway.ceramic.network'
 
 export enum CeramicSchema {
-  BUCKET_META_DATA = 'k3y52l7qbv1fryfanod9dhaqx4ktq9vavxeunj6db6lko4qyttn3gsw663xon6l8g',
+  BUCKET_META_DATA = 'k3y52l7qbv1frxqaahvbejpzb1s4mu26894ec6dfsa9eu759u69hwo1x4bohl9dz4',
   TASK_META_DATA = 'k6zn3rc3v8qin1nhs5janurq194ioqf45aeumk07spnm19d0ob0v0iqywc2otkluxtg8vxtcp321881rtw6vdol15chnpt6r2obrdmyhaisfaodlbxdyjpy',
 }
 
@@ -58,17 +58,10 @@ class Ceramic {
       throw new Error('Missing did id')
     }
 
-    const doc2 = await TileDocument.create(
-      this.ceramic,
-      {
-        title: input.data.title,
-        description: input.data.description,
-      },
-      {
-        schema: input.schema,
-        controllers: [this.ceramic.did.id],
-      }
-    )
+    const doc2 = await TileDocument.create(this.ceramic, input.data, {
+      schema: input.schema,
+      controllers: [this.ceramic.did.id],
+    })
 
     return doc2.id.toString()
   }
@@ -92,21 +85,32 @@ class Ceramic {
 export default new Ceramic()
 
 // ceramic create tile --content '
-//  {
-//     "$schema": "http://json-schema.org/draft-07/schema#",
-//     "properties": {
-//         "title": {
-//         "type": "string"
-//         },
-//         "description": {
-//         "type": "string"
-//         }
-//     },
-//     "type": "object",
-//     "additionalProperties": false,
-//     "required": ["title", "description"]
+// {
+//   "$schema": "http://json-schema.org/draft-07/schema#",
+//   "properties": {
+//           "name": {
+//                   "type": "string"
+//           },
+//           "description": {
+//                   "type": "string"
+//           },
+//           "website": {
+//                   "type": "string"
+//           },
+//           "discord": {
+//                   "type": "string"
+//           },
+//           "logo": {
+//                   "type": "string"
+//           },
+//           "primaryColor": {
+//                   "type": "string"
+//           }
+//   },
+//   "type": "object",
+//   "additionalProperties": true,
+//   "required": ["name", "description", "website", "discord", "logo", "primaryColor"]
 // }
-// '
 
 // only update by task owner
 type Meta = {

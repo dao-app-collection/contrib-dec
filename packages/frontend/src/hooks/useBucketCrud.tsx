@@ -22,7 +22,7 @@ const useBucketCrud = ({ parentBucket }: { parentBucket?: BucketEntity }): useBu
         const ceramicId = await ceramic.create({
           schema: CeramicSchema.BUCKET_META_DATA,
           data: {
-            title: payload.name,
+            name: payload.name,
             description: payload.description,
           },
         })

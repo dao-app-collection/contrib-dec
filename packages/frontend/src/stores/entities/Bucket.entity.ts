@@ -20,6 +20,8 @@ export class BucketEntity {
   name: string
   nameAsSlug: string
   level: number
+
+  tokenAddress: string
   url = ''
   slug: string[] = []
   parent?: BucketEntity
@@ -48,6 +50,7 @@ export class BucketEntity {
       storeKey: `${data.name}token`,
       // symbolOverride: 'ETH',
     })
+    this.tokenAddress = data.token
 
     makeObservable(this, {
       topLevel: computed,

@@ -8,7 +8,7 @@ import { Field } from '../../types/all-types'
 
 type Props = Field
 
-const FormMultiselect: FC<Props> = ({ label, name, required = false, ...props }) => {
+const FormMultiselect: FC<Props> = ({ label, name, ...props }) => {
   const { control } = useFormContext() // retrieve all hook methods
 
   return (
@@ -21,7 +21,9 @@ const FormMultiselect: FC<Props> = ({ label, name, required = false, ...props })
           return (
             <CreatableSelect
               {...field}
+              {...props}
               isMulti
+              isDisabled={props.disabled}
               onChange={(val) => {
                 field.onChange(val.map(({ value }) => value))
               }}
