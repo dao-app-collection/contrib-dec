@@ -2,6 +2,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import { Modal, ModalProps, Spinner } from '@geist-ui/react'
 import styled from 'styled-components'
+import { X as XIcon } from '@geist-ui/react-icons'
 
 const StyledModal = styled(Modal)`
   position: relative;
@@ -21,6 +22,12 @@ const LoadingScreen = styled.div`
   z-index: 3;
 `
 
+const Close = styled.div`
+  cursor: pointer;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+`
 type Props = ModalProps & {
   title: string
   subText?: string
@@ -30,6 +37,9 @@ type Props = ModalProps & {
 const CustomModal: FC<Props> = ({ title, subText, children, loading, ...props }) => {
   return (
     <StyledModal {...props} disableBackdropClick width="50rem">
+      <Close onClick={props.onClose}>
+        <XIcon />
+      </Close>
       {loading && (
         <LoadingScreen>
           <Spinner />
