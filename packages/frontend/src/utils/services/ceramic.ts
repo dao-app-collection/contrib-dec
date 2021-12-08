@@ -66,7 +66,7 @@ class Ceramic {
     return doc2.id.toString()
   }
 
-  read = async (id: string): Promise<void | CeramicInput['data']> => {
+  read = async <T>(id: string): Promise<void | T> => {
     try {
       const data = await this.ceramic.loadStream(id)
       return data.content

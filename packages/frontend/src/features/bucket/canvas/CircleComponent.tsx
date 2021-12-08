@@ -3,6 +3,7 @@ import { CircleProps, useNodeMouseHandlers } from '@nivo/circle-packing'
 import { FC } from 'react'
 import styled, { css } from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
+import { lighten } from 'polished'
 import { Z_INDEX } from '../../../utils/general-settings'
 import Heading from '../../../components/Heading'
 
@@ -51,7 +52,7 @@ const InfoInner = styled(motion.div)`
 const Circle = styled(animated.div).withConfig({
   shouldForwardProp: (prop, defaultValidatorFn) =>
     !['isChildCircle', 'isSelected'].includes(prop) && defaultValidatorFn(prop),
-})<{ depth: number; isNextLevel: boolean; isSelected: boolean }>`
+})<{ depth: number; isNextLevel: boolean; isSelected: boolean; color: string }>`
   transition: background 0.3s ease, background-color 0.3s ease;
   will-change: background, background-color;
   position: absolute;
@@ -62,21 +63,24 @@ const Circle = styled(animated.div).withConfig({
   ${(props) =>
     props.depth === 0 &&
     css`
-      box-shadow: inset 0px 0px 7px 4px rgb(25 0 95 / 62%);
+      box-shadow: inset 0px 0px 7px 4px  ${lighten(0.62)(props.color)}   ;
       cursor: pointer
       opacity: 1;;
     `}
+
   ${(props) =>
     props.isNextLevel &&
     css`
-      background: linear-gradient(
+      /* background: linear-gradient(
         154.57deg,
         #6035d6 2.94%,
         #6035d6 2.95%,
         rgba(123, 75, 255, 0) 105.2%
-      );
-      background: linear-gradient(154.57deg, #6035d6 2.94%, rgba(123, 75, 255, 0) 105.2%);
+      ); */
+      background: linear-gradient(154.57deg, ${props.color} 2.94%, rgba(123, 75, 255, 0) 105.2%);
+
       background-color: transparent;
+
       box-shadow: inset 0px -1.85837px 50.176px rgba(255, 255, 255, 0.31);
       box-sizing: border-box;
       opacity: 1;
@@ -91,7 +95,6 @@ const Circle = styled(animated.div).withConfig({
 
   ${(props) =>
     props.isSelected &&
-    props.depth !== 0 &&
     css`
       border: 12px solid #ffffff;
       box-shadow: inset 0px -3.02075px 55.5603px rgba(255, 255, 255, 0.31);
@@ -123,13 +126,13 @@ const CircleComponent = (extraProps) => (circleProps: CircleProps<any>) => {
       depth={node.depth}
       isSelected={isSelected}
       isNextLevel={isNextLevel}
+      color={node.data.color}
       style={{
         top: interpolatePosition(style.y, style.radius),
         left: interpolatePosition(style.x, style.radius),
         height: size,
         width: size,
         backgroundColor: style.color,
-
         borderRadius: style.radius,
       }}
       onMouseEnter={handlers.onMouseEnter}

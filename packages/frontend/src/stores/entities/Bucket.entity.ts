@@ -1,4 +1,4 @@
-import { computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { BigNumber, ethers } from 'ethers'
 import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
@@ -33,7 +33,8 @@ export class BucketEntity {
   _topLevel?: BucketEntity
   ceramicId: string
   creatingTask = false
-  data: BucketMetaData = {}
+  data?: BucketMetaData = undefined
+  color = ''
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
@@ -55,9 +56,11 @@ export class BucketEntity {
     makeObservable(this, {
       topLevel: computed,
       allocation: computed,
+      color: observable,
       tasks: observable,
       children: observable,
       data: observable,
+      setColor: action,
     })
   }
 
@@ -77,14 +80,45 @@ export class BucketEntity {
 
   load = async () => {
     try {
-      const data = await ceramic.read(this.ceramicId)
+      const data = await ceramic.read<BucketMetaData>(this.ceramicId)
 
-      runInAction(() => {
-        this.data = data
-      })
+      if (data) {
+        runInAction(() => {
+          this.data = data
+        })
+      }
     } catch (e) {
       console.error(e)
     }
+  }
+
+  setColor = () => {
+    if (this.name === 'ROME DAO') {
+      console.log('setColor', this, this.data)
+    }
+    if (!this.data) {
+      return
+    }
+
+    if (this.data?.primaryColor) {
+      console.log('PRIMAR', this.data.primaryColor)
+      this.color = this.data.primaryColor
+      return
+    }
+
+    let { parent } = this
+    let _color
+
+    while (parent && !_color) {
+      if (parent) {
+        if (parent.data?.primaryColor) {
+          _color = parent.data.primaryColor
+        }
+        parent = parent.parent
+      }
+    }
+
+    this.color = _color || ''
   }
 
   addChild = (child: BucketEntity): void => {
@@ -122,6 +156,8 @@ export class BucketEntity {
       this.url = `/${this.nameAsSlug}`
       this.slug = [this.nameAsSlug]
     }
+
+    this.setColor()
   }
 
   init = (): void => {

@@ -1,10 +1,17 @@
 import { useRouter } from 'next/dist/client/router'
 import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import { createGlobalStyle } from 'styled-components'
 import { useRootStore } from './RootStoreProvider'
 import { DAOEntity } from '../stores/entities/DAO.entity'
 import { TaskEntity } from '../stores/entities/Task.entity'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
+
+const DAOStyle = createGlobalStyle<{ primary: string }>`
+  html {
+     --dao-primary-color: ${(props) => props.primary};
+  }
+`
 
 type DaoContextInterface = {
   navigateTo: (bucket: BucketEntity) => void
@@ -81,7 +88,14 @@ export const DaoProvider: FC = observer(({ children }) => {
     currentTask,
   }
 
-  return <DaoContext.Provider value={value}>{children}</DaoContext.Provider>
+  console.log('------selectedBucket', selectedBucket)
+
+  return (
+    <DaoContext.Provider value={value}>
+      <DAOStyle primary={selectedBucket?.color} />
+      {children}
+    </DaoContext.Provider>
+  )
 })
 
 export const useDao = (): DaoContextInterface => {

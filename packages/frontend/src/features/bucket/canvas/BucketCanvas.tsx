@@ -4,13 +4,14 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { ResponsiveCirclePackingHtml } from '@nivo/circle-packing'
 
+import { toJS } from 'mobx'
 import CircleComponent from './CircleComponent'
 import { useDao } from '../../../context/DaoContext'
 import { BucketEntity } from '../../../stores/entities/Bucket.entity'
 import { pixelSizes } from '../../../theme/breakpoints'
 
 const Container = styled.div`
-  background-color: #321c6f;
+  background-color: ${(props) => props.theme.dao.primary};
   height: 100vh;
   left: 420px;
   position: fixed;
@@ -61,7 +62,7 @@ const BucketCanvas: FC = () => {
     return {
       name: b.name,
       children: b.children.map((c) => createChild(c, maxLevel)) || [],
-      color: 'hsl(256, 60%, 27%)',
+      color: toJS(b.color),
       gotChildren: Boolean(b.children.length),
       size: b.allocation?.toNumber() || 1,
       entity: {
@@ -95,8 +96,8 @@ const BucketCanvas: FC = () => {
         zoomedId={zoomedId}
         motionConfig="slow"
         circleComponent={CircleComponent(extraProps)}
-        colors="#321c6f"
-        childColor={{ from: 'color', modifiers: [['brighter', 0.2]] }}
+        colors={selectedBucket.color}
+        childColor={{ from: 'color', modifiers: [['brighter', 0.4]] }}
         inheritColorFromParent
         onClick={(node) => {
           if (node.depth === currentDepth) {

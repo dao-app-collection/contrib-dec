@@ -4,7 +4,7 @@ import BucketCanvas from './canvas/BucketCanvas'
 import BucketContent from './BucketContent'
 
 const Container = styled.div`
-  background-color: #321c6f;
+  background-color: ${(props) => props.theme.dao.primary};
   position: relative;
 `
 
