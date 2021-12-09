@@ -199,7 +199,7 @@ export class BucketEntity {
       // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
       return new TaskEntity(this.root, {
         data: {
-          id: '',
+          id: event.args.id,
           ceramicId: event.args.data,
           // deadline: event.args.deadline,
           // issuers: event.args.issuers,

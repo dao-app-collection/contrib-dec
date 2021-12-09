@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import BucketNav from './BucketNav'
@@ -8,6 +8,7 @@ import Tabs from '../../components/Tabs'
 import TaskList from '../tasks/TaskList'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import Overview from '../overview/Overview'
+import { useDao } from '../../context/DaoContext'
 
 const Top = styled.div`
   background-color: ${(props) => props.theme.bg.secondary};
@@ -23,8 +24,15 @@ const Inner = styled.div`
 export type TabId = 'overview' | 'tasks' | 'members' | 'suggestions'
 
 const BucketInner: FC = () => {
+  const { currentTask } = useDao()
   const [activeTab, setActiveTab] = useState<TabId>('overview')
   const selected = useSelectedBucket()
+
+  useEffect(() => {
+    if (currentTask) {
+      setActiveTab('tasks')
+    }
+  }, [currentTask])
 
   if (!selected) {
     return null

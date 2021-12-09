@@ -1,4 +1,5 @@
 import { Dayjs } from 'dayjs'
+import { BigNumber } from 'ethers'
 import { UseFormRegister } from 'react-hook-form'
 
 export type TheGraphBucket = {
@@ -32,7 +33,7 @@ export type TaskMetaData = {
 }
 
 export type TheGraphTask = {
-  id: string
+  id: BigNumber
   ceramicId: string
   // bucket: string
 }

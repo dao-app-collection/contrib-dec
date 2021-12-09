@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { makeObservable, observable, runInAction } from 'mobx'
 import { TaskMetaData, TheGraphTask } from '../../types/all-types'
 import ceramic from '../../utils/services/ceramic'
@@ -5,13 +6,13 @@ import { RootStore } from '../RootStore'
 
 export class TaskEntity {
   root: RootStore
-  id = ''
+  id: string
   ceramicId: string
   data?: TaskMetaData = undefined
 
   constructor(root: RootStore, { data }: { data: TheGraphTask }) {
     this.root = root
-    // this.id = ethers.utils.getAddress(data.id)
+    this.id = data.id.toString()
     this.ceramicId = data?.ceramicId
 
     makeObservable(this, {
@@ -24,6 +25,8 @@ export class TaskEntity {
   load = async (): Promise<void> => {
     try {
       const data = await ceramic.read<TaskMetaData>(this.ceramicId)
+
+      console.log('task data', { data })
       if (data) {
         runInAction(() => {
           this.data = data
