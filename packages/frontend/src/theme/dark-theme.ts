@@ -14,6 +14,7 @@ export const darkTheme: DefaultTheme = {
     secondary: '#000',
     primary: '#252525',
     placeholder: '#A1A1A1',
+    card: '#3E3E3E',
   },
   text: {
     primary: ' #FFF',

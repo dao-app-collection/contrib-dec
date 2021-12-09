@@ -224,6 +224,10 @@ export class BucketEntity {
     })
     console.log({ bucketTasks })
 
+    runInAction(() => {
+      this.tasks = bucketTasks
+    })
+
     this.getAllocation()
 
     autorun(() => {
