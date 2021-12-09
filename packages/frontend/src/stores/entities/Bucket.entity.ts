@@ -54,6 +54,7 @@ export class BucketEntity {
       children: computed,
       parent: computed,
       level: computed,
+      allChildren: computed,
       color: observable,
       tasks: observable,
       data: observable,
@@ -105,6 +106,18 @@ export class BucketEntity {
 
   get children(): BucketEntity[] {
     return this.root.bucketStore.buckets.filter((bucket) => bucket.parent?.id === this.id)
+  }
+
+  get allChildren(): BucketEntity[] {
+    const children: BucketEntity[] = []
+
+    const mapChild = (child: BucketEntity) => {
+      children.push(child)
+      child.children.forEach(mapChild)
+    }
+    this.children.forEach(mapChild)
+
+    return children
   }
 
   load = async () => {

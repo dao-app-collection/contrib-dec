@@ -11,12 +11,6 @@ import { getBucketSlug } from '../utils/buckets-utils'
 import { getAllBuckets, getEntityFromSlug } from '../utils/services/bucket-api'
 
 const SlugPage: FC = (props) => {
-  const router = useRouter()
-
-  // if (router.isFallback) {
-  //   return <div>fallback...</div>
-  // }
-
   const store = useRootStore()
 
   if (store.bucketStore.loading) {

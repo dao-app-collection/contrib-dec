@@ -7,6 +7,7 @@ import { DAOEntity } from '../stores/entities/DAO.entity'
 import { TaskEntity } from '../stores/entities/Task.entity'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
 import SEO from '../components/SEO'
+import AvailableBuckets from '../features/landing/AvailableBuckets'
 
 const DAOStyle = createGlobalStyle<{ primary: string }>`
   html {
@@ -96,6 +97,10 @@ export const DaoProvider: FC = observer(({ children }) => {
         .reverse()
         .join(' - ')
     : 'Loading ...'
+
+  if (!selectedBucket) {
+    return <AvailableBuckets />
+  }
 
   return (
     <DaoContext.Provider value={value}>

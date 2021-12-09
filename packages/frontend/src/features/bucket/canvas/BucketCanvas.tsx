@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { ResponsiveCirclePackingHtml } from '@nivo/circle-packing'
 
 import { toJS } from 'mobx'
+import Decimal from 'decimal.js'
 import CircleComponent from './CircleComponent'
 import { useDao } from '../../../context/DaoContext'
 import { BucketEntity } from '../../../stores/entities/Bucket.entity'
@@ -58,16 +59,14 @@ const BucketCanvas: FC = () => {
   if (!topLevel) {
     return null
   }
-
   const createChild = (b: BucketEntity): DataItem => {
-    console.log('color', b.color, 'asd')
     return toJS({
       id: b.id,
       name: b.name,
       children: b.children.map((c) => createChild(c)) || [],
       color: toJS(b.color),
       gotChildren: Boolean(b.children.length),
-      size: b.allocation?.toNumber() || 1,
+      size: b.allocation?.toNumber() || 1.2,
       isSelected: b.id === zoomedId,
       currentDepth,
       entity: {

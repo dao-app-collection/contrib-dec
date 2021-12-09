@@ -37,11 +37,12 @@ const Counter = styled(animated.div)`
 const Logo = styled(animated.div)`
   border-radius: 50%;
   left: 50%;
+  min-height: 35px;
+  min-width: 35px;
   overflow: hidden;
   position: absolute;
   top: 0;
   transform: translate(-50%, -50%);
-
   img {
     height: 100%;
     object-fit: fill;
@@ -130,7 +131,7 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
   const isNextLevel = currentDepth + 1 === node.depth
   let showInfo = currentDepth + 1 === node.depth
   const logo = node.data.entity?.logo
-  const logoSize = interpolateSize(style.radius, 0.3)
+  const logoSize = interpolateSize(style.radius, 0.4)
   const titleSize = interpolateSize(style.radius, 0.2)
   const textSize = interpolateSize(style.radius, 0.15)
 
