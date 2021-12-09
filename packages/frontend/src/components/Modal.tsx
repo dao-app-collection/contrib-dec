@@ -6,7 +6,6 @@ import { X as XIcon } from '@geist-ui/react-icons'
 
 const StyledModal = styled(Modal)`
   position: relative;
-  width: 760px;
 `
 
 const LoadingScreen = styled.div`
@@ -32,11 +31,19 @@ type Props = ModalProps & {
   title: string
   subText?: string
   loading?: boolean
+  width?: string
 }
 
-const CustomModal: FC<Props> = ({ title, subText, children, loading, ...props }) => {
+const CustomModal: FC<Props> = ({
+  title,
+  subText,
+  children,
+  loading,
+  width = '50rem',
+  ...props
+}) => {
   return (
-    <StyledModal {...props} disableBackdropClick width="50rem">
+    <StyledModal {...props} disableBackdropClick width={width}>
       <Close onClick={props.onClose}>
         <XIcon />
       </Close>

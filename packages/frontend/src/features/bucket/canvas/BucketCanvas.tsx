@@ -60,8 +60,6 @@ const BucketCanvas: FC = () => {
   }
 
   const createChild = (b: BucketEntity): DataItem => {
-    const symbol = b.token.symbol() || ''
-
     return toJS({
       id: b.id,
       name: b.name,
@@ -74,7 +72,7 @@ const BucketCanvas: FC = () => {
       entity: {
         logo: b.data?.logo,
         allocation: b.allocation?.toNumber() || 0,
-        tokenSymbol: typeof symbol === 'string' ? symbol : symbol[0],
+        tokenSymbol: b.getSymbol(),
       },
     })
   }

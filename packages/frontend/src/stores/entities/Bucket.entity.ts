@@ -189,19 +189,17 @@ export class BucketEntity {
     this.setColor()
   }
 
+  getSymbol = (): string => {
+    const symbol = this.token.symbol() || ''
+    return typeof symbol === 'string' ? symbol : symbol[0]
+  }
+
   init = (): void => {
     // this.tasks = mockTasks
     //   .filter((task) => task.bucket === this.id)
     //   .map((task) => new TaskEntity(this.root, { task }))
 
     this.getAllocation()
-
-    reaction(
-      () => [this.parent, this.name],
-      () => {
-        this.setStructure()
-      }
-    )
 
     autorun(() => {
       this.setStructure()
@@ -234,7 +232,8 @@ export class BucketEntity {
       )
 
       if (allowance.lt(amount)) {
-        await erc20Contract.approve(ethers.utils.getAddress(this.id), INFINITE)
+        const tx = await erc20Contract.approve(ethers.utils.getAddress(this.id), INFINITE)
+        await tx.wait()
       }
 
       const contract = Bucket__factory.connect(
@@ -242,7 +241,8 @@ export class BucketEntity {
         this.root.web3Store.signer
       )
 
-      await contract.fundBucket(amount)
+      const tx2 = await contract.fundBucket(amount)
+      await tx2.wait()
       await this.getAllocation()
     }
   }

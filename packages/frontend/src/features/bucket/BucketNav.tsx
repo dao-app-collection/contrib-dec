@@ -19,6 +19,10 @@ const arrowBack = (
     <path d="M8 1L2 7L8 13" stroke="white" strokeWidth="1.5" />
   </svg>
 )
+
+const StyledBreadcrumbs = styled(Breadcrumbs)`
+  flex-wrap: wrap;
+`
 const BackArrowWrap = styled.div`
   align-items: center;
   background-color: ${(props) => props.theme.bg.placeholder};
@@ -65,7 +69,7 @@ const BucketNav: FC = () => {
       <div>
         <Heading type="h2">{selectedBucket.name}</Heading>
         {items.length > 1 && (
-          <Breadcrumbs>
+          <StyledBreadcrumbs>
             {items.filter(notEmpty).map((item) => (
               <Breadcrumbs.Item key={item.id}>
                 <Link
@@ -79,7 +83,7 @@ const BucketNav: FC = () => {
                 </Link>
               </Breadcrumbs.Item>
             ))}
-          </Breadcrumbs>
+          </StyledBreadcrumbs>
         )}
       </div>
       {isOwner && <BucketEditAction />}

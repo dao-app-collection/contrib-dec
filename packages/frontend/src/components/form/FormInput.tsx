@@ -1,9 +1,9 @@
-import { Input } from '@geist-ui/react'
+import { Input, InputProps } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
 import { Field } from '../../types/all-types'
 
-type Props = Field
+type Props = Field & InputProps
 
 const FormInput: FC<Props> = ({ label, register, name, required = false, ...props }) => {
   return (

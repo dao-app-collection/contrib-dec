@@ -1,8 +1,6 @@
-import { Text } from '@geist-ui/react'
+import { Description, Link, Spacer, Text } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
-import FundBucket from '../bucket/FundBucket'
-import CreateSubBucketButton from '../bucket-crud/CreateSubBucketButton'
 
 const Overview: React.FC = () => {
   const selectedBucket = useSelectedBucket()
@@ -13,16 +11,29 @@ const Overview: React.FC = () => {
 
   return (
     <div>
-      <CreateSubBucketButton />
       <Text p>
-        {selectedBucket?.data.description}
-        Discord: {selectedBucket?.data.discord}
-        Website: {selectedBucket?.data.website}
+        <div>
+          <Description title="Description" />
+          {selectedBucket?.data.description}
+        </div>
+        {selectedBucket?.data.discord && (
+          <div>
+            <Spacer h={2} />
+            <Description title="Discord" />
+            <Link href={selectedBucket?.data.discord}>{selectedBucket?.data.discord}</Link>
+          </div>
+        )}
+        {selectedBucket?.data.website && (
+          <div>
+            <Spacer h={2} />
+            <Description title="Website" />
+            <Link href={selectedBucket?.data.website}>{selectedBucket?.data.website}</Link>
+          </div>
+        )}
+        <Spacer h={2} />
+        <Description title="Allocation" />
+        {selectedBucket?.allocation?.toString()} {selectedBucket.token.symbol()}
       </Text>
-      <Text p>
-        Allocation: {selectedBucket?.allocation?.toString()} {selectedBucket.token.symbol()}
-      </Text>
-      <FundBucket />
     </div>
   )
 }
