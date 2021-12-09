@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import { RootStore } from './RootStore'
 import { ContractStore } from './ContractStore'
 import {
+  Bucket__factory,
   ContribBucketFactoryAbi as ContribBucket,
   ContribBucketFactoryAbi__factory,
   StandardBounties__factory,
@@ -28,7 +29,6 @@ export class ContribBucketFactoryContractStore extends ContractStore {
 
     if (typeof window !== 'undefined') {
       this.getEvents()
-      this.getTaskEvents()
     }
   }
 
@@ -78,20 +78,5 @@ export class ContribBucketFactoryContractStore extends ContractStore {
     )
 
     return (result || []) as BucketCreatedEvent[]
-  }
-
-  getTaskEvents = async (): Promise<ethers.Event[]> => {
-    const strandardContract = StandardBounties__factory.connect(
-      '0x6ac6baf770b3ffe2ddb3c5797e47c17cebef2ec4',
-      this.root.web3Store.coreProvider
-    )
-
-    const result = await strandardContract.queryFilter(
-      strandardContract.filters.BountyIssued(null, null, null, null, null, null),
-      0,
-      'latest'
-    )
-
-    return result || []
   }
 }

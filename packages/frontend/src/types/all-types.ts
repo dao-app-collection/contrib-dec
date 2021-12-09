@@ -25,10 +25,16 @@ export type BucketMetaData = {
   primaryColor?: string
 }
 
+export type TaskMetaData = {
+  title: string
+  description: string
+  deadline: Dayjs
+}
+
 export type TheGraphTask = {
-  data: string
   id: string
-  bucket: string
+  ceramicId: string
+  // bucket: string
 }
 
 export type TaskPopulated = TheGraphTask
@@ -86,3 +92,7 @@ export type Field = {
 }
 
 export type FormFieldType = 'input' | 'textarea' | 'multiselect' | 'file'
+
+export type MyField = Omit<Field, 'register'> & {
+  type?: FormFieldType
+}

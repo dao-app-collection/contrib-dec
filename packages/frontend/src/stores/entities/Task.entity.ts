@@ -1,12 +1,36 @@
-import { TheGraphTask } from '../../types/all-types'
+import { makeObservable, observable, runInAction } from 'mobx'
+import { TaskMetaData, TheGraphTask } from '../../types/all-types'
+import ceramic from '../../utils/services/ceramic'
 import { RootStore } from '../RootStore'
 
 export class TaskEntity {
   root: RootStore
-  id: string
+  id = ''
+  ceramicId: string
+  data?: TaskMetaData = undefined
 
-  constructor(root: RootStore, { task }: { task: TheGraphTask }) {
+  constructor(root: RootStore, { data }: { data: TheGraphTask }) {
     this.root = root
-    this.id = task.id
+    // this.id = ethers.utils.getAddress(data.id)
+    this.ceramicId = data?.ceramicId
+
+    makeObservable(this, {
+      data: observable,
+    })
+
+    this.load()
+  }
+
+  load = async (): Promise<void> => {
+    try {
+      const data = await ceramic.read<TaskMetaData>(this.ceramicId)
+      if (data) {
+        runInAction(() => {
+          this.data = data
+        })
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
