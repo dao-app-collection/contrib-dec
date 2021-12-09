@@ -32,6 +32,7 @@ export class TaskStore {
     try {
       const events = await this.root.contribBucketFactoryContractStore.getTaskEvents()
 
+      console.log({ events })
       const result: any[] = await Promise.all(
         events.map(async (event) => {
           if (!event.args) {

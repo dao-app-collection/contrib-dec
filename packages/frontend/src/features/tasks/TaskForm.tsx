@@ -1,57 +1,85 @@
 import * as React from 'react'
-import { Grid, Input, Textarea, Button, useInput } from '@geist-ui/react'
+import { Grid, Button, Spacer, Divider } from '@geist-ui/react'
 import { FC } from 'react'
 import dayjs from 'dayjs'
-import { TaskPayload } from '../../types/all-types'
+import { FormProvider, useForm } from 'react-hook-form'
+import { MyField, TaskPayload } from '../../types/all-types'
 import { useRootStore } from '../../context/RootStoreProvider'
+import FormField from '../../components/form/FormField'
+
+type FormData = {
+  title: string
+  description: string
+  deadline: string
+  issuers: string[]
+  approvers: string[]
+}
 
 type Props = {
   onSubmit: (payload: TaskPayload) => void
+  edit?: boolean
+  defaultValues?: Partial<FormData>
 }
 
-const TaskForm: FC<Props> = ({ onSubmit }) => {
+const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
   const { uiStore } = useRootStore()
-  const titleInput = useInput('')
-  const descriptionInput = useInput('')
 
-  const handleSubmit = async () => {
-    if (titleInput.state && descriptionInput.state) {
-      try {
-        onSubmit({
-          title: titleInput.state,
-          description: descriptionInput.state,
-          deadline: dayjs().add(10, 'day'),
-          approvers: [],
-          issuers: [],
-        })
-      } catch (e) {
-        uiStore.errorToast('Error creating task', e)
-      }
+  const fields: MyField[] = [
+    {
+      name: 'title',
+      label: 'Name',
+      required: true,
+      disabled: edit,
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      required: true,
+      type: 'textarea',
+    },
+  ]
+
+  const methods = useForm<FormData>({
+    defaultValues: {
+      ...defaultValues,
+    },
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = methods
+
+  const _onSubmit = handleSubmit((data) => {
+    try {
+      onSubmit({
+        title: data.title,
+        description: data.description,
+        deadline: dayjs().add(10, 'day'),
+        approvers: [],
+        issuers: [],
+      })
+    } catch (e) {
+      uiStore.errorToast('Error creating task', e)
     }
-  }
+  })
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        handleSubmit()
-      }}
-    >
-      <Grid.Container gap={2}>
-        <Grid xs={24}>
-          <Input clearable {...titleInput.bindings} width="100%" placeholder="Title" />
-        </Grid>
-        <Grid xs={24}>
-          <Textarea {...descriptionInput.bindings} width="100%" placeholder="Description" />
-        </Grid>
-
-        <Grid xs={24}>
-          <Button htmlType="submit" width="100%">
-            Create task
-          </Button>
-        </Grid>
-      </Grid.Container>
-    </form>
+    <FormProvider {...methods}>
+      <form onSubmit={_onSubmit}>
+        <Grid.Container gap={2}>
+          {fields.map((field) => (
+            <Grid xs={24} key={field.name}>
+              <FormField {...field} register={register} />
+            </Grid>
+          ))}
+        </Grid.Container>
+        <Spacer h={2} />
+        <Divider />
+        <Button htmlType="submit">{edit ? 'Update task' : 'Create task'}</Button>
+      </form>
+    </FormProvider>
   )
 }
 

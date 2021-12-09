@@ -8,6 +8,7 @@ import { RootStore } from '../RootStore'
 import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
 import { slugify } from '../../utils/buckets-utils'
 import { Bucket__factory } from '../../generated/factories/Bucket__factory'
+import { TaskCreatedEvent } from '../../generated/Bucket'
 
 import { ERC20__factory } from '../../generated/factories/ERC20__factory'
 import ceramic from '../../utils/services/ceramic'
@@ -84,6 +85,18 @@ export class BucketEntity {
     }
 
     return _level
+  }
+
+  fetchBucketEvents = async (bucketAddress: string): Promise<TaskCreatedEvent[]> => {
+    const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
+
+    const result = await bucketContract.queryFilter(
+      bucketContract.filters.TaskCreated(null, null, null, null, null),
+      0,
+      'latest'
+    )
+
+    return (result || []) as TaskCreatedEvent
   }
 
   get topLevel(): BucketEntity | void {
@@ -208,10 +221,25 @@ export class BucketEntity {
     return typeof symbol === 'string' ? symbol : symbol[0]
   }
 
-  init = (): void => {
-    // this.tasks = mockTasks
-    //   .filter((task) => task.bucket === this.id)
-    //   .map((task) => new TaskEntity(this.root, { task }))
+  init = async (): Promise<void> => {
+    const result = await this.fetchBucketEvents(this.id)
+    const bucketTasks = result.map((event) => {
+      // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
+      return new TaskEntity(this.root, {
+        data: {
+          id: '',
+          ceramicId: event.args.data,
+          // deadline: event.args.deadline,
+          // issuers: event.args.issuers,
+          // approvers: event.args.approvers,
+        },
+      })
+    })
+    console.log({ bucketTasks })
+
+    runInAction(() => {
+      this.tasks = bucketTasks
+    })
 
     this.getAllocation()
 
