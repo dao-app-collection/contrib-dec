@@ -2,9 +2,11 @@ import { Divider, Page, Spacer } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
+import AvailableBuckets from './AvailableBuckets'
 import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
+import CreateBucketButton from '../bucket-crud/CreateBucketButton'
 
 const Wrapper = styled.div`
   background: radial-gradient(
@@ -26,13 +28,15 @@ const Wrapper = styled.div`
       rgba(107, 152, 238, 0) 100%
     ),
     #000000;
-  min-height: 100vh;
-
   main,
   section,
   header,
   svg {
     overflow: visible;
+  }
+
+  section {
+    min-height: none;
   }
 
   a {
@@ -99,6 +103,10 @@ const LandingPage: FC = () => {
           </div>
         </TextPart>
         <Divider />
+        <Spacer h={4} />
+
+        <AvailableBuckets />
+        <CreateBucketButton />
       </Page>
     </Wrapper>
   )

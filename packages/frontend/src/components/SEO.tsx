@@ -94,6 +94,7 @@ const SEO: FC<Props> = ({ description, meta = [], keywords = [], title, image })
       {metaContent.map((m) => (
         <meta {...m} key={'name' in m ? m.name : m.property} />
       ))}
+      <link rel="shortcut icon" href="/favicon.png" />
 
       <meta charSet="utf-8" />
     </Head>

@@ -104,7 +104,7 @@ const Content = styled.div`
   }
 
   h1 {
-    font-size: 70px;
+    font-size: 74px;
   }
 
   h3 {
