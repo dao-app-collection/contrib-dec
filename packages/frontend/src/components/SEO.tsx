@@ -29,7 +29,7 @@ const SEO: FC<Props> = ({ description, meta = [], keywords = [], title, image })
   //     }
   //   }
 
-  const metaImage = '/hej.png'
+  const metaImage = '/og-image.png'
   const metaContent = [
     {
       name: 'description',

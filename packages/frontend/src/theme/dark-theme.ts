@@ -10,6 +10,10 @@ export const darkTheme: DefaultTheme = {
     primary: 'var(--dao-primary-color)',
   },
 
+  contrib: {
+    primary: '#CA87FF',
+  },
+
   bg: {
     secondary: '#000',
     primary: '#252525',
