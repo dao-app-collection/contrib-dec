@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, autorun, computed, makeObservable, observable, runInAction } from 'mobx'
 import { BigNumber, ethers } from 'ethers'
 import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
@@ -24,8 +24,6 @@ export class BucketEntity {
   tokenAddress: string
   url = ''
   slug: string[] = []
-  parent?: BucketEntity
-  children: BucketEntity[] = []
   tasks: TaskEntity[] = []
   token: Erc20Store
   parentAddress?: string
@@ -56,12 +54,15 @@ export class BucketEntity {
     makeObservable(this, {
       topLevel: computed,
       allocation: computed,
+      children: computed,
+      parent: computed,
       color: observable,
       tasks: observable,
-      children: observable,
       data: observable,
       setColor: action,
     })
+
+    this.init()
   }
 
   get topLevel(): BucketEntity | void {
@@ -76,6 +77,14 @@ export class BucketEntity {
     }
 
     return new Decimal('0')
+  }
+
+  get parent(): BucketEntity | void {
+    return this.root.bucketStore.buckets.find((bucket) => bucket.id === this.parentAddress)
+  }
+
+  get children(): BucketEntity[] | void {
+    return this.root.bucketStore.buckets.filter((bucket) => bucket.parent?.id === this.id)
   }
 
   load = async () => {
@@ -142,7 +151,7 @@ export class BucketEntity {
   }
 
   setParent = (parent: BucketEntity): void => {
-    this.parent = parent
+    // this.parent = parent
   }
 
   setStructure = () => {
@@ -173,11 +182,15 @@ export class BucketEntity {
   }
 
   init = (): void => {
-    this.tasks = mockTasks
-      .filter((task) => task.bucket === this.id)
-      .map((task) => new TaskEntity(this.root, { task }))
+    // this.tasks = mockTasks
+    //   .filter((task) => task.bucket === this.id)
+    //   .map((task) => new TaskEntity(this.root, { task }))
 
     this.getAllocation()
+
+    autorun(() => {
+      this.setStructure()
+    })
   }
 
   getAllocation = async (): Promise<void> => {
