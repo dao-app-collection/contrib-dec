@@ -165,7 +165,7 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
       onMouseLeave={handlers.onMouseLeave}
       onClick={handlers.onClick}
     >
-      <AnimatePresence>
+      <AnimatePresence key={node.id}>
         {logo && (
           <Logo
             style={{

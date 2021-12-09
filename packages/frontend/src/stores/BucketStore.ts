@@ -55,7 +55,7 @@ export class BucketStore {
 
       await Promise.all(entities.map((entity) => entity.load()))
 
-      const buckets = buildBucketEntityStructure(entities)
+      const buckets = entities // buildBucketEntityStructure(entities)
       runInAction(() => {
         this.buckets = buckets
         this.loading = false

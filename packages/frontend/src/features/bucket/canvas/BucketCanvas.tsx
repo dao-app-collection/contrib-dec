@@ -44,7 +44,7 @@ const BucketCanvas: FC = () => {
 
   useEffect(() => {
     if (selectedBucket && selectedBucket.id !== zoomedId) {
-      setZoomedId(selectedBucket.name)
+      setZoomedId(selectedBucket.id)
       setDepth(selectedBucket.level - 1)
     }
   }, [selectedBucket])
@@ -62,30 +62,30 @@ const BucketCanvas: FC = () => {
   const createChild = (b: BucketEntity): DataItem => {
     const symbol = b.token.symbol() || ''
 
-    return {
+    return toJS({
+      id: b.id,
       name: b.name,
       children: b.children.map((c) => createChild(c)) || [],
       color: toJS(b.color),
       gotChildren: Boolean(b.children.length),
       size: b.allocation?.toNumber() || 1,
-      isSelected: b.name === zoomedId,
+      isSelected: b.id === zoomedId,
       currentDepth,
       entity: {
         logo: b.data?.logo,
         allocation: b.allocation?.toNumber() || 0,
         tokenSymbol: typeof symbol === 'string' ? symbol : symbol[0],
       },
-    }
+    })
   }
 
   const data = createChild(topLevel)
-
   return (
     <Container>
       <ResponsiveCirclePackingHtml
         data={data}
         margin={{ top: 120, right: 20, bottom: 120, left: 20 }}
-        id="name"
+        id="id"
         value="size"
         enableLabels={false}
         padding={32}
@@ -105,7 +105,7 @@ const BucketCanvas: FC = () => {
             id = node.id
             depth = node.depth
           } else if (selectedBucket.parent) {
-            id = selectedBucket.parent.name
+            id = selectedBucket.parent.id
             depth = selectedBucket.parent.level - 1
           } else {
             return
@@ -113,9 +113,9 @@ const BucketCanvas: FC = () => {
 
           setZoomedId(id)
           setDepth(depth)
-
+          console.log('set id::', id)
           if (id) {
-            const bucket = buckets.find((b) => b.name === id)
+            const bucket = buckets.find((b) => b.id === id)
 
             if (bucket) {
               navigateTo(bucket)

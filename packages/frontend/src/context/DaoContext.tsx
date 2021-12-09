@@ -56,6 +56,9 @@ export const DaoProvider: FC = observer(({ children }) => {
     }
   }, [selectedBucket?.tasks, router.query.task])
 
+  console.log(buckets.map((bucket) => bucket.slug.join('')))
+
+  console.log(selectedBucket)
   const openTask = (task?: TaskEntity): void => {
     setCurrentTask(task || null)
     if (task) {
@@ -90,8 +93,12 @@ export const DaoProvider: FC = observer(({ children }) => {
   }
 
   const parents = selectedBucket?.getTreeUp() || []
-  const title = selectedBucket ? parents.map((b) => b.name || b.name).join(' - ') : 'Loading ...'
-  console.log(parents)
+  const title = selectedBucket
+    ? parents
+        .map((b) => b.name)
+        .reverse()
+        .join(' - ')
+    : 'Loading ...'
 
   return (
     <DaoContext.Provider value={value}>

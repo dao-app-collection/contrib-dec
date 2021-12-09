@@ -1,11 +1,10 @@
-import { action, autorun, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, autorun, computed, makeObservable, observable, reaction, runInAction } from 'mobx'
 import { BigNumber, ethers } from 'ethers'
 import Decimal from 'decimal.js'
 import { TaskEntity } from './Task.entity'
 import { Erc20Store } from './Erc20.entity'
 import { BucketMetaData, TheGraphBucket } from '../../types/all-types'
 import { RootStore } from '../RootStore'
-import { mockTasks } from '../../utils/mocked'
 import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
 import { slugify } from '../../utils/buckets-utils'
 import { Bucket__factory } from '../../generated/factories/Bucket__factory'
@@ -17,9 +16,7 @@ export class BucketEntity {
   root: RootStore
   loading = true
   id: string
-  name: string
-  nameAsSlug: string
-  level: number
+  _name: string
 
   tokenAddress: string
   url = ''
@@ -37,11 +34,9 @@ export class BucketEntity {
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
     this.id = ethers.utils.getAddress(data.id)
-    this.name = data.name
-    this.nameAsSlug = slugify(data.name)
+    this._name = data.name
     this.ceramicId = data.ceramicId
     this.owners = data.owners
-    this.level = 0
     this.parentAddress = EMPTY_CONTRACT_ADDRESS === data.parent ? undefined : data.parent
     this.token = new Erc20Store({
       root: this.root,
@@ -52,10 +47,13 @@ export class BucketEntity {
     this.tokenAddress = data.token
 
     makeObservable(this, {
+      name: computed,
+      nameAsSlug: computed,
       topLevel: computed,
       allocation: computed,
       children: computed,
       parent: computed,
+      level: computed,
       color: observable,
       tasks: observable,
       data: observable,
@@ -63,6 +61,28 @@ export class BucketEntity {
     })
 
     this.init()
+  }
+
+  get name(): string {
+    return this.data?.name || this._name
+  }
+
+  get nameAsSlug(): string {
+    return slugify(this.name)
+  }
+
+  get level(): number {
+    let parent = this?.parent
+    let _level = 1
+
+    while (parent) {
+      if (parent) {
+        _level += 1
+        parent = parent.parent
+      }
+    }
+
+    return _level
   }
 
   get topLevel(): BucketEntity | void {
@@ -83,7 +103,7 @@ export class BucketEntity {
     return this.root.bucketStore.buckets.find((bucket) => bucket.id === this.parentAddress)
   }
 
-  get children(): BucketEntity[] | void {
+  get children(): BucketEntity[] {
     return this.root.bucketStore.buckets.filter((bucket) => bucket.parent?.id === this.id)
   }
 
@@ -142,18 +162,6 @@ export class BucketEntity {
     return items
   }
 
-  addChild = (child: BucketEntity): void => {
-    this.children.push(child)
-  }
-
-  setLevel = (level: number): void => {
-    this.level = level
-  }
-
-  setParent = (parent: BucketEntity): void => {
-    // this.parent = parent
-  }
-
   setStructure = () => {
     if (this.parent) {
       // eslint-disable-next-line prefer-destructuring
@@ -187,6 +195,13 @@ export class BucketEntity {
     //   .map((task) => new TaskEntity(this.root, { task }))
 
     this.getAllocation()
+
+    reaction(
+      () => [this.parent, this.name],
+      () => {
+        this.setStructure()
+      }
+    )
 
     autorun(() => {
       this.setStructure()

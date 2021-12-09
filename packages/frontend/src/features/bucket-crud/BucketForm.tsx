@@ -1,4 +1,4 @@
-import { Input, Modal, Textarea, Spacer, Divider, Grid } from '@geist-ui/react'
+import { Spacer, Divider, Grid } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -77,7 +77,7 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
       name: 'name',
       label: 'Name',
       required: true,
-      disabled: edit,
+      // disabled: edit,
     },
     {
       name: 'tokenAddress',
