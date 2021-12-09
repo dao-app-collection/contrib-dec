@@ -15,10 +15,10 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
 
   return (
     <Modal visible={visible} onClose={onClose}>
-      <Modal.Title>{task?.id}</Modal.Title>
-      <Modal.Subtitle>This is a modal</Modal.Subtitle>
+      <Modal.Title>{task?.data?.title}</Modal.Title>
+      {task?.id && <Modal.Subtitle>id: {task?.id}</Modal.Subtitle>}
       <Modal.Content>
-        <p>Some content contained within the modal.</p>
+        <p>{task?.data?.description}</p>
       </Modal.Content>
       <Modal.Action passive onClick={onClose}>
         Cancel
