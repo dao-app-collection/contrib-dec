@@ -26,7 +26,7 @@ type DaoContextInterface = {
 
 const DaoContext = createContext<DaoContextInterface>({} as DaoContextInterface)
 
-export const DaoProvider: FC = observer(({ children }) => {
+const _DaoProvider: FC = ({ children }) => {
   const router = useRouter()
   const store = useRootStore()
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,7 +40,7 @@ export const DaoProvider: FC = observer(({ children }) => {
 
   const slugStr = typeof slug === 'string' ? slug : slug?.join('')
   const selectedBucket = useMemo(
-    () => buckets.find((bucket) => bucket.slug.join('') === slugStr),
+    () => buckets.find((bucket) => bucket.slug.join('').toLowerCase() === slugStr?.toLowerCase()),
     [slugStr]
   )
 
@@ -109,7 +109,9 @@ export const DaoProvider: FC = observer(({ children }) => {
       {children}
     </DaoContext.Provider>
   )
-})
+}
+
+export const DaoProvider = observer(_DaoProvider)
 
 export const useDao = (): DaoContextInterface => {
   const Dao = useContext(DaoContext)

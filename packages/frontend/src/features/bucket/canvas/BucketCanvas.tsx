@@ -64,7 +64,7 @@ const BucketCanvas: FC = () => {
       id: b.id,
       name: b.name,
       children: b.children.map((c) => createChild(c)) || [],
-      color: toJS(b.color),
+      color: b.color,
       gotChildren: Boolean(b.children.length),
       size: b.allocation?.toNumber() || 1.2,
       isSelected: b.id === zoomedId,

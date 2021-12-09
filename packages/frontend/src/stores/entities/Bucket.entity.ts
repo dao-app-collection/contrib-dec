@@ -20,8 +20,6 @@ export class BucketEntity {
   _name: string
 
   tokenAddress: string
-  url = ''
-  slug: string[] = []
   tasks: TaskEntity[] = []
   token: Erc20Store
   parentAddress?: string
@@ -30,7 +28,6 @@ export class BucketEntity {
   ceramicId: string
   creatingTask = false
   data?: BucketMetaData = undefined
-  color = ''
 
   constructor(root: RootStore, { data }: { data: TheGraphBucket }) {
     this.root = root
@@ -56,10 +53,12 @@ export class BucketEntity {
       parent: computed,
       level: computed,
       allChildren: computed,
-      color: observable,
+      color: computed,
+      slug: computed,
+      treeUp: computed,
+      url: computed,
       tasks: observable,
       data: observable,
-      setColor: action,
     })
 
     this.init()
@@ -67,6 +66,14 @@ export class BucketEntity {
 
   get name(): string {
     return this.data?.name || this._name
+  }
+
+  get slug(): string[] {
+    return this.treeUp.map((bucket) => bucket.nameAsSlug)
+  }
+
+  get url(): string {
+    return `/${this.slug.join('/')}`
   }
 
   get nameAsSlug(): string {
@@ -87,20 +94,8 @@ export class BucketEntity {
     return _level
   }
 
-  fetchBucketEvents = async (bucketAddress: string): Promise<TaskCreatedEvent[]> => {
-    const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
-
-    const result = await bucketContract.queryFilter(
-      bucketContract.filters.TaskCreated(null, null, null, null, null),
-      0,
-      'latest'
-    )
-
-    return (result || []) as TaskCreatedEvent
-  }
-
   get topLevel(): BucketEntity | void {
-    return this.level === 1 ? this : this._topLevel
+    return this.treeUp[0]
   }
 
   get allocation(): Decimal {
@@ -121,59 +116,7 @@ export class BucketEntity {
     return this.root.bucketStore.buckets.filter((bucket) => bucket.parent?.id === this.id)
   }
 
-  get allChildren(): BucketEntity[] {
-    const children: BucketEntity[] = []
-
-    const mapChild = (child: BucketEntity) => {
-      children.push(child)
-      child.children.forEach(mapChild)
-    }
-    this.children.forEach(mapChild)
-
-    return children
-  }
-
-  load = async () => {
-    try {
-      const data = await ceramic.read<BucketMetaData>(this.ceramicId)
-
-      if (data) {
-        runInAction(() => {
-          this.data = data
-        })
-      }
-    } catch (e) {
-      console.error(e)
-    }
-    this.setColor()
-  }
-
-  setColor = () => {
-    if (!this.data) {
-      return
-    }
-
-    if (this.data?.primaryColor) {
-      this.color = this.data.primaryColor
-      return
-    }
-
-    let { parent } = this
-    let _color
-
-    while (parent && !_color) {
-      if (parent) {
-        if (parent.data?.primaryColor) {
-          _color = parent.data.primaryColor
-        }
-        parent = parent.parent
-      }
-    }
-
-    this.color = _color || '#321c6f'
-  }
-
-  getTreeUp = (): BucketEntity[] => {
+  get treeUp(): BucketEntity[] {
     const items = []
     let parent = this?.parent
 
@@ -189,32 +132,61 @@ export class BucketEntity {
     return items
   }
 
-  setStructure = () => {
-    if (this.parent) {
-      // eslint-disable-next-line prefer-destructuring
-      let parent: BucketEntity | void = this.parent
-      const slug = []
-      let lastParent
+  get allChildren(): BucketEntity[] {
+    const children: BucketEntity[] = []
 
-      while (parent) {
-        if (parent) {
-          lastParent = parent
-          slug.unshift(parent.nameAsSlug)
-          parent = parent.parent
-        }
-      }
+    const mapChild = (child: BucketEntity) => {
+      children.push(child)
+      child.children.forEach(mapChild)
+    }
+    this.children.forEach(mapChild)
 
-      this._topLevel = lastParent
-      slug.push(this.nameAsSlug)
-      this.slug = slug
-      this.url = `/${slug.join('/')}`
-    } else {
-      this.url = `/${this.nameAsSlug}`
-      this.slug = [this.nameAsSlug]
+    return children
+  }
+
+  get color(): string {
+    if (!this.data) {
+      return '#321c6f'
     }
 
-    this.setColor()
+    if (this.data?.primaryColor) {
+      return this.data.primaryColor
+    }
+
+    let { parent } = this
+    let _color
+
+    while (parent && !_color) {
+      if (parent) {
+        if (parent.data?.primaryColor) {
+          _color = parent.data.primaryColor
+        }
+        parent = parent.parent
+      }
+    }
+
+    return _color || '#321c6f'
   }
+
+  load = async () => {
+    try {
+      const data = await ceramic.read<BucketMetaData>(this.ceramicId)
+
+      if (data) {
+        runInAction(() => {
+          this.data = data
+        })
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  getTreeUp = (): BucketEntity[] => {
+    return this.treeUp
+  }
+
+  setStructure = () => {}
 
   getSymbol = (): string => {
     const symbol = this.token.symbol() || ''
@@ -235,7 +207,6 @@ export class BucketEntity {
         },
       })
     })
-    console.log({ bucketTasks })
 
     runInAction(() => {
       this.tasks = bucketTasks
@@ -243,9 +214,21 @@ export class BucketEntity {
 
     this.getAllocation()
 
-    autorun(() => {
-      this.setStructure()
-    })
+    // autorun(() => {
+    //   this.setStructure()
+    // })
+  }
+
+  fetchBucketEvents = async (bucketAddress: string): Promise<TaskCreatedEvent[]> => {
+    const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
+
+    const result = await bucketContract.queryFilter(
+      bucketContract.filters.TaskCreated(null, null, null, null, null),
+      0,
+      'latest'
+    )
+
+    return (result || []) as TaskCreatedEvent
   }
 
   getAllocation = async (): Promise<void> => {
