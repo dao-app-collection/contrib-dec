@@ -165,32 +165,30 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
       onMouseLeave={handlers.onMouseLeave}
       onClick={handlers.onClick}
     >
-      <AnimatePresence key={node.id}>
-        {logo && (
-          <Logo
-            style={{
-              height: logoSize,
-              width: logoSize,
-            }}
-          >
-            <img src={logo} alt={node.data.name} />
-          </Logo>
-        )}
-        {showInfo && <Counter key="counter">4</Counter>}
-
-        <InfoInner
-          animate={showInfo ? 'show' : 'hide'}
-          variants={{
-            hide: { opacity: 0, scale: 0.7 },
-            show: { opacity: 1, scale: 1, transition: { delay: 0.5 } },
+      {logo && (
+        <Logo
+          style={{
+            height: logoSize,
+            width: logoSize,
           }}
         >
-          <animated.h3 style={{ fontSize: titleSize }}>{node.data.name}</animated.h3>
-          <animated.div style={{ fontSize: textSize }}>
-            {node.data.entity.allocation} {node.data.entity.tokenSymbol}
-          </animated.div>
-        </InfoInner>
-      </AnimatePresence>
+          <img src={logo} alt={node.data.name} />
+        </Logo>
+      )}
+      {showInfo && <Counter key="counter">4</Counter>}
+
+      <InfoInner
+        animate={showInfo ? 'show' : 'hide'}
+        variants={{
+          hide: { opacity: 0, scale: 0.7 },
+          show: { opacity: 1, scale: 1, transition: { delay: 0.5 } },
+        }}
+      >
+        <animated.h3 style={{ fontSize: titleSize }}>{node.data.name}</animated.h3>
+        <animated.div style={{ fontSize: textSize }}>
+          {node.data.entity.allocation} {node.data.entity.tokenSymbol}
+        </animated.div>
+      </InfoInner>
     </Circle>
   )
 }

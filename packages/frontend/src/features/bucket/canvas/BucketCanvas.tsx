@@ -113,7 +113,6 @@ const BucketCanvas: FC = () => {
 
           setZoomedId(id)
           setDepth(depth)
-          console.log('set id::', id)
           if (id) {
             const bucket = buckets.find((b) => b.id === id)
 

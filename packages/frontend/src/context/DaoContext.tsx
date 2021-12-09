@@ -56,9 +56,6 @@ export const DaoProvider: FC = observer(({ children }) => {
     }
   }, [selectedBucket?.tasks, router.query.task])
 
-  console.log(buckets.map((bucket) => bucket.slug.join('')))
-
-  console.log(selectedBucket)
   const openTask = (task?: TaskEntity): void => {
     setCurrentTask(task || null)
     if (task) {
