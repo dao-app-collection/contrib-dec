@@ -119,6 +119,7 @@ export class BucketEntity {
     } catch (e) {
       console.error(e)
     }
+    this.setColor()
   }
 
   setColor = () => {

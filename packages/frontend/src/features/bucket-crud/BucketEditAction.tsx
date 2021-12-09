@@ -19,6 +19,12 @@ const Container = styled.div`
   }
 `
 
+const Item = styled.div`
+  div {
+    cursor: pointer;
+  }
+`
+
 const BucketEditAction: FC = () => {
   const [visible, setVisible] = useState<string | null>(null)
   const onClose = () => setVisible(null)
@@ -38,36 +44,33 @@ const BucketEditAction: FC = () => {
   const content = () => (
     <>
       <Popover.Item>
-        <Link
-          href="#"
+        <Item
           onClick={() => {
             setVisible('fund')
           }}
         >
           Fund bucket
-        </Link>
+        </Item>
       </Popover.Item>
       <Popover.Item line />
       <Popover.Item>
-        <Link
-          href="#"
+        <Item
           onClick={() => {
             setVisible('update')
           }}
         >
           Update bucket
-        </Link>
+        </Item>
       </Popover.Item>
       <Popover.Item line />
       <Popover.Item>
-        <Link
-          href="#"
+        <Item
           onClick={() => {
             setVisible('create')
           }}
         >
           Create sub bucket
-        </Link>
+        </Item>
       </Popover.Item>
     </>
   )

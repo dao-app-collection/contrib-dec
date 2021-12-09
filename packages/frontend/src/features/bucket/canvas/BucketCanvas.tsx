@@ -60,6 +60,7 @@ const BucketCanvas: FC = () => {
   }
 
   const createChild = (b: BucketEntity): DataItem => {
+    console.log('color', b.color, 'asd')
     return toJS({
       id: b.id,
       name: b.name,
