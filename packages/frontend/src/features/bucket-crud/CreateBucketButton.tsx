@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CreateBucketModal from './CreateBucketModal'
 import Button from '../../components/Button'
 import { useRootStore } from '../../context/RootStoreProvider'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
+import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 
 type Props = {
   selectedBucket?: BucketEntity
@@ -13,6 +14,7 @@ const CreateBucketButton: React.FC<Props> = ({ selectedBucket }) => {
   const { web3Store, contribBucketFactoryContractStore } = useRootStore()
   const label = web3Store.signerState.address ? 'Create Bucket' : 'Connect Wallet to create Bucket'
   const [visible, setVisible] = useState(false)
+  const isOwner = useIsBucketOwner()
 
   const onClick = () => {
     if (web3Store.signerState.address) {
@@ -21,6 +23,12 @@ const CreateBucketButton: React.FC<Props> = ({ selectedBucket }) => {
       web3Store.connect()
     }
   }
+
+  useEffect(() => {
+    if (!isOwner) {
+      setVisible(false)
+    }
+  }, [isOwner])
 
   return (
     <>
