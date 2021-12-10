@@ -22,6 +22,7 @@ export const darkTheme: DefaultTheme = {
   },
   text: {
     primary: ' #FFF',
+    smooth: '#CACFDB',
   },
 
   gap: (value: number) => `${value * 8}px`,

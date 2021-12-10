@@ -7,6 +7,7 @@ import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
 import CreateBucketButton from '../bucket-crud/CreateBucketButton'
+import { pixelSizes } from '../../theme/breakpoints'
 
 const Wrapper = styled.div`
   background: radial-gradient(
@@ -35,19 +36,24 @@ const Wrapper = styled.div`
     overflow: visible;
   }
 
-  section {
-    min-height: none;
+  @media (max-width: ${pixelSizes.tablet}) {
+    &&& section {
+      width: auto;
+    }
   }
 
   a {
     color: ${(props) => props.theme.contrib.primary};
   }
 `
+const Inner = styled.div`
+  margin: 0 auto;
 
+  max-width: 1185px;
+`
 const twitters = [
   '@jontgus',
   '@daniellivert',
-  '@jontgus',
   '@Adam_Strandberg',
   '@Morkeeth',
   '@_geimaj',
@@ -58,55 +64,58 @@ const LandingPage: FC = () => {
   return (
     <Wrapper>
       <Page>
-        <Header />
-        <Features />
+        <Inner>
+          <Header />
+          <Spacer h={8} />
+          <Features />
 
-        <Spacer h={4} />
-        <Divider />
-        <TextPart title="Making DAOs organized">
-          <div>
-            <p>
-              Create a clear and structured overview of DAO-allocations. A better way to create
-              ownership, increase DAO-visibility and create a culture of contribution.
-            </p>
-            <p>
-              Turn members into contributors and launch your own task overview simplyfing the
-              contributor experience.
-            </p>
-          </div>
-        </TextPart>
-        <Divider />
+          <Spacer h={4} />
+          <Divider />
+          <TextPart title="Making DAOs organized">
+            <div>
+              <p>
+                Create a clear and structured overview of DAO-allocations. A better way to create
+                ownership, increase DAO-visibility and create a culture of contribution.
+              </p>
+              <p>
+                Turn members into contributors and launch your own task overview simplyfing the
+                contributor experience.
+              </p>
+            </div>
+          </TextPart>
+          <Divider />
 
-        <TextPart title="How it started">
-          <div>
-            <p>
-              Our mission is to ability to upvote and downvote well-written tasks. For members and
-              externals to quickly find and filter between tasks within a bucket.
-            </p>
-            <p>
-              Our mission is to ability to upvote and downvote well-written tasks. For members and
-              externals to quickly find and filter between tasks within a bucket. Built by{' '}
-              {twitters.map((twitt, i) => (
-                <span key={twitt}>
-                  <a
-                    href={`https://twitter.com/${twitt}`}
-                    target="_blank"
-                    title={twitt}
-                    rel="noreferrer"
-                  >
-                    {twitt}
-                  </a>
-                  {i < twitters.length - 1 && ','}{' '}
-                </span>
-              ))}
-            </p>
-          </div>
-        </TextPart>
-        <Divider />
-        <Spacer h={4} />
+          <TextPart title="How it started">
+            <div>
+              <p>
+                Our mission is to ability to upvote and downvote well-written tasks. For members and
+                externals to quickly find and filter between tasks within a bucket.
+              </p>
+              <p>
+                Our mission is to ability to upvote and downvote well-written tasks. For members and
+                externals to quickly find and filter between tasks within a bucket. Built by{' '}
+                {twitters.map((twitt, i) => (
+                  <span key={twitt}>
+                    <a
+                      href={`https://twitter.com/${twitt}`}
+                      target="_blank"
+                      title={twitt}
+                      rel="noreferrer"
+                    >
+                      {twitt}
+                    </a>
+                    {i < twitters.length - 1 && ','}{' '}
+                  </span>
+                ))}
+              </p>
+            </div>
+          </TextPart>
+          <Divider />
+          <Spacer h={4} />
 
-        <AvailableBuckets />
-        <CreateBucketButton />
+          <AvailableBuckets />
+          <CreateBucketButton />
+        </Inner>
       </Page>
     </Wrapper>
   )
