@@ -15,12 +15,26 @@ const func: DeployFunction = async ({
   // rinkeby address
   let standardBountiesAddress = '0x6ac6baf770b3ffe2ddb3c5797e47c17cebef2ec4'
 
-  if (hre.network.name === 'hardhat') {
-    await deploy('ContribTestToken', {
-      from: deployer,
-      args: ['contrib', 'ctb', 18],
-    })
+  // await deploy('ContribTestToken', {
+  //   from: deployer,
+  //   args: ['contrib-orakuru', 'c-ork', 18],
+  // })
 
+  // await deploy('ContribTestToken', {
+  //   from: deployer,
+  //   args: ['contrib-dxdao', 'c-dxdao', 18],
+  // })
+
+  // await deploy('ContribTestToken', {
+  //   from: deployer,
+  //   args: ['contrib-rome', 'c-rome', 18],
+  // })
+
+  // await deploy('ContribTestToken', {
+  //   from: deployer,
+  //   args: ['contrib-mate', 'c-mate', 18],
+  // })
+  if (hre.network.name === 'hardhat') {
     const sbResult = await deploy('StandardBounties', {
       from: deployer,
     })
