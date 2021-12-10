@@ -1,14 +1,10 @@
-import { Button, Spacer } from '@geist-ui/react'
-import { observer } from 'mobx-react-lite'
 import * as React from 'react'
-import { useState, FC } from 'react'
-import styled, { css } from 'styled-components'
+import { FC } from 'react'
+import styled from 'styled-components'
+import TryContribButton from './TryContribButton'
 import Heading from '../../components/Heading'
 import SEO from '../../components/SEO'
-import { useRootStore } from '../../context/RootStoreProvider'
 import { pixelSizes } from '../../theme/breakpoints'
-import { spacingIncrement } from '../../theme/utils'
-import CreateBucketModal from '../bucket-crud/CreateBucketModal'
 
 const Container = styled.header`
   overflow: hidden;
@@ -109,44 +105,7 @@ const Gradient = styled.div`
   }
 `
 
-const buttonBackground = css`
-  background: #8134ff;
-  background: -webkit-linear-gradient(top left, #8134ff, #d477ff);
-  background: -moz-linear-gradient(top left, #8134ff, #d477ff);
-  background: linear-gradient(to bottom right, #8134ff, #d477ff);
-  color: white;
-`
-
-const CallToAction = styled(Button)`
-  &&& {
-    ${buttonBackground};
-    font-size: ${({ theme }) => theme.fontSize.base};
-    font-weight: 600;
-    height: auto;
-    padding: ${spacingIncrement(8)} 0;
-
-    :hover {
-      ${buttonBackground};
-      border: 1px solid white;
-
-      color: white;
-    }
-  }
-`
-
 const Header: FC = () => {
-  const { web3Store, contribBucketFactoryContractStore } = useRootStore()
-  const [visible, setVisible] = useState(false)
-  const label = web3Store.signerState.address ? 'Try Contrib now' : 'Connect Wallet'
-
-  const onClick = () => {
-    if (web3Store.signerState.address) {
-      setVisible(true)
-    } else {
-      web3Store.connect()
-    }
-  }
-
   return (
     <Container>
       <Gradient>
@@ -166,13 +125,10 @@ const Header: FC = () => {
 
         <p>DAO contribution and experience, validated on-chain</p>
 
-        <CallToAction onClick={onClick} loading={contribBucketFactoryContractStore.creatingBucket}>
-          {label}
-        </CallToAction>
-        <CreateBucketModal visible={visible} onClose={() => setVisible(false)} />
+        <TryContribButton />
       </Content>
     </Container>
   )
 }
 
-export default observer(Header)
+export default Header

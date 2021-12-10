@@ -7,6 +7,7 @@ import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
 import Upcoming from './Upcoming'
+import Twitter from './Twitter'
 import { pixelSizes } from '../../theme/breakpoints'
 import SEO from '../../components/SEO'
 
@@ -108,7 +109,8 @@ const LandingPage: FC = () => {
           <Divider />
           <Spacer h={4} />
 
-          <AvailableBuckets />
+          <Twitter />
+          {/* <AvailableBuckets /> */}
         </Inner>
       </Page>
     </Wrapper>
