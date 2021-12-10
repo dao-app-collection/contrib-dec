@@ -21,8 +21,8 @@ const Header: FC = () => {
     <Wrapper>
       <ConnectButton />
       <Spacer w={1} inline />
-      <ToggleTheme />
-      <Spacer w={1} inline />
+      {/* <ToggleTheme />
+      <Spacer w={1} inline /> */}
     </Wrapper>
   )
 }
