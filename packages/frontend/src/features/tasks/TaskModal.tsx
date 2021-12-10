@@ -1,4 +1,4 @@
-import { Modal } from '@geist-ui/react'
+import { Button, Modal } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC, useState } from 'react'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import TaskApplicants from './modal/TaskApplicants'
 import TaskHistory from './modal/TaskHistory'
 import TaskOverview from './modal/TaskOverview'
+import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import Tabs from '../../components/Tabs'
 import { spacingIncrement } from '../../theme/utils'
@@ -25,6 +26,35 @@ const Top = styled.div`
   padding: ${spacingIncrement(20)};
   padding-bottom: 0;
   width: 100%;
+`
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: ${spacingIncrement(20)} 0;
+`
+
+const TopSection = styled.div<{ alignItems: 'flex-start' | 'flex-end' }>`
+  align-items: ${({ alignItems }) => alignItems};
+  display: flex;
+  flex-direction: column;
+`
+
+const TaskCategory = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: 400;
+  margin-left: ${spacingIncrement(10)};
+`
+
+const TaskTitle = styled.h2`
+  font-size: ${({ theme }) => theme.fontSize.xl};
+  font-weight: 400;
+`
+
+const Title = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 `
 
 const Inner = styled.div`
@@ -60,7 +90,21 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   return (
     <Modal visible={visible} onClose={onClose} width="65%" padding="0">
       <Top>
-        {task?.data?.title}
+        <Title>
+          <TaskStatusLabel status="open" size="large" />
+          <TaskCategory>Core tech</TaskCategory>
+        </Title>
+        <TopContainer>
+          <TopSection alignItems="flex-start">
+            <TaskTitle>{task?.data?.title}</TaskTitle>
+            <span>500 DDAO</span>
+          </TopSection>
+          <TopSection alignItems="flex-end">
+            <Button>Apply for task</Button>
+            <span>Share link</span>
+          </TopSection>
+        </TopContainer>
+
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
 
