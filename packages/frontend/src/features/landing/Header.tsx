@@ -123,7 +123,7 @@ const Header: FC = () => {
 
         <h3>Get a clear overview of tasks and token flows in your DAO</h3>
 
-        <p>DAO contribution and experience, validated on-chain</p>
+        <p>Next-level coordination, where we know every DAO is unique!</p>
 
         <TryContribButton />
       </Content>
