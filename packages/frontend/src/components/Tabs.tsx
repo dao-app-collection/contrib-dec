@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { FC } from 'react'
 import { Tabs as GeistTabs } from '@geist-ui/react'
-import { TabId } from '../features/bucket/BucketInner'
 
 type Props = {
   tabs: {
@@ -9,7 +8,7 @@ type Props = {
     id: string
   }[]
   selected: string
-  onChange: (id: TabId) => void
+  onChange: (id: any) => void
 }
 
 const Tabs: FC<Props> = ({ tabs, selected, onChange, ...props }) => {
@@ -17,7 +16,7 @@ const Tabs: FC<Props> = ({ tabs, selected, onChange, ...props }) => {
     <GeistTabs
       value={selected}
       onChange={(value: string) => {
-        onChange(value as TabId)
+        onChange(value)
       }}
       {...props}
     >
