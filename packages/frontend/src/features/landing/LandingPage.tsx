@@ -8,6 +8,7 @@ import TextPart from './TextPart'
 import DAOList from './DAOList'
 import Upcoming from './Upcoming'
 import Twitter from './Twitter'
+import Navigation from './Navigation'
 import { pixelSizes } from '../../theme/breakpoints'
 import SEO from '../../components/SEO'
 
@@ -73,6 +74,7 @@ const twitters = [
 const LandingPage: FC = () => {
   return (
     <Wrapper>
+      <Navigation />
       <Page>
         <Inner>
           <Header />

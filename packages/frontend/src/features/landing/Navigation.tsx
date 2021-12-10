@@ -2,7 +2,10 @@ import styled from 'styled-components'
 import { spacingIncrement } from '../../theme/utils'
 
 const Wrapper = styled.div`
-  z-index: 10;
+  margin-right: ${spacingIncrement(20)};
+  padding: ${spacingIncrement(20)};
+  padding-top: ${spacingIncrement(40)};
+  z-index: 5;
 `
 
 const List = styled.ul`
@@ -12,9 +15,6 @@ const List = styled.ul`
   list-style-type: none;
   margin: 0;
   padding: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
   z-index: 100;
 
   li {
