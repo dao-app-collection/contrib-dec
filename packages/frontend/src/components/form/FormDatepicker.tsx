@@ -14,7 +14,9 @@ const FormDatepicker: FC<Props> = ({ label, name, ...props }) => {
 
   return (
     <div style={{ width: '100%' }}>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel>
+        {label} {props.required ? ' *' : ''}
+      </InputLabel>
       <Controller
         name={name}
         control={control}

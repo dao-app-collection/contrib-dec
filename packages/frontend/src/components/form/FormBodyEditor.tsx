@@ -22,7 +22,7 @@ const FormBodyEditor: FC<Props> = ({ label, name, ...props }) => {
             <div
               style={{
                 position: 'relative',
-                zIndex: -1,
+                // zIndex: -1,
               }}
             >
               <Yamde value={field.value} handler={field.onChange} theme="dark" />
