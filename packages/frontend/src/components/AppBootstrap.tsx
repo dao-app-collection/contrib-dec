@@ -1,3 +1,4 @@
+import { SkeletonTheme } from 'react-loading-skeleton'
 import { observer } from 'mobx-react-lite'
 import { ThemeProvider } from 'styled-components'
 import { ToastContainer } from 'react-toastify'
@@ -20,14 +21,16 @@ const AppBootstrap: React.FC = ({ children }) => {
 
   return (
     <>
-      <GeistProvider themeType={uiStore.selectedTheme}>
-        <ThemeProvider theme={darkTheme}>
-          <ToastContainer theme={uiStore.selectedTheme} />
-          <CssBaseline />
-          <GlobalStyle />
-          {children}
-        </ThemeProvider>
-      </GeistProvider>
+      <SkeletonTheme baseColor="#202020" highlightColor="#444">
+        <GeistProvider themeType={uiStore.selectedTheme}>
+          <ThemeProvider theme={darkTheme}>
+            <ToastContainer theme={uiStore.selectedTheme} />
+            <CssBaseline />
+            <GlobalStyle />
+            {children}
+          </ThemeProvider>
+        </GeistProvider>
+      </SkeletonTheme>
     </>
   )
 }
