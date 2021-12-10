@@ -1,17 +1,19 @@
 import { Button, Modal } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import TaskApplicants from './modal/TaskApplicants'
 import TaskHistory from './modal/TaskHistory'
 import TaskOverview from './modal/TaskOverview'
 import TaskStatusLabel from './TaskStatusLabel'
+import TaskEdit from './TaskEdit'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import Tabs from '../../components/Tabs'
 import { spacingIncrement } from '../../theme/utils'
 import { media } from '../../theme/media'
 import useResponsive from '../../hooks/useResponsive'
+import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 
 type Props = {
   //   visible: boolean
@@ -85,9 +87,10 @@ const Inner = styled.div`
 `
 
 const TaskModal: FC<Props> = ({ onClose, task }) => {
-  const visible = Boolean(task)
+  const [visible, setVisble] = useState(false)
   const { isDesktop } = useResponsive()
   const [activeTab, setActiveTab] = useState<TabId>('overview')
+  const isOwner = useIsBucketOwner()
 
   const tabs = [
     {
@@ -104,8 +107,27 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     },
   ]
 
+  if (isOwner) {
+    tabs.push({
+      id: 'edit',
+      text: 'Edit',
+    })
+  }
+
+  useEffect(() => {
+    if (task) {
+      setVisble(true)
+    } else {
+      setTimeout(() => {
+        setActiveTab('overview')
+        setVisble(false)
+      }, 500)
+    }
+  }, [task])
+
   const tabList = {
-    overview: <TaskOverview task={task} />,
+    edit: TaskEdit,
+    overview: task && <TaskOverview task={task} />,
     applicants: <TaskApplicants />,
     history: <TaskHistory />,
   }

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import { primaryFontFamily } from '../../theme/general-settings'
@@ -73,4 +74,4 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
   )
 }
 
-export default TaskListItem
+export default observer(TaskListItem)
