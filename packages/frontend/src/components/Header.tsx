@@ -13,7 +13,6 @@ const Wrapper = styled.div`
   padding: ${(props) => props.theme.gap(2)};
   position: fixed;
   right: 0;
-  width: 100%;
   z-index: ${Z_INDEX.header};
 `
 
