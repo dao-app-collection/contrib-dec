@@ -6,6 +6,7 @@ import AvailableBuckets from './AvailableBuckets'
 import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
+import Upcoming from './Upcoming'
 import { pixelSizes } from '../../theme/breakpoints'
 import SEO from '../../components/SEO'
 
@@ -61,7 +62,8 @@ const LandingPage: FC = () => {
           <Header />
           <Spacer h={8} />
           <Features />
-
+          <Spacer h={8} />
+          <Upcoming />
           <Spacer h={4} />
           <Divider />
           <TextPart title="Making DAOs organized">
