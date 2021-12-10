@@ -102,11 +102,11 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     },
     {
       id: 'applicants',
-      text: 'Applicants',
+      text: 'Applicants · 3',
     },
     {
       id: 'history',
-      text: 'History',
+      text: 'History · 4',
     },
   ]
 
