@@ -5,7 +5,7 @@ const config = {
   ENVIRONMENT: process.env.ENVIRONMENT ?? 'dev',
   ROUNDED_DECIMALS: 4,
   CONFIG_CAT_SDK_KEY: '',
-  SITE_URL: process.env.SITE_URL ?? 'https://hackaton.contrib.at/',
+  SITE_URL: process.env.SITE_URL ?? 'https://hack.contrib.at/',
 }
 
 const appConfig = {

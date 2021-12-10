@@ -28,7 +28,9 @@ const Overview: React.FC = () => {
           <div>
             <Spacer h={2} />
             <Description title="Website" />
-            <Link href={selectedBucket?.data.website}>{selectedBucket?.data.website}</Link>
+            <Link href={selectedBucket?.data.website} target="_blank" rel="noreferrer">
+              {selectedBucket?.data.website}
+            </Link>
           </div>
         )}
         <Spacer h={2} />

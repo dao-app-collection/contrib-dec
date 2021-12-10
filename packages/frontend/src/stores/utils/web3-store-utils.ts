@@ -27,8 +27,8 @@ export const getOnboardConfig = (chainId: number, darkMode: boolean): Initializa
         },
         {
           walletName: 'trezor',
-          appUrl: 'https://prepo.io/',
-          email: 'hello@prepo.io',
+          appUrl: 'https://contrib.at/',
+          email: 'hello@contrib.at',
           rpcUrl,
           preferred: true,
         },

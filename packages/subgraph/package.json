@@ -1,5 +1,5 @@
 {
-  "name": "@dapp-starter-fullstack/subgraph",
+  "name": "@contrib/subgraph",
   "license": "UNLICENSED",
   "version": "1.0.0",
   "scripts": {

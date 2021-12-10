@@ -1,5 +1,5 @@
 {
-  "name": "@dapp-starter-fullstack/services",
+  "name": "@contrib/services",
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
