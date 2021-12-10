@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import BucketNav from './BucketNav'
 import BucketSelect from './BucketSelect'
+import BucketMembers from './BucketMembers'
 import Tabs from '../../components/Tabs'
 import TaskList from '../tasks/TaskList'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
@@ -62,7 +63,7 @@ const BucketInner: FC = () => {
   const tabList = {
     overview: <Overview />,
     tasks: <TaskList />,
-    members: <div>Members</div>,
+    members: <BucketMembers bucket={selected} />,
     suggestions: <div>Suggestions</div>,
   }
 

@@ -28,13 +28,10 @@ const useCreateTask = ({
       let success = false
       setIsCreating(true)
       try {
-        console.log('::::', payload.data)
         const ceramicId = await ceramic.create({
           schema: CeramicSchema.TASK_META_DATA,
           data: payload.data,
         })
-
-        console.log({ ceramicId })
 
         const tx = await selectedBucket?.createTask({
           data: ceramicId,

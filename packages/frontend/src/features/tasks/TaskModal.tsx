@@ -16,6 +16,7 @@ import useResponsive from '../../hooks/useResponsive'
 import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import Modal from '../../components/Modal'
+import { useRootStore } from '../../context/RootStoreProvider'
 
 type Props = {
   //   visible: boolean
@@ -95,6 +96,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   const [activeTab, setActiveTab] = useState<TabId>('overview')
   const selectedBucket = useSelectedBucket()
   const isOwner = useIsBucketOwner(selectedBucket)
+  const store = useRootStore()
 
   const tabs = [
     {
@@ -136,6 +138,12 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     history: <TaskHistory />,
   }
 
+  if (!task) {
+    return null
+  }
+
+  console.log(task.data?.applications)
+
   return (
     <Modal
       disableBackdropClick
@@ -158,11 +166,16 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
             </TaskMetadata>
           </TopSection>
           <TopSection alignItems="flex-end">
-            <Button>Apply for task</Button>
+            {task.canApply && (
+              <Button onClick={() => task.apply()} loading={task.status === 'isApplying'}>
+                Apply for task
+              </Button>
+            )}
+
             <span>Share link</span>
           </TopSection>
         </TopContainer>
-
+        Applicants:: {task.data?.applications?.join(',')}
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
 

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { TaskMetaData, TheGraphTask } from '../../types/all-types'
 import ceramic from '../../utils/services/ceramic'
 import { RootStore } from '../RootStore'
@@ -9,19 +9,34 @@ export class TaskEntity {
   id: string
   ceramicId: string
   data?: TaskMetaData
+  status = ''
 
   constructor(root: RootStore, { data }: { data: TheGraphTask }) {
     this.root = root
     this.id = data.id.toString()
     this.ceramicId = data?.ceramicId
 
-    console.log(data)
-
     makeObservable(this, {
+      canApply: computed,
       data: observable,
+      status: observable,
+      apply: action,
     })
 
     this.load()
+  }
+
+  get canApply(): boolean {
+    if (!this.data) {
+      return false
+    }
+    const userAddress = this.root.web3Store.signerState.address
+
+    if (!userAddress) {
+      return false
+    }
+
+    return !this.data.applications?.includes(userAddress)
   }
 
   load = async (): Promise<void> => {
@@ -39,19 +54,20 @@ export class TaskEntity {
     }
   }
 
-  updateData = async (data: Partial<TaskMetaData>) => {
+  updateData = async (newData: Partial<TaskMetanewData>) => {
     if (!this.data) {
       return
     }
 
     const merged = {
       ...this.data,
-      ...data,
+      ...newData,
     }
     try {
+      await ceramic.update(this.ceramicId, merged)
       const data = await ceramic.read<TaskMetaData>(this.ceramicId)
 
-      console.log('task data', { data })
+      console.log('task data', { data, merged })
       if (data) {
         runInAction(() => {
           this.data = data
@@ -60,5 +76,27 @@ export class TaskEntity {
     } catch (e) {
       console.error(e)
     }
+  }
+
+  apply = async (): Promise<void> => {
+    if (!this.data) {
+      return
+    }
+    const userAddress = this.root.web3Store.signerState.address
+
+    if (!userAddress) {
+      return
+    }
+
+    if (this.data.applications.includes(userAddress)) {
+      return
+    }
+
+    this.status = 'isApplying'
+    const applications = [...this.data.applications, userAddress]
+    await this.updateData({
+      applications,
+    })
+    this.status = 'default'
   }
 }

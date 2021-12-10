@@ -295,6 +295,7 @@ export class BucketEntity {
         )
 
         await contract.createTask(data, deadline, issuers, approvers)
+        await this.fetchBucketEvents()
       } catch (e) {
         this.root.uiStore.errorToast('Error creating task', e)
       } finally {
