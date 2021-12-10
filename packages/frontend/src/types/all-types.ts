@@ -47,7 +47,7 @@ export type TaskMetaData = {
   title: string
   body: string
   assignes: string[] //
-  applications: [] // chose from
+  applications: string[] // chose from
   taskStatus: TaskStatus
   deadlineTimestamp: number
   createdTimestamp: number
@@ -92,6 +92,7 @@ export type TaskPayload = {
   deadline: number
   issuers: string[]
   approvers: string[]
+  amount: BigNumber
 }
 // export type Bucket = {
 //   parent?: string

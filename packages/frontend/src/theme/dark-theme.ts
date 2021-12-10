@@ -1,5 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import { fontSizes } from './font-sizes'
+import { TaskStatus } from '../types/all-types'
 
 export const darkTheme: DefaultTheme = {
   fontSize: fontSizes,
@@ -12,6 +13,8 @@ export const darkTheme: DefaultTheme = {
 
   contrib: {
     primary: '#CA87FF',
+    accent: '#E5D4FF',
+    borderColor: '#565656',
   },
 
   bg: {
@@ -24,11 +27,13 @@ export const darkTheme: DefaultTheme = {
   text: {
     primary: ' #FFF',
     smooth: '#CACFDB',
+    accent: '#838383',
   },
   taskStatus: {
-    open: 'rgba(75, 241, 60, 0.24)',
-    claimes: 'rgba(75, 241, 60, 0.24)',
-    completed: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.OPEN]: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.CLAIMED]: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.COMPLETED]: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.REVIEW]: 'rgba(75, 241, 60, 0.24)',
   },
   taskStatusText: {
     open: '#C1FFBC',
@@ -38,3 +43,40 @@ export const darkTheme: DefaultTheme = {
 
   gap: (value: number) => `${value * 8}px`,
 }
+
+export const reactSelectTheme = (theme) => ({
+  ...theme,
+  colors: {
+    // ...theme.colors,
+    primary25: '#000',
+    primary: '#FFF',
+    primary75: '#fafafa',
+    primary50: '#fafafa',
+
+    // All possible overrides
+    // primary: '#2684FF',
+    // primary75: '#4C9AFF',
+    // primary50: '#B2D4FF',
+    // primary25: '#DEEBFF',
+
+    // danger: '#DE350B',
+    // dangerLight: '#FFBDAD',
+
+    neutral0: 'hsl(0, 0%, 20%)',
+    // neutral5: 'hsl(0, 0%, 95%)',
+    // neutral10: 'hsl(0, 0%, 90%)',
+    // neutral20: 'hsl(0, 0%, 80%)',
+    // neutral30: 'hsl(0, 0%, 70%)',
+    // neutral40: 'hsl(0, 0%, 60%)',
+    // neutral50: 'hsl(0, 0%, 50%)',
+    // neutral60: 'hsl(0, 0%, 40%)',
+    // neutral70: 'hsl(0, 0%, 30%)',
+    // neutral80: 'hsl(0, 0%, 20%)',
+    // neutral90: 'hsl(0, 0%, 10%)',
+  },
+  // Other options you can use
+  // borderRadius: 4
+  // baseUnit: 4,
+  // controlHeight: 38
+  // menuGutter: baseUnit * 2
+})

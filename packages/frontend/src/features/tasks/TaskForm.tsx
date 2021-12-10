@@ -1,11 +1,12 @@
 import * as React from 'react'
 import { Grid, Button, Spacer, Divider } from '@geist-ui/react'
 import { FC } from 'react'
-import dayjs from 'dayjs'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import { MyField, TaskMetaData } from '../../types/all-types'
 import { useRootStore } from '../../context/RootStoreProvider'
 import FormField from '../../components/form/FormField'
+import { spacingIncrement } from '../../theme/utils'
 
 type FormData = {
   title: string
@@ -21,9 +22,14 @@ type Props = {
   edit?: boolean
   defaultValues?: Partial<TaskMetaData>
   loading?: boolean
+  symbol?: string
 }
 
-const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading }) => {
+const Form = styled.form`
+  padding: ${spacingIncrement(30)};
+`
+
+const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, symbol }) => {
   const { uiStore } = useRootStore()
 
   const fields: MyField[] = [
@@ -31,21 +37,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
       name: 'title',
       label: 'Title',
       required: true,
-    },
-    {
-      name: 'body',
-      label: 'Description',
-      required: true,
-      type: 'body',
-    },
-    {
-      name: 'github',
-      label: 'Github link',
-    },
-    {
-      name: 'deadline',
-      label: 'Deadline',
-      type: 'date',
     },
     {
       name: 'experienceLevel',
@@ -67,7 +58,32 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
         },
       ],
     },
+
+    {
+      name: 'amount',
+      label: 'Amount',
+      required: true,
+      disabled: edit,
+      labelRight: symbol,
+    },
+    {
+      name: 'github',
+      label: 'Github link',
+    },
+
+    {
+      name: 'deadline',
+      label: 'Deadline',
+      type: 'date',
+    },
   ]
+
+  const bodyField = {
+    name: 'body',
+    label: 'Description',
+    required: true,
+    type: 'body',
+  }
 
   const methods = useForm<FormData>({
     defaultValues: {
@@ -75,7 +91,7 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
       body: defaultValues?.body || '',
       experienceLevel: defaultValues?.experienceLevel && {
         value: defaultValues.experienceLevel,
-        label: defaultValues.experienceLevel.toUpperCase(),
+        label: defaultValues.experienceLevel.toLowerCase(),
       },
       deadline: defaultValues?.deadlineTimestamp
         ? new Date(defaultValues.deadlineTimestamp)
@@ -91,7 +107,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
 
   const _onSubmit = handleSubmit((data) => {
     try {
-      console.log('....data', data)
       onSubmit({
         ...data,
         deadline: data.deadline ? data.deadline.getTime() : 0,
@@ -104,20 +119,22 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={_onSubmit}>
+      <Form onSubmit={_onSubmit}>
         <Grid.Container gap={4}>
           {fields.map((field) => (
-            <Grid xs={24} key={field.name}>
+            <Grid xs={24} md={field.name === 'amount' ? 24 : 12} key={field.name}>
               <FormField {...field} register={register} />
             </Grid>
           ))}
-        </Grid.Container>
+        </Grid.Container>{' '}
+        <Spacer h={2} />
+        <FormField {...bodyField} />
         <Spacer h={2} />
         <Divider /> <Spacer h={2} />
         <Button loading={loading} htmlType="submit">
           {edit ? 'Update task' : 'Create task'}
         </Button>
-      </form>
+      </Form>
     </FormProvider>
   )
 }

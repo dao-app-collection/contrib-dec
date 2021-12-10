@@ -1,4 +1,3 @@
-import { Button, Modal } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC, useState, useEffect } from 'react'
@@ -15,6 +14,9 @@ import { media } from '../../theme/media'
 import useResponsive from '../../hooks/useResponsive'
 import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
+import Modal from '../../components/Modal'
+import { useRootStore } from '../../context/RootStoreProvider'
+import Button from '../../components/Button'
 
 type Props = {
   //   visible: boolean
@@ -60,6 +62,7 @@ const TaskMetadata = styled.h2`
   display: flex;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: 600;
+  text-align: left;
 
   span {
     color: ${({ theme }) => theme.bg.placeholder};
@@ -93,6 +96,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   const [activeTab, setActiveTab] = useState<TabId>('overview')
   const selectedBucket = useSelectedBucket()
   const isOwner = useIsBucketOwner(selectedBucket)
+  const store = useRootStore()
 
   const tabs = [
     {
@@ -101,7 +105,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     },
     {
       id: 'applicants',
-      text: 'Applicants',
+      text: `Applicants · ${task?.data?.applications.length}`,
     },
     {
       id: 'history',
@@ -120,9 +124,9 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     if (task) {
       setVisble(true)
     } else {
+      setVisble(false)
       setTimeout(() => {
         setActiveTab('overview')
-        setVisble(false)
       }, 500)
     }
   }, [task])
@@ -130,31 +134,60 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   const tabList = {
     edit: task && <TaskEdit task={task} />,
     overview: task && <TaskOverview task={task} />,
-    applicants: <TaskApplicants />,
+    applicants: <TaskApplicants task={task} />,
     history: <TaskHistory />,
   }
 
+  if (!task) {
+    return null
+  }
+
   return (
-    <Modal visible={visible} onClose={onClose} width={isDesktop ? '50%' : '100%'} padding="0">
+    <Modal
+      disableBackdropClick
+      visible={visible}
+      onClose={onClose}
+      width={isDesktop ? '50%' : '100%'}
+      padding="0"
+    >
       <Top>
         <Title>
-          <TaskStatusLabel status="open" size="large" />
+          <TaskStatusLabel status={task.data?.taskStatus} size="large" />
           <TaskCategory>Core tech</TaskCategory>
         </Title>
         <TopContainer>
           <TopSection alignItems="flex-start">
             <TaskTitle>{task?.data?.title}</TaskTitle>
             <TaskMetadata>
-              <div>500 DDAO</div>
-              <span>Intermediate · Frontend</span>
+              <div>{task?.allocation}</div>
+              <span>{task?.data?.experienceLevel} </span>
             </TaskMetadata>
           </TopSection>
           <TopSection alignItems="flex-end">
-            <Button>Apply for task</Button>
-            <span>Share link</span>
+            {task.canApply && (
+              <Button
+                modifier="dao"
+                onClick={() => task.apply()}
+                loading={task.status === 'isApplying'}
+              >
+                Apply for task
+              </Button>
+            )}
+
+            {/* <span>Share link</span> */}
           </TopSection>
         </TopContainer>
-
+        {/* Applicants::{' '}
+        {task.data?.applications?.map((address) => (
+          <div key={address}>
+            {address}
+            {task.canApprove && (
+              <Button onClick={() => task.approve(address)} loading={task.status === 'isApproving'}>
+                Approve
+              </Button>
+            )}
+          </div>
+        ))} */}
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
 

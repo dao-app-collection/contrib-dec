@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { ResponsiveCirclePackingHtml } from '@nivo/circle-packing'
 
 import { toJS } from 'mobx'
-import Decimal from 'decimal.js'
 import CircleComponent from './CircleComponent'
 import { useDao } from '../../../context/DaoContext'
 import { BucketEntity } from '../../../stores/entities/Bucket.entity'
@@ -35,6 +34,7 @@ type DataItem = {
     logo?: string
     allocation: number
     tokenSymbol: string
+    taskCount: number
   }
 }
 
@@ -70,6 +70,7 @@ const BucketCanvas: FC = () => {
       isSelected: b.id === zoomedId,
       currentDepth,
       entity: {
+        taskCount: b.tasks.length,
         logo: b.data?.logo,
         allocation: b.allocation?.toNumber() || 0,
         tokenSymbol: b.getSymbol(),

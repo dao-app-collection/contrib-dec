@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import BucketNav from './BucketNav'
 import BucketSelect from './BucketSelect'
+import BucketMembers from './BucketMembers'
 import Tabs from '../../components/Tabs'
 import TaskList from '../tasks/TaskList'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
@@ -25,7 +26,7 @@ export type TabId = 'overview' | 'tasks' | 'members' | 'suggestions'
 
 const BucketInner: FC = () => {
   const { currentTask } = useDao()
-  const [activeTab, setActiveTab] = useState<TabId>('tasks')
+  const [activeTab, setActiveTab] = useState<TabId>('overview')
   const selected = useSelectedBucket()
 
   useEffect(() => {
@@ -54,13 +55,14 @@ const BucketInner: FC = () => {
     {
       id: 'suggestions',
       text: 'Suggestions',
+      disabled: true,
     },
   ]
 
   const tabList = {
     overview: <Overview />,
     tasks: <TaskList />,
-    members: <div>Members</div>,
+    members: <BucketMembers bucket={selected} />,
     suggestions: <div>Suggestions</div>,
   }
 

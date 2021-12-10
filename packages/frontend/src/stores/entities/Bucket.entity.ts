@@ -13,6 +13,7 @@ import { TransferEvent } from '../../generated/ERC20'
 
 import { ERC20__factory } from '../../generated/factories/ERC20__factory'
 import ceramic from '../../utils/services/ceramic'
+import { StandardBounties__factory } from '../../generated'
 
 export class BucketEntity {
   root: RootStore
@@ -195,42 +196,56 @@ export class BucketEntity {
   }
 
   init = async (): Promise<void> => {
-    const result = await this.fetchBucketEvents(this.id)
-    const bucketTasks = result.map((event) => {
-      console.log(event.args)
-      // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
-      return new TaskEntity(this.root, {
-        data: {
-          id: event.args.id,
-          ceramicId: event.args.data,
-          // deadline: event.args.deadline,
-          // issuers: event.args.issuers,
-          // approvers: event.args.approvers,
-        },
-      })
-    })
+    try {
+      await this.fetchBucketEvents(this.id)
 
-    runInAction(() => {
-      this.tasks = bucketTasks
-    })
-
-    this.getAllocation()
+      this.getAllocation()
+    } catch (e) {
+      this.root.uiStore.errorToast('Failed fetching tasks', e)
+    }
 
     // autorun(() => {
     //   this.setStructure()
     // })
   }
 
-  fetchBucketEvents = async (bucketAddress: string): Promise<TaskCreatedEvent[]> => {
+  fetchBucketEvents = async (bucketAddress: string): Promise<void> => {
     const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
 
-    const result = await bucketContract.queryFilter(
-      bucketContract.filters.TaskCreated(null, null, null, null, null),
-      0,
-      'latest'
+    const result =
+      (await bucketContract.queryFilter(
+        bucketContract.filters.TaskCreated(null, null, null, null, null),
+        0,
+        'latest'
+      )) || []
+
+    const bucketTasks = result.map((event) => {
+      // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
+      return new TaskEntity(this.root, {
+        bucket: this,
+        data: {
+          id: event.args.id,
+          ceramicId: event.args.data,
+        },
+      })
+    })
+
+    const sbAddress = await bucketContract.standardBounties()
+    const sbContract = StandardBounties__factory.connect(
+      sbAddress,
+      this.root.web3Store.coreProvider
     )
 
-    return (result || []) as TaskCreatedEvent
+    const bounties = await Promise.all(bucketTasks.map((task) => sbContract.getBounty(task.id)))
+    await Promise.all(bucketTasks.map((task) => task.load()))
+
+    bucketTasks.forEach((task, index) => {
+      task.setBounty(bounties[index])
+    })
+
+    runInAction(() => {
+      this.tasks = bucketTasks
+    })
   }
 
   fetchTransactions = async (): Promise<TransferEvent[]> => {
@@ -296,38 +311,6 @@ export class BucketEntity {
     }
   }
 
-  createTask = async ({
-    data,
-    deadline,
-    issuers,
-    approvers,
-  }: {
-    data: string
-    deadline: number
-    issuers: string[]
-    approvers: string[]
-  }): Promise<void> => {
-    if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
-      runInAction(() => {
-        this.creatingTask = true
-      })
-      try {
-        const contract = Bucket__factory.connect(
-          ethers.utils.getAddress(this.id),
-          this.root.web3Store.signer
-        )
-
-        await contract.createTask(data, deadline, issuers, approvers)
-      } catch (e) {
-        this.root.uiStore.errorToast('Error creating task', e)
-      } finally {
-        runInAction(() => {
-          this.creatingTask = false
-        })
-      }
-    }
-  }
-
   createAndFundTask = async ({
     data,
     deadline,
@@ -351,7 +334,8 @@ export class BucketEntity {
           this.root.web3Store.signer
         )
 
-        await contract.createAndFundTask(data, deadline, issuers, approvers, amount)
+        await contract.createAndFundTask(data, deadline, issuers, [this.id, ...approvers], amount)
+        await this.fetchBucketEvents(this.id)
       } catch (e) {
         this.root.uiStore.errorToast('Error creating task', e)
       } finally {

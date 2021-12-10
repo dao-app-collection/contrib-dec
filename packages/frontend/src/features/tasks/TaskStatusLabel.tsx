@@ -1,9 +1,10 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import { spacingIncrement } from '../../theme/utils'
+import { TaskStatus } from '../../types/all-types'
 
 type TaskStatusLabelProps = {
-  status: 'open' | 'claimed' | 'completed'
+  status?: TaskStatus
   size?: 'small' | 'large'
 }
 
@@ -35,14 +36,12 @@ const StatusLabel = styled.div<TaskStatusLabelProps>`
 `
 
 const TaskStatusLabel: FC<TaskStatusLabelProps> = ({ status, size }) => {
-  const labels = {
-    open: 'Open',
-    claimed: 'Claimed',
-    completed: 'Completed',
+  if (!status) {
+    return null
   }
   return (
     <StatusLabel status={status} size={size}>
-      {labels[status]}
+      {status}
     </StatusLabel>
   )
 }

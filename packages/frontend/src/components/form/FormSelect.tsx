@@ -4,6 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
 import InputLabel from './InputLabel'
 import { Field } from '../../types/all-types'
+import { reactSelectTheme } from '../../theme/dark-theme'
 
 type Props = Field
 
@@ -21,6 +22,7 @@ const FormSelect: FC<Props> = ({ label, name, ...props }) => {
             <Select
               {...field}
               {...props}
+              theme={reactSelectTheme}
               isClearable
               isDisabled={props.disabled}
               onChange={(val) => {

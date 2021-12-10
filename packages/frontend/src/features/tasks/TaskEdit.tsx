@@ -46,7 +46,15 @@ const TaskEdit: FC<Props> = ({ task }) => {
     experienceLevel: task.data.experienceLevel,
   }
 
-  return <TaskForm edit onSubmit={onSubmit} defaultValues={defaultValues} loading={isUpdating} />
+  return (
+    <TaskForm
+      edit
+      symbol={task.bucket?.getSymbol()}
+      onSubmit={onSubmit}
+      defaultValues={defaultValues}
+      loading={isUpdating}
+    />
+  )
 }
 
 export default observer(TaskEdit)

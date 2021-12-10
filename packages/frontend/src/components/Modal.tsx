@@ -26,6 +26,7 @@ const Close = styled.div`
   position: absolute;
   right: 12px;
   top: 12px;
+  z-index: 5;
 `
 type Props = ModalProps & {
   title: string

@@ -3,10 +3,16 @@ import * as React from 'react'
 import { FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { ethers } from 'ethers'
+import styled from 'styled-components'
 import { BucketPayload, Field, FormFieldType } from '../../types/all-types'
 import Button from '../../components/Button'
 import FormField from '../../components/form/FormField'
 import { OWNERS } from '../../lib/constants'
+import { spacingIncrement } from '../../theme/utils'
+
+const Form = styled.form`
+  padding: ${spacingIncrement(30)};
+`
 
 type FormData = {
   name: string
@@ -31,7 +37,7 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
   const methods = useForm<FormData>({
     defaultValues: {
       ...defaultValues,
-      owners: defaultValues.owners || OWNERS,
+      owners: defaultValues.owners || [],
       tokenAddress: defaultValues.tokenAddress || WEENUS_RINKENY_ADDRESS,
     },
   })
@@ -126,7 +132,7 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={_onSubmit}>
+      <Form onSubmit={_onSubmit}>
         <Grid.Container gap={5}>
           {fields.map((field) => (
             <Grid xs={12} key={field.name}>
@@ -146,7 +152,7 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
         </Grid.Container>
 
         <Button htmlType="submit">{edit ? 'Update' : 'Create'}</Button>
-      </form>
+      </Form>
     </FormProvider>
   )
 }

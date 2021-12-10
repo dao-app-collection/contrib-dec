@@ -52,14 +52,7 @@ const Inner = styled.div`
 
   max-width: 1185px;
 `
-const twitters = [
-  '@jontgus',
-  '@daniellivert',
-  '@Adam_Strandberg',
-  '@Morkeeth',
-  '@_geimaj',
-  '@0xbud',
-]
+const twitters = ['@jontgus', '@danielivert', '@Adam_Strandberg', '@Morkeeth', '@_geimaj', '@0xbud']
 
 const LandingPage: FC = () => {
   return (

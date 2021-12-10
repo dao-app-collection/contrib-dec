@@ -51,6 +51,9 @@ const GlobalStyle = createGlobalStyle`
 
   }
 
+  #react-select-3-listbox {
+    z-index: 1100;
+  }
  
   
   @media screen and (max-width: ${pixelSizes.tablet}) {
@@ -61,6 +64,23 @@ const GlobalStyle = createGlobalStyle`
 
   /* Blocknative modal style classes */
   ${blocknativeStyles}
+
+
+  ol {
+    text-align: left;
+  }
+
+  /* Modal padding */
+  .wrapper-enter.wrapper-enter-active {
+    .content {
+      padding: 0;
+    }
+  }
+  .wrapper.wrapper-leave {
+    .content {
+      padding: 0;
+    }
+  }
 `
 
 export default GlobalStyle

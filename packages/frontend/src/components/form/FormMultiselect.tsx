@@ -4,6 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import CreatableSelect from 'react-select/creatable'
 import InputLabel from './InputLabel'
 import { Field } from '../../types/all-types'
+import { reactSelectTheme } from '../../theme/dark-theme'
 
 type Props = Field
 
@@ -22,6 +23,7 @@ const FormMultiselect: FC<Props> = ({ label, name, ...props }) => {
               {...field}
               {...props}
               isMulti
+              theme={reactSelectTheme}
               isDisabled={props.disabled}
               onChange={(val) => {
                 field.onChange(val.map(({ value }) => value))

@@ -2,10 +2,12 @@ import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { ethers } from 'ethers'
 import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import { primaryFontFamily } from '../../theme/general-settings'
 import { spacingIncrement } from '../../theme/utils'
+import { capitalizeFirstLetter } from '../../utils/string-utils'
 
 const Wrapper = styled.div`
   ${primaryFontFamily};
@@ -62,14 +64,16 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
       <Top>
         <Section>
           <Title>{task.data?.title}</Title>
-          <TaskStatusLabel status="open" />
+          <TaskStatusLabel status={task.data?.taskStatus} />
         </Section>
         <Section>
           <Description>Design</Description>
-          <Amount>500 DDAO</Amount>
+          <Amount>{task.allocation}</Amount>
         </Section>
       </Top>
-      <Bottom>Intermediate · Frontend</Bottom>
+      {task.data?.experienceLevel && (
+        <Bottom>{capitalizeFirstLetter(task.data?.experienceLevel)}</Bottom>
+      )}
     </Wrapper>
   )
 }

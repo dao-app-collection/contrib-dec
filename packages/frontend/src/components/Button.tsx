@@ -9,7 +9,7 @@ const StyledButton = styled(GeistButton)<{ modifier?: 'dao' }>`
     css`
       &&& {
         background-color: ${theme.dao.primary};
-        color: ${theme.dao.inverted};
+        color: white;
       }
     `}
 `
