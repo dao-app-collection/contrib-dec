@@ -2,11 +2,12 @@ import { Divider, Page, Spacer } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
-import AvailableBuckets from './AvailableBuckets'
 import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
 import DAOList from './DAOList'
+import Upcoming from './Upcoming'
+import Twitter from './Twitter'
 import { pixelSizes } from '../../theme/breakpoints'
 import SEO from '../../components/SEO'
 
@@ -77,7 +78,8 @@ const LandingPage: FC = () => {
           <Header />
           <Spacer h={8} />
           <Features />
-
+          <Spacer h={8} />
+          <Upcoming />
           <Spacer h={4} />
           <Divider />
           <TextPart title="Making DAOs organized">
@@ -101,12 +103,15 @@ const LandingPage: FC = () => {
                 contributing DAO-members and part of core teams - We build a tool that we need, and
                 that we want to use. Without any limits 100% flexible to the DAO:s need! We wanted
                 to create a better overview of DAO:s their members, domains and open tasks! To see
-                how funds are allocated and even suggest where you fel contribution is needed.
+                how funds are allocated and even suggest where you feel contribution is needed.
               </p>
               <p>
                 A new way for DAOs to get their members to start contributing and make it easier for
-                the core team and DAO to decide on future core contributors. We’re building next
-                level coordination — where we know every DAO is unique!
+                the core team and DAO to decide on future core contributors. Partitioning funds into
+                buckets creates transparency for anyone to easily see what funds have been allocated
+                to a specific area and who is currently in control of them. It also enables the DAO
+                to perform analysis such as which domains are using the capital in the most
+                efficient manner.
               </p>
 
               <p>
@@ -132,6 +137,8 @@ const LandingPage: FC = () => {
 
           <DAOList />
           <Spacer h={14} />
+          <Twitter />
+          {/* <AvailableBuckets /> */}
         </Inner>
       </Page>
     </Wrapper>
