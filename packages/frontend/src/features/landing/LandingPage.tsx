@@ -138,7 +138,9 @@ const LandingPage: FC = () => {
           <Spacer h={4} />
 
           <DAOList />
-          <Spacer h={14} />
+          <Spacer h={4} />
+          <Divider />
+          <Spacer h={4} />
           <Twitter />
           {/* <AvailableBuckets /> */}
         </Inner>
