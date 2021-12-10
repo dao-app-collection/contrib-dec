@@ -7,6 +7,7 @@ type Props = {
   tabs: {
     text: string
     id: string
+    disabled?: boolean
   }[]
   padding?: string
   selected: string
@@ -35,7 +36,7 @@ const Tabs: FC<Props> = ({ tabs, selected, onChange, padding, ...props }) => {
       {...props}
     >
       {tabs.map((tab) => (
-        <GeistTabs.Item label={tab.text} key={tab.id} value={tab.id} />
+        <GeistTabs.Item disabled={tab.disabled} label={tab.text} key={tab.id} value={tab.id} />
       ))}
     </Wrapper>
   )
