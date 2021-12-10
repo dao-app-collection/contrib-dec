@@ -3,6 +3,7 @@ import { FC } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { ethers } from 'ethers'
+import dayjs from 'dayjs'
 import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import { primaryFontFamily } from '../../theme/general-settings'
@@ -67,7 +68,11 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
           <TaskStatusLabel status={task.data?.taskStatus} />
         </Section>
         <Section>
-          <Description>Design</Description>
+          <Description>
+            {' '}
+            {task.data?.deadlineTimestamp &&
+              dayjs().from(dayjs(new Date(task.data?.deadlineTimestamp)), true)}
+          </Description>
           <Amount>{task.allocation}</Amount>
         </Section>
       </Top>

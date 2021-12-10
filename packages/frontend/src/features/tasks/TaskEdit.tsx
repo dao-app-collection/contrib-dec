@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import { observer } from 'mobx-react-lite'
+import { ethers } from 'ethers'
 import TaskForm from './TaskForm'
 import useUpdateTask from '../../hooks/useUpdateTask'
 import { TaskEntity } from '../../stores/entities/Task.entity'
@@ -44,6 +45,7 @@ const TaskEdit: FC<Props> = ({ task }) => {
     github: task.data.github,
     deadline: task.data.deadlineTimestamp,
     experienceLevel: task.data.experienceLevel,
+    amount: task.balance && ethers.utils.formatEther(task.balance),
   }
 
   return (

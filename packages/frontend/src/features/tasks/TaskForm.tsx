@@ -109,6 +109,7 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, s
 
   const _onSubmit = handleSubmit((data) => {
     try {
+      console.log('data')
       onSubmit({
         ...data,
         deadline: data.deadline ? data.deadline.getTime() : 0,
