@@ -3,6 +3,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
 import Heading from '../../components/Heading'
+import SEO from '../../components/SEO'
 import { pixelSizes } from '../../theme/breakpoints'
 
 const Container = styled.header`
@@ -113,12 +114,16 @@ const Header: FC = () => {
         <div />
       </Gradient>
 
+      <SEO
+        title="Contrib. | Get a clear overview of tasks and token flows in your DAO"
+        description="DAO contribution and experience, validated on-chain"
+      />
       <Content>
         <Heading type="h1">Contrib.</Heading>
 
-        <h3>Get a clear overview of tasks and token flows in your DAO.</h3>
+        <h3>Get a clear overview of tasks and token flows in your DAO</h3>
 
-        <p>DAO contribution and experience, validated on-chain.</p>
+        <p>DAO contribution and experience, validated on-chain</p>
       </Content>
     </Container>
   )

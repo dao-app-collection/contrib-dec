@@ -8,6 +8,7 @@ import Header from './Header'
 import TextPart from './TextPart'
 import CreateBucketButton from '../bucket-crud/CreateBucketButton'
 import { pixelSizes } from '../../theme/breakpoints'
+import SEO from '../../components/SEO'
 
 const Wrapper = styled.div`
   background: radial-gradient(
