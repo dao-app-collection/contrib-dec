@@ -1,18 +1,23 @@
 import { useRouter } from 'next/dist/client/router'
-import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import { useRootStore } from './RootStoreProvider'
 import { DAOEntity } from '../stores/entities/DAO.entity'
 import { TaskEntity } from '../stores/entities/Task.entity'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
 import SEO from '../components/SEO'
-import AvailableBuckets from '../features/landing/AvailableBuckets'
+import DAOList from '../features/landing/DAOList'
 
 const DAOStyle = createGlobalStyle<{ primary: string }>`
   html {
      --dao-primary-color: ${(props) => props.primary};
   }
+`
+
+const EmptyPage = styled.div`
+  margin: 10% auto;
+  max-width: 1100px;
 `
 
 type DaoContextInterface = {
@@ -99,7 +104,12 @@ const _DaoProvider: FC = ({ children }) => {
     : 'Loading ...'
 
   if (!selectedBucket) {
-    return <AvailableBuckets />
+    return (
+      <EmptyPage>
+        <SEO title="Contrib." />
+        <DAOList />
+      </EmptyPage>
+    )
   }
 
   return (

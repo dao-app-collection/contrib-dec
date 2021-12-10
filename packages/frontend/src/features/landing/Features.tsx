@@ -279,13 +279,13 @@ const contribs = (
 const items = [
   {
     title: 'Contributor Culture',
-    body: 'Make it a standard within your DAO that contribution is key. Support and incentives new and current contributors.',
+    body: 'Make it a standard within your DAO that contribution is key. Support and incentives new and current contributors. Get an overview of who is doing what!',
     icon: culture,
   },
 
   {
     title: 'DAO Flexibility',
-    body: 'No limits on DAO-structure, launch your buckets and task completely flexible to fit into your specific needs.',
+    body: 'No limits on DAO-structure, launch your buckets and task completely flexible to fit into your specific needs. Create transparency and increase DAO visibility.',
     icon: flex,
   },
 

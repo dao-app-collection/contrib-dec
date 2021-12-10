@@ -8,6 +8,7 @@ import SEO from '../components/SEO'
 import { DaoProvider } from '../context/DaoContext'
 import { useRootStore } from '../context/RootStoreProvider'
 import BucketPage from '../features/bucket/BucketPage'
+import DAOList from '../features/landing/DAOList'
 import { getBucketSlug } from '../utils/buckets-utils'
 import { getAllBuckets, getEntityFromSlug } from '../utils/services/bucket-api'
 
@@ -17,7 +18,7 @@ const SlugPage: FC = (props) => {
   if (store.bucketStore.loading) {
     return (
       <>
-        <PageLoader />
+        <DAOList />
         <SEO
           title="Contrib. | Get a clear overview of tasks and token flows in your DAO"
           description="DAO contribution and experience, validated on-chain"
