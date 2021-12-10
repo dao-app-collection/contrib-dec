@@ -10,6 +10,8 @@ import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import Tabs from '../../components/Tabs'
 import { spacingIncrement } from '../../theme/utils'
+import { media } from '../../theme/media'
+import useResponsive from '../../hooks/useResponsive'
 
 type Props = {
   //   visible: boolean
@@ -51,6 +53,26 @@ const TaskTitle = styled.h2`
   font-weight: 400;
 `
 
+const TaskMetadata = styled.h2`
+  display: flex;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: 600;
+
+  span {
+    color: ${({ theme }) => theme.bg.placeholder};
+    font-weight: 400;
+    margin-left: ${spacingIncrement(10)};
+  }
+
+  ${media.phone`
+    flex-direction: column;
+    justify-content: flex-start;
+    span {
+      margin-left: 0;
+    }
+  `}
+`
+
 const Title = styled.div`
   align-items: center;
   display: flex;
@@ -64,6 +86,7 @@ const Inner = styled.div`
 
 const TaskModal: FC<Props> = ({ onClose, task }) => {
   const visible = Boolean(task)
+  const { isDesktop } = useResponsive()
   const [activeTab, setActiveTab] = useState<TabId>('overview')
 
   const tabs = [
@@ -88,7 +111,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   }
 
   return (
-    <Modal visible={visible} onClose={onClose} width="65%" padding="0">
+    <Modal visible={visible} onClose={onClose} width={isDesktop ? '50%' : '100%'} padding="0">
       <Top>
         <Title>
           <TaskStatusLabel status="open" size="large" />
@@ -97,7 +120,10 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
         <TopContainer>
           <TopSection alignItems="flex-start">
             <TaskTitle>{task?.data?.title}</TaskTitle>
-            <span>500 DDAO</span>
+            <TaskMetadata>
+              <div>500 DDAO</div>
+              <span>Intermediate · Frontend</span>
+            </TaskMetadata>
           </TopSection>
           <TopSection alignItems="flex-end">
             <Button>Apply for task</Button>
