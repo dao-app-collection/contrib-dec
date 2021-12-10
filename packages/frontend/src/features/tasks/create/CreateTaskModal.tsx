@@ -2,6 +2,7 @@ import { Loading } from '@geist-ui/react'
 import * as React from 'react'
 import { FC } from 'react'
 import { observer } from 'mobx-react-lite'
+import { ethers } from 'ethers'
 import CreateTaskForm from './CreateTaskForm'
 import { BucketEntity } from '../../../stores/entities/Bucket.entity'
 import useCreateTask from '../../../hooks/useCreateTask'
@@ -38,6 +39,7 @@ const CreateTaskModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       deadline: meta.deadlineTimestamp,
       issuers: selectedBucket?.owners || [],
       approvers: selectedBucket?.owners || [],
+      amount: ethers.utils.parseEther(payload.amount),
     })
 
     if (success) {

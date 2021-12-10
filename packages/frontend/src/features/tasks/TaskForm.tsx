@@ -22,13 +22,14 @@ type Props = {
   edit?: boolean
   defaultValues?: Partial<TaskMetaData>
   loading?: boolean
+  symbol?: string
 }
 
 const Form = styled.form`
   padding: ${spacingIncrement(30)};
 `
 
-const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading }) => {
+const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, symbol }) => {
   const { uiStore } = useRootStore()
 
   const fields: MyField[] = [
@@ -36,6 +37,13 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
       name: 'title',
       label: 'Title',
       required: true,
+    },
+    {
+      name: 'amount',
+      label: 'Amount',
+      required: true,
+      disabled: edit,
+      labelRight: symbol,
     },
     {
       name: 'github',
@@ -112,7 +120,7 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
       <Form onSubmit={_onSubmit}>
         <Grid.Container gap={4}>
           {fields.map((field) => (
-            <Grid xs={24} md={12} key={field.name}>
+            <Grid xs={24} md={field.name === 'amount' ? 24 : 12} key={field.name}>
               <FormField {...field} register={register} />
             </Grid>
           ))}

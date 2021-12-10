@@ -33,6 +33,7 @@ export const darkTheme: DefaultTheme = {
     [TaskStatus.OPEN]: 'rgba(75, 241, 60, 0.24)',
     [TaskStatus.CLAIMED]: 'rgba(75, 241, 60, 0.24)',
     [TaskStatus.COMPLETED]: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.REVIEW]: 'rgba(75, 241, 60, 0.24)',
   },
   taskStatusText: {
     open: '#C1FFBC',
