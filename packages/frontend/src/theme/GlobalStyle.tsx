@@ -69,6 +69,13 @@ const GlobalStyle = createGlobalStyle`
   ol {
     text-align: left;
   }
+
+  /* Modal padding */
+  .wrapper-enter.wrapper-enter-active {
+    .content {
+      padding: 0;
+    }
+  }
 `
 
 export default GlobalStyle
