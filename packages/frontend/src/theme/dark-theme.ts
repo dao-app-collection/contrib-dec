@@ -17,6 +17,7 @@ export const darkTheme: DefaultTheme = {
   bg: {
     secondary: '#000',
     primary: '#252525',
+    third: '#171717',
     placeholder: '#A1A1A1',
     card: '#3E3E3E',
   },

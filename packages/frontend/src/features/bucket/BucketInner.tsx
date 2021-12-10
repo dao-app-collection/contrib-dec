@@ -69,7 +69,7 @@ const BucketInner: FC = () => {
       <Top>
         <BucketNav />
         <Spacer h={2} />
-        <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
+        <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} padding="0" />
       </Top>
       <Inner>{tabList[activeTab]}</Inner>
       <BucketSelect />

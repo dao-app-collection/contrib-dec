@@ -8,6 +8,7 @@ import TaskHistory from './modal/TaskHistory'
 import TaskOverview from './modal/TaskOverview'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import Tabs from '../../components/Tabs'
+import { spacingIncrement } from '../../theme/utils'
 
 type Props = {
   //   visible: boolean
@@ -17,8 +18,18 @@ type Props = {
 
 export type TabId = 'overview' | 'applicants' | 'history'
 
+const Top = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: ${spacingIncrement(20)};
+  padding-bottom: 0;
+  width: 100%;
+`
+
 const Inner = styled.div`
-  margin: ${({ theme }) => theme.gap(2)};
+  background: ${({ theme }) => theme.bg.primary};
+  padding: ${spacingIncrement(24)};
 `
 
 const TaskModal: FC<Props> = ({ onClose, task }) => {
@@ -47,18 +58,13 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   }
 
   return (
-    <Modal visible={visible} onClose={onClose} width="65%">
-      <Modal.Title>{task?.data?.title}</Modal.Title>
-      {task?.id && <Modal.Subtitle>id: {task?.id}</Modal.Subtitle>}
-      <Modal.Content>
-        <p>{task?.data?.description}</p>
-      </Modal.Content>
-      <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
+    <Modal visible={visible} onClose={onClose} width="65%" padding="0">
+      <Top>
+        {task?.data?.title}
+        <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
+      </Top>
+
       <Inner>{tabList[activeTab]}</Inner>
-      <Modal.Action passive onClick={onClose}>
-        Cancel
-      </Modal.Action>
-      <Modal.Action disabled>Submit</Modal.Action>
     </Modal>
   )
 }
