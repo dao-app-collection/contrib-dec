@@ -309,7 +309,7 @@ export class BucketEntity {
           this.root.web3Store.signer
         )
 
-        await contract.createTask(data, deadline, issuers, approvers)
+        await contract.createTask(data, deadline, issuers, [this.id, ...approvers])
         await this.fetchBucketEvents(this.id)
       } catch (e) {
         this.root.uiStore.errorToast('Error creating task', e)

@@ -14,6 +14,7 @@ export class TaskEntity {
   status: 'default' | 'isApproving' | 'isApplying' | 'isTurningIn' | 'isCompleting' = 'default'
   bucket: BucketEntity
   balance: BigNumber = BigNumber.from('0')
+  approvers: string = []
 
   constructor(root: RootStore, { data, bucket }: { data: TheGraphTask; bucket: BucketEntity }) {
     this.root = root
@@ -26,6 +27,8 @@ export class TaskEntity {
       data: observable,
       status: observable,
       balance: observable,
+
+      approvers: observable,
       apply: action,
       approve: action,
     })
@@ -211,8 +214,9 @@ export class TaskEntity {
     })
   }
 
-  setBounty = ({ balance }) => {
+  setBounty = ({ balance, approvers }) => {
     this.balance = balance
+    this.approvers = approvers
   }
 
   completeWork = async (): Promise<void> => {
@@ -234,13 +238,10 @@ export class TaskEntity {
         this.root.web3Store.signer
       )
 
-      await contract.completeTask(
-        this.id,
-        this.data?.assignes || [],
-        this.ceramicId,
-        this.root.web3Store.signerState.address,
-        [this.balance]
-      )
+      const approverId = 0
+      await contract.completeTask(this.id, this.data?.assignes || [], this.ceramicId, approverId, [
+        this.balance,
+      ])
 
       await this.updateData({
         taskStatus: TaskStatus.COMPLETED,
