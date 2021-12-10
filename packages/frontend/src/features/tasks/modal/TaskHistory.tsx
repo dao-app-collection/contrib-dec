@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import styled from 'styled-components'
+import { media } from '../../../theme/media'
 import { spacingIncrement } from '../../../theme/utils'
 import { getShortAccount } from '../../../utils/account-utils'
 
@@ -41,6 +42,11 @@ const Wrapper = styled.div`
   display: flex;
   font-size: ${({ theme }) => theme.fontSize.sm};
   padding: ${spacingIncrement(6)} 0;
+
+  ${media.phone`
+    flex-direction: column;
+    align-items: flex-start;
+  `}
 `
 
 const Timestamp = styled.div`
