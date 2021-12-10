@@ -112,7 +112,7 @@ export class TaskEntity {
       return
     }
 
-    if (this.data.applications.includes(userAddress)) {
+    if (Array.isArray(this.data?.applications) && this.data?.applications?.includes(userAddress)) {
       return
     }
 

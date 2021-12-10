@@ -134,7 +134,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   const tabList = {
     edit: task && <TaskEdit task={task} />,
     overview: task && <TaskOverview task={task} />,
-    applicants: <TaskApplicants />,
+    applicants: <TaskApplicants task={task} />,
     history: <TaskHistory />,
   }
 
@@ -175,7 +175,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
             <span>Share link</span>
           </TopSection>
         </TopContainer>
-        Applicants::{' '}
+        {/* Applicants::{' '}
         {task.data?.applications?.map((address) => (
           <div key={address}>
             {address}
@@ -185,7 +185,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
               </Button>
             )}
           </div>
-        ))}
+        ))} */}
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
 
