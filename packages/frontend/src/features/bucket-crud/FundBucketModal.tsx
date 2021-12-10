@@ -4,16 +4,22 @@ import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
 import { useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import FormInput from '../../components/form/FormInput'
 import Modal from '../../components/Modal'
 import useFundBucket from '../../hooks/useFundBucket'
 import { BucketEntity } from '../../stores/entities/Bucket.entity'
+import { spacingIncrement } from '../../theme/utils'
 
 type Props = {
   visible: boolean
   onClose: () => void
   selectedBucket: BucketEntity
 }
+
+const Form = styled.form`
+  padding: ${spacingIncrement(30)};
+`
 
 const FundBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
   const { isFunding, fundBucket } = useFundBucket({ bucket: selectedBucket })
@@ -38,7 +44,7 @@ const FundBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       visible={visible}
       onClose={onClose}
     >
-      <form onSubmit={_onSubmit}>
+      <Form onSubmit={_onSubmit}>
         <FormInput
           labelRight={selectedBucket.getSymbol()}
           label="Amount"
@@ -50,7 +56,7 @@ const FundBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
         <Button type="secondary" htmlType="submit">
           Fund
         </Button>
-      </form>
+      </Form>
     </Modal>
   )
 }

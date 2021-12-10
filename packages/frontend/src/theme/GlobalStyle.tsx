@@ -76,6 +76,11 @@ const GlobalStyle = createGlobalStyle`
       padding: 0;
     }
   }
+  .wrapper.wrapper-leave {
+    .content {
+      padding: 0;
+    }
+  }
 `
 
 export default GlobalStyle
