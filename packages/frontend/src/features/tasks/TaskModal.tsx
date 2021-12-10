@@ -105,11 +105,11 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     },
     {
       id: 'applicants',
-      text: 'Applicants · 3',
+      text: `Applicants · ${task?.data?.applications.length}`,
     },
     {
       id: 'history',
-      text: 'History · 4',
+      text: 'History',
     },
   ]
 
@@ -159,8 +159,8 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
           <TopSection alignItems="flex-start">
             <TaskTitle>{task?.data?.title}</TaskTitle>
             <TaskMetadata>
-              <div>500 DDAO</div>
-              <span>Intermediate · Frontend</span>
+              <div>{task?.allocation}</div>
+              <span>{task?.data?.experienceLevel} </span>
             </TaskMetadata>
           </TopSection>
           <TopSection alignItems="flex-end">

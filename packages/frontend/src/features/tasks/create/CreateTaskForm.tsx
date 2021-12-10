@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { FC } from 'react'
+import useSelectedBucket from '../../../hooks/useSelectedBucket'
 import { TaskMetaData } from '../../../types/all-types'
 import TaskForm from '../TaskForm'
 
@@ -8,7 +9,9 @@ type Props = {
 }
 
 const CreateTaskForm: FC<Props> = ({ onSubmit }) => {
-  return <TaskForm onSubmit={onSubmit} />
+  const selectedBucket = useSelectedBucket()
+
+  return <TaskForm symbol={selectedBucket?.getSymbol()} onSubmit={onSubmit} />
 }
 
 export default CreateTaskForm

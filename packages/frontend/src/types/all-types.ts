@@ -92,6 +92,7 @@ export type TaskPayload = {
   deadline: number
   issuers: string[]
   approvers: string[]
+  amount: BigNumber
 }
 // export type Bucket = {
 //   parent?: string

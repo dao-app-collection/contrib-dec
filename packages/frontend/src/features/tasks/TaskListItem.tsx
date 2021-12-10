@@ -67,9 +67,7 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
         </Section>
         <Section>
           <Description>Design</Description>
-          <Amount>
-            {task.balance && ethers.utils.formatEther(task.balance)} {task?.bucket?.getSymbol()}
-          </Amount>
+          <Amount>{task.allocation}</Amount>
         </Section>
       </Top>
       <Bottom>{task?.data?.experienceLevel}</Bottom>

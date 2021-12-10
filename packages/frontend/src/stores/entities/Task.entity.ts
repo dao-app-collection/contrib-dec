@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { BucketEntity } from './Bucket.entity'
 import { TaskMetaData, TaskStatus, TheGraphTask } from '../../types/all-types'
@@ -13,7 +13,7 @@ export class TaskEntity {
   data?: TaskMetaData
   status: 'default' | 'isApproving' | 'isApplying' | 'isTurningIn' | 'isCompleting' = 'default'
   bucket: BucketEntity
-  balance: BigNumber
+  balance: BigNumber = BigNumber.from('0')
 
   constructor(root: RootStore, { data, bucket }: { data: TheGraphTask; bucket: BucketEntity }) {
     this.root = root
@@ -29,8 +29,6 @@ export class TaskEntity {
       apply: action,
       approve: action,
     })
-
-    this.load()
   }
 
   get canApply(): boolean {
@@ -96,6 +94,10 @@ export class TaskEntity {
     }
 
     return this.bucket.owners.includes(this.root.web3Store.signerState.address)
+  }
+
+  get allocation(): string {
+    return `${this.balance && ethers.utils.formatEther(this.balance)} ${this?.bucket?.getSymbol()}`
   }
 
   load = async (): Promise<void> => {

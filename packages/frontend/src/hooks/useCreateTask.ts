@@ -37,7 +37,7 @@ const useCreateTask = ({
           deadline: payload.deadline,
           issuers: payload.issuers,
           approvers: payload.approvers,
-          amount: ethers.utils.parseEther('1.337'),
+          amount: payload.amount,
         })
         success = true
       } catch (e) {
