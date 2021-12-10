@@ -169,7 +169,7 @@ export class TaskEntity {
       return
     }
 
-    if (!this.data.applications.includes(userAddress)) {
+    if (!this.bucket.owners.includes(userAddress)) {
       return
     }
 
@@ -220,6 +220,9 @@ export class TaskEntity {
     if (!this.root.web3Store.signer) {
       return
     }
+    if (!this.root.web3Store.signerState.address) {
+      return
+    }
 
     this.status = 'isCompleting'
 
@@ -233,7 +236,8 @@ export class TaskEntity {
         this.id,
         this.data?.assignes || [],
         this.ceramicId,
-        this.root.web3Store.signerState.address
+        this.root.web3Store.signerState.address,
+        [this.balance]
       )
 
       await this.updateData({

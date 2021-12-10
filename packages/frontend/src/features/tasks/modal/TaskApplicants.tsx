@@ -53,10 +53,13 @@ const _TaskApplicant: React.FC<TaskApplicantProps> = ({
         </Button>
       )}
 
-      {task.canComplete && (
-        <Button loading={loading} onClick={() => task.completeWork()} modifier="dao">
-          Pay out
-        </Button>
+      {task.canComplete && asssigned && (
+        <>
+          <Button loading={loading} onClick={() => task.completeWork()} modifier="dao">
+            Pay out
+          </Button>
+          <Spacer w={1} />
+        </>
       )}
 
       {asssigned && task.canTurnIn && (

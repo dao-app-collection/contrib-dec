@@ -2,6 +2,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { ethers } from 'ethers'
 import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import { primaryFontFamily } from '../../theme/general-settings'
@@ -66,10 +67,12 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
         </Section>
         <Section>
           <Description>Design</Description>
-          <Amount>500 DDAO</Amount>
+          <Amount>
+            {task.balance && ethers.utils.formatEther(task.balance)} {task?.bucket?.getSymbol()}
+          </Amount>
         </Section>
       </Top>
-      <Bottom>Intermediate · Frontend</Bottom>
+      <Bottom>{task?.data?.experienceLevel}</Bottom>
     </Wrapper>
   )
 }
