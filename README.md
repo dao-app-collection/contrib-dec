@@ -38,6 +38,11 @@ Started workshoping and discussion with different DAO:s, potential stakeholders 
 ### EXTRA
 - Any additional docs the team wants to have reviewed
 
+![contrib3](https://user-images.githubusercontent.com/95685541/145647240-7cf55d67-e9ce-4fc8-ac0d-11b99579cc06.png)
+![Uploading contrib5.png…]()
+![contrib2](https://user-images.githubusercontent.com/95685541/145647247-c2d8604a-0363-489e-ab31-4e1e49c2ab89.png)
+![Uploading Contrib vision.png…]()
+
 
 ## Get Started (Documentation on how to run the project)
 
