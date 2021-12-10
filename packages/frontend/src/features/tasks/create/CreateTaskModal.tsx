@@ -5,13 +5,7 @@ import { observer } from 'mobx-react-lite'
 import CreateTaskForm from './CreateTaskForm'
 import { BucketEntity } from '../../../stores/entities/Bucket.entity'
 import useCreateTask from '../../../hooks/useCreateTask'
-import {
-  ExperienceLevel,
-  TaskMetaData,
-  TaskPayload,
-  TaskStatus,
-  TaskType,
-} from '../../../types/all-types'
+import { ExperienceLevel, TaskMetaData, TaskStatus, TaskType } from '../../../types/all-types'
 import Modal from '../../../components/Modal'
 
 type Props = {
@@ -46,7 +40,6 @@ const CreateTaskModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
       approvers: selectedBucket?.owners || [],
     })
 
-    return
     if (success) {
       onClose()
     }

@@ -14,6 +14,7 @@ import { spacingIncrement } from '../../theme/utils'
 import { media } from '../../theme/media'
 import useResponsive from '../../hooks/useResponsive'
 import useIsBucketOwner from '../../hooks/useIsBucketOwner'
+import useSelectedBucket from '../../hooks/useSelectedBucket'
 
 type Props = {
   //   visible: boolean
@@ -90,7 +91,8 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   const [visible, setVisble] = useState(false)
   const { isDesktop } = useResponsive()
   const [activeTab, setActiveTab] = useState<TabId>('overview')
-  const isOwner = useIsBucketOwner()
+  const selectedBucket = useSelectedBucket()
+  const isOwner = useIsBucketOwner(selectedBucket)
 
   const tabs = [
     {
@@ -126,7 +128,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   }, [task])
 
   const tabList = {
-    edit: TaskEdit,
+    edit: task && <TaskEdit task={task} />,
     overview: task && <TaskOverview task={task} />,
     applicants: <TaskApplicants />,
     history: <TaskHistory />,

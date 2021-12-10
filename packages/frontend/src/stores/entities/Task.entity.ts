@@ -15,6 +15,8 @@ export class TaskEntity {
     this.id = data.id.toString()
     this.ceramicId = data?.ceramicId
 
+    console.log(data)
+
     makeObservable(this, {
       data: observable,
     })

@@ -52,11 +52,11 @@ const ConnectButton: React.FC = () => {
 
   return (
     <Wrapper>
-      {balance && (
+      {/* {balance && (
         <BalanceWrapper>
           <Balance />
         </BalanceWrapper>
-      )}
+      )} */}
       <Flex>
         <Button onClick={onClick}>
           {getShortAccount(account) ?? 'Connect Wallet'}

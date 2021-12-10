@@ -196,6 +196,7 @@ export class BucketEntity {
   init = async (): Promise<void> => {
     const result = await this.fetchBucketEvents(this.id)
     const bucketTasks = result.map((event) => {
+      console.log(event.args)
       // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
       return new TaskEntity(this.root, {
         data: {

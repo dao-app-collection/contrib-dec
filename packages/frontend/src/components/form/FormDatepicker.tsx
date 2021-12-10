@@ -18,12 +18,10 @@ const FormDatepicker: FC<Props> = ({ label, name, ...props }) => {
         name={name}
         control={control}
         render={({ field }) => {
-          console.log(field)
           return (
             <DatePicker
               selected={field.value}
               onChange={(val) => {
-                console.log(val)
                 field.onChange(val)
               }}
             />

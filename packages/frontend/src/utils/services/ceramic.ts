@@ -72,7 +72,7 @@ class Ceramic {
     }
   }
 
-  update = async (streamId: string, data: BucketMetaData) => {
+  update = async (streamId: string, data: BucketMetaData | TaskMetaData) => {
     const doc = await TileDocument.load(this.ceramic, streamId)
 
     await doc.update(data)

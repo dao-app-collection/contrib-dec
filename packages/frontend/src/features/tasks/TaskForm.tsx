@@ -20,9 +20,10 @@ type Props = {
   onSubmit: (payload: Partial<FormData>) => void
   edit?: boolean
   defaultValues?: Partial<TaskMetaData>
+  loading?: boolean
 }
 
-const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
+const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading }) => {
   const { uiStore } = useRootStore()
 
   const fields: MyField[] = [
@@ -30,7 +31,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
       name: 'title',
       label: 'Title',
       required: true,
-      disabled: edit,
     },
     {
       name: 'body',
@@ -73,6 +73,10 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
     defaultValues: {
       ...defaultValues,
       body: defaultValues?.body || '',
+      experienceLevel: defaultValues?.experienceLevel && {
+        value: defaultValues.experienceLevel,
+        label: defaultValues.experienceLevel.toUpperCase(),
+      },
       deadline: defaultValues?.deadlineTimestamp
         ? new Date(defaultValues.deadlineTimestamp)
         : undefined,
@@ -93,14 +97,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
         deadline: data.deadline ? data.deadline.getTime() : 0,
         experienceLevel: data.experienceLevel?.value || '',
       })
-
-      // onSubmit({
-      //   title: data.title,
-      //   body: data.body,
-      //   deadline: dayjs().add(10, 'day'),
-      //   approvers: [],
-      //   issuers: [],
-      // })
     } catch (e) {
       uiStore.errorToast('Error creating task', e)
     }
@@ -118,7 +114,9 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
         </Grid.Container>
         <Spacer h={2} />
         <Divider /> <Spacer h={2} />
-        <Button htmlType="submit">{edit ? 'Update task' : 'Create task'}</Button>
+        <Button loading={loading} htmlType="submit">
+          {edit ? 'Update task' : 'Create task'}
+        </Button>
       </form>
     </FormProvider>
   )

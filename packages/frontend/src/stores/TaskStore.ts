@@ -28,47 +28,5 @@ export class TaskStore {
     }
   }
 
-  fetchTasks = async (): Promise<void> => {
-    try {
-      const events = await this.root.contribBucketFactoryContractStore.getTaskEvents()
-
-      console.log({ events })
-      const result: any[] = await Promise.all(
-        events.map(async (event) => {
-          if (!event.args) {
-            return null
-          }
-
-          const data = await ceramic.read(event.args.data)
-
-          return {
-            owners: event.args.owners,
-            id: event.args.bucket,
-            name: event.args.name,
-            token: event.args.token,
-            parent: event.args.parent,
-            data,
-          }
-        })
-      )
-
-      // const entities = result.filter(notEmpty).map(
-      //   (task) =>
-      //     new TaskEntity(this.root, {
-      //       data: task,
-      //     })
-      // )
-
-      // const tasks = buildBucketEntityStructure(entities)
-      runInAction(() => {
-        // this.tasks = tasks
-        this.loading = false
-      })
-    } catch (e) {
-      console.error(e)
-    }
-    runInAction(() => {
-      this.loading = false
-    })
-  }
+  fetchTasks = async (): Promise<void> => {}
 }
