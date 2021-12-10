@@ -105,7 +105,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   ]
 
   const tabList = {
-    overview: <TaskOverview />,
+    overview: <TaskOverview task={task} />,
     applicants: <TaskApplicants />,
     history: <TaskHistory />,
   }

@@ -13,7 +13,7 @@ type Props = {
 const CreateTaskButton: React.FC<Props> = () => {
   const { selectedBucket } = useDao()
   const { canCreateTask } = useCreateTask({ selectedBucket })
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
 
   if (!selectedBucket || !canCreateTask) {
     return null
