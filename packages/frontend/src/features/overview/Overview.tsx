@@ -1,5 +1,6 @@
 import { Description, Link, Spacer, Text } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
+import Transactions from './Transactions'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 
 const Overview: React.FC = () => {
@@ -34,6 +35,11 @@ const Overview: React.FC = () => {
         <Description title="Allocation" />
         {selectedBucket?.allocation?.toString()} {selectedBucket.token.symbol()}
       </Text>
+
+      <div>
+        <Description title="Transactions" />
+        <Transactions />
+      </div>
     </div>
   )
 }
