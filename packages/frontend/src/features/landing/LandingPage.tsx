@@ -6,6 +6,7 @@ import AvailableBuckets from './AvailableBuckets'
 import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
+import DAOList from './DAOList'
 import { pixelSizes } from '../../theme/breakpoints'
 import SEO from '../../components/SEO'
 
@@ -37,6 +38,14 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${pixelSizes.tablet}) {
+    background: radial-gradient(
+        95.37% 95.37% at 113.05% -4.81%,
+        rgba(165, 158, 246, 0.42) 0%,
+        rgba(141, 107, 238, 0.315) 34.9%,
+        rgba(125, 107, 238, 0) 100%
+      ),
+      #000000;
+
     &&& section {
       width: auto;
     }
@@ -51,7 +60,14 @@ const Inner = styled.div`
 
   max-width: 1185px;
 `
-const twitters = ['@jontgus', '@danielivert', '@Adam_Strandberg', '@Morkeeth', '@_geimaj', '@0xbud']
+const twitters = [
+  '@jontgus',
+  '@danielivert',
+  '@Adam_Strandberg',
+  '@Morkeeth',
+  '@_geimaj',
+  // '@0xbud'
+]
 
 const LandingPage: FC = () => {
   return (
@@ -81,12 +97,20 @@ const LandingPage: FC = () => {
           <TextPart title="How it started">
             <div>
               <p>
-                Our mission is to ability to upvote and downvote well-written tasks. For members and
-                externals to quickly find and filter between tasks within a bucket.
+                After being on both sides of the table of contribution. As Discord lurkers,
+                contributing DAO-members and part of core teams - We build a tool that we need, and
+                that we want to use. Without any limits 100% flexible to the DAO:s need! We wanted
+                to create a better overview of DAO:s their members, domains and open tasks! To see
+                how funds are allocated and even suggest where you fel contribution is needed.
               </p>
               <p>
-                Our mission is to ability to upvote and downvote well-written tasks. For members and
-                externals to quickly find and filter between tasks within a bucket. Built by{' '}
+                A new way for DAOs to get their members to start contributing and make it easier for
+                the core team and DAO to decide on future core contributors. We’re building next
+                level coordination — where we know every DAO is unique!
+              </p>
+
+              <p>
+                Built by:{' '}
                 {twitters.map((twitt, i) => (
                   <span key={twitt}>
                     <a
@@ -106,7 +130,8 @@ const LandingPage: FC = () => {
           <Divider />
           <Spacer h={4} />
 
-          <AvailableBuckets />
+          <DAOList />
+          <Spacer h={14} />
         </Inner>
       </Page>
     </Wrapper>

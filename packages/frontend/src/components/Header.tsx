@@ -3,7 +3,6 @@ import { FC } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '@geist-ui/react'
 import Link from 'next/link'
-import ToggleTheme from './ToggleTheme'
 import ConnectButton from '../features/connect/ConnectButton'
 import { Z_INDEX } from '../utils/general-settings'
 
@@ -38,9 +37,6 @@ const Header: FC = () => {
       <div>
         <ConnectButton />
       </div>
-
-      {/* <ToggleTheme />
-      <Spacer w={1} inline /> */}
     </Wrapper>
   )
 }
