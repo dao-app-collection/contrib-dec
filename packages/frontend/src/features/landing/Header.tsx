@@ -2,6 +2,7 @@ import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
 import TryContribButton from './TryContribButton'
+import Navigation from './Navigation'
 import Heading from '../../components/Heading'
 import SEO from '../../components/SEO'
 import { pixelSizes } from '../../theme/breakpoints'
@@ -108,6 +109,7 @@ const Gradient = styled.div`
 const Header: FC = () => {
   return (
     <Container>
+      <Navigation />
       <Gradient>
         <div />
         <div />
