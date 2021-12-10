@@ -51,6 +51,9 @@ const GlobalStyle = createGlobalStyle`
 
   }
 
+  #react-select-3-listbox {
+    z-index: 100;
+  }
  
   
   @media screen and (max-width: ${pixelSizes.tablet}) {
@@ -61,6 +64,11 @@ const GlobalStyle = createGlobalStyle`
 
   /* Blocknative modal style classes */
   ${blocknativeStyles}
+
+
+  ol {
+    text-align: left;
+  }
 `
 
 export default GlobalStyle

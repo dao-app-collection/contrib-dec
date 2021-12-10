@@ -1,4 +1,4 @@
-import MDEditor from '@uiw/react-md-editor'
+import ReactMarkdown from 'react-markdown'
 import { TaskEntity } from '../../../stores/entities/Task.entity'
 
 type Props = {
@@ -10,7 +10,7 @@ const TaskOverview: React.FC<Props> = ({ task }) => {
     <div>
       <h1>Task Overview</h1>
       <div>
-        <MDEditor.Markdown source={task.data?.body || ''} />
+        <ReactMarkdown>{task.data?.body || ''}</ReactMarkdown>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { Button, Modal } from '@geist-ui/react'
+import { Button } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC, useState, useEffect } from 'react'
@@ -15,6 +15,7 @@ import { media } from '../../theme/media'
 import useResponsive from '../../hooks/useResponsive'
 import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
+import Modal from '../../components/Modal'
 
 type Props = {
   //   visible: boolean
@@ -135,7 +136,13 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
   }
 
   return (
-    <Modal visible={visible} onClose={onClose} width={isDesktop ? '50%' : '100%'} padding="0">
+    <Modal
+      disableBackdropClick
+      visible={visible}
+      onClose={onClose}
+      width={isDesktop ? '50%' : '100%'}
+      padding="0"
+    >
       <Top>
         <Title>
           <TaskStatusLabel status="open" size="large" />

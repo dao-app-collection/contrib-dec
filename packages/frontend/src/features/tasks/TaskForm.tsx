@@ -33,12 +33,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
       required: true,
     },
     {
-      name: 'body',
-      label: 'Description',
-      required: true,
-      type: 'body',
-    },
-    {
       name: 'github',
       label: 'Github link',
     },
@@ -69,13 +63,20 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
     },
   ]
 
+  const bodyField = {
+    name: 'body',
+    label: 'Description',
+    required: true,
+    type: 'body',
+  }
+
   const methods = useForm<FormData>({
     defaultValues: {
       ...defaultValues,
       body: defaultValues?.body || '',
       experienceLevel: defaultValues?.experienceLevel && {
         value: defaultValues.experienceLevel,
-        label: defaultValues.experienceLevel.toUpperCase(),
+        label: defaultValues.experienceLevel.toLowerCase(),
       },
       deadline: defaultValues?.deadlineTimestamp
         ? new Date(defaultValues.deadlineTimestamp)
@@ -91,7 +92,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
 
   const _onSubmit = handleSubmit((data) => {
     try {
-      console.log('....data', data)
       onSubmit({
         ...data,
         deadline: data.deadline ? data.deadline.getTime() : 0,
@@ -107,11 +107,13 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
       <form onSubmit={_onSubmit}>
         <Grid.Container gap={4}>
           {fields.map((field) => (
-            <Grid xs={24} key={field.name}>
+            <Grid xs={24} md={12} key={field.name}>
               <FormField {...field} register={register} />
             </Grid>
           ))}
-        </Grid.Container>
+        </Grid.Container>{' '}
+        <Spacer h={2} />
+        <FormField {...bodyField} />
         <Spacer h={2} />
         <Divider /> <Spacer h={2} />
         <Button loading={loading} htmlType="submit">

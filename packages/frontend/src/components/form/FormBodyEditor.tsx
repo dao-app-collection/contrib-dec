@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import MDEditor from '@uiw/react-md-editor'
+
+import Yamde from 'yamde'
 import InputLabel from './InputLabel'
 import { Field } from '../../types/all-types'
-import '@uiw/react-md-editor/markdown-editor.css'
-import '@uiw/react-markdown-preview/markdown.css'
 
 type Props = Field
 
@@ -21,7 +20,7 @@ const FormBodyEditor: FC<Props> = ({ label, name, ...props }) => {
         render={({ field }) => {
           return (
             <div>
-              <MDEditor value={field.value} onChange={field.onChange} />
+              <Yamde value={field.value} handler={field.onChange} theme="dark" />
             </div>
           )
         }}
