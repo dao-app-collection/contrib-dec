@@ -37,7 +37,7 @@ export class TaskEntity {
     }
   }
 
-  updateData = (data: Partial<TaskMetaData>) => {
+  updateData = async (data: Partial<TaskMetaData>) => {
     if (!this.data) {
       return
     }
