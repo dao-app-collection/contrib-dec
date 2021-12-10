@@ -9,7 +9,7 @@ const items = [
   {
     img: '/rome.png',
     name: 'RomeDAO',
-    url: '/rome-dao',
+    url: '/romedao',
   },
   {
     img: '/orakuru.jpeg',

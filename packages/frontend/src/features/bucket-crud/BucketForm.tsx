@@ -38,7 +38,7 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
     defaultValues: {
       ...defaultValues,
       owners: defaultValues.owners || [],
-      tokenAddress: defaultValues.tokenAddress || WEENUS_RINKENY_ADDRESS,
+      tokenAddress: defaultValues.tokenAddress || '',
     },
   })
 
@@ -58,6 +58,10 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
         return null
       })
       .filter(Boolean)
+
+    if (ownersCorrect.length === 0) {
+      return
+    }
 
     try {
       onSubmit({
@@ -158,3 +162,17 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
 }
 
 export default BucketForm
+
+// contrib-orakuru: 0x1a5d7f73c67dfd2d894ebe2a81103baf4f5c37a8
+// contrib-dxdao: 0x157e58ca378333458e066db7e2f6cf1c2fad2ec3
+// contrib-rome: 0xbb10e4c54e96d6331badf17b66eab893bad5d5d4
+// contrib-mate: 0xc174c9cc0a6686b7f347c7c40cf330486785158d
+
+// kaji — Today at 10:40 PM
+// '',
+
+// '0xa50F556168a2A67EeABD5BAf821212a6F0c8Fe1E',
+// '0xf6B186049232cd426E18DD068a205d50c398a2D8',
+//   0xC174C9CC0A6686B7F347c7c40cf330486785158d
+//   0xf3476b36fc9942083049C04e9404516703369ef3
+//   0xC174C9CC0A6686B7F347c7c40cf330486785158d
