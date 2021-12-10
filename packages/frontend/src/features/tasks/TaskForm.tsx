@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Grid, Button, Spacer, Divider } from '@geist-ui/react'
+import { Grid, Spacer, Divider } from '@geist-ui/react'
 import { FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
@@ -7,6 +7,7 @@ import { MyField, TaskMetaData } from '../../types/all-types'
 import { useRootStore } from '../../context/RootStoreProvider'
 import FormField from '../../components/form/FormField'
 import { spacingIncrement } from '../../theme/utils'
+import Button from '../../components/Button'
 
 type FormData = {
   title: string
@@ -38,6 +39,11 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, s
       label: 'Title',
       required: true,
     },
+
+    {
+      name: 'github',
+      label: 'Github link',
+    },
     {
       name: 'experienceLevel',
       label: 'Experience Level',
@@ -60,21 +66,17 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, s
     },
 
     {
+      name: 'deadline',
+      label: 'Deadline',
+      type: 'date',
+    },
+
+    {
       name: 'amount',
       label: 'Amount',
       required: true,
       disabled: edit,
       labelRight: symbol,
-    },
-    {
-      name: 'github',
-      label: 'Github link',
-    },
-
-    {
-      name: 'deadline',
-      label: 'Deadline',
-      type: 'date',
     },
   ]
 
@@ -127,11 +129,11 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, s
             </Grid>
           ))}
         </Grid.Container>{' '}
-        <Spacer h={2} />
+        <Spacer h={4} />
         <FormField {...bodyField} />
         <Spacer h={2} />
         <Divider /> <Spacer h={2} />
-        <Button loading={loading} htmlType="submit">
+        <Button modifier="dao" loading={loading} htmlType="submit">
           {edit ? 'Update task' : 'Create task'}
         </Button>
       </Form>

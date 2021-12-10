@@ -16,11 +16,11 @@ configure({
   disableErrorBoundaries: false,
 })
 
-const App = ({ Component, pageProps }: AppProps): React.ReactElement => {
+const App = ({ Component, pageProps, router, ...rest }: AppProps): React.ReactElement => {
   return (
     <RootStoreProvider>
       <AppBootstrap>
-        <Header />
+        {router.asPath !== '/' && <Header />}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Component {...pageProps} />
       </AppBootstrap>
