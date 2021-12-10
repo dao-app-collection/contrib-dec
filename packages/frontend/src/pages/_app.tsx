@@ -5,6 +5,7 @@ import { RootStoreProvider } from '../context/RootStoreProvider'
 import AppBootstrap from '../components/AppBootstrap'
 import Header from '../components/Header'
 import 'react-toastify/dist/ReactToastify.min.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 // mobx config
 configure({

@@ -1,7 +1,9 @@
 import styled from 'styled-components'
+import Skeleton from 'react-loading-skeleton'
 
 type TableItemProps = {
   label: string
+  loading?: boolean
 }
 
 const Wrapper = styled.div`
@@ -20,11 +22,11 @@ const Text = styled.div`
   font-weight: 400;
 `
 
-const TaskTableItem: React.FC<TableItemProps> = ({ label, children }) => {
+const TaskTableItem: React.FC<TableItemProps> = ({ label, loading, children }) => {
   return (
     <Wrapper>
       <Label>{label}</Label>
-      <Text>{children}</Text>
+      {loading ? <Skeleton /> : <Text>{children}</Text>}
     </Wrapper>
   )
 }

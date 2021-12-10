@@ -39,22 +39,6 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, s
       required: true,
     },
     {
-      name: 'amount',
-      label: 'Amount',
-      required: true,
-      disabled: edit,
-      labelRight: symbol,
-    },
-    {
-      name: 'github',
-      label: 'Github link',
-    },
-    {
-      name: 'deadline',
-      label: 'Deadline',
-      type: 'date',
-    },
-    {
       name: 'experienceLevel',
       label: 'Experience Level',
       required: true,
@@ -73,6 +57,24 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading, s
           label: 'Senior',
         },
       ],
+    },
+
+    {
+      name: 'amount',
+      label: 'Amount',
+      required: true,
+      disabled: edit,
+      labelRight: symbol,
+    },
+    {
+      name: 'github',
+      label: 'Github link',
+    },
+
+    {
+      name: 'deadline',
+      label: 'Deadline',
+      type: 'date',
     },
   ]
 

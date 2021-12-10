@@ -7,6 +7,7 @@ import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import { primaryFontFamily } from '../../theme/general-settings'
 import { spacingIncrement } from '../../theme/utils'
+import { capitalizeFirstLetter } from '../../utils/string-utils'
 
 const Wrapper = styled.div`
   ${primaryFontFamily};
@@ -70,7 +71,9 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
           <Amount>{task.allocation}</Amount>
         </Section>
       </Top>
-      <Bottom>{task?.data?.experienceLevel}</Bottom>
+      {task.data?.experienceLevel && (
+        <Bottom>{capitalizeFirstLetter(task.data?.experienceLevel)}</Bottom>
+      )}
     </Wrapper>
   )
 }

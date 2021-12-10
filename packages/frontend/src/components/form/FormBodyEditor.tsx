@@ -19,7 +19,12 @@ const FormBodyEditor: FC<Props> = ({ label, name, ...props }) => {
         control={control}
         render={({ field }) => {
           return (
-            <div>
+            <div
+              style={{
+                position: 'relative',
+                zIndex: -1,
+              }}
+            >
               <Yamde value={field.value} handler={field.onChange} theme="dark" />
             </div>
           )

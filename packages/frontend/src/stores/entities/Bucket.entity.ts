@@ -288,39 +288,6 @@ export class BucketEntity {
     }
   }
 
-  createTask = async ({
-    data,
-    deadline,
-    issuers,
-    approvers,
-  }: {
-    data: string
-    deadline: number
-    issuers: string[]
-    approvers: string[]
-  }): Promise<void> => {
-    if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
-      runInAction(() => {
-        this.creatingTask = true
-      })
-      try {
-        const contract = Bucket__factory.connect(
-          ethers.utils.getAddress(this.id),
-          this.root.web3Store.signer
-        )
-
-        await contract.createTask(data, deadline, issuers, approvers)
-        await this.fetchBucketEvents(this.id)
-      } catch (e) {
-        this.root.uiStore.errorToast('Error creating task', e)
-      } finally {
-        runInAction(() => {
-          this.creatingTask = false
-        })
-      }
-    }
-  }
-
   createAndFundTask = async ({
     data,
     deadline,
@@ -344,7 +311,7 @@ export class BucketEntity {
           this.root.web3Store.signer
         )
 
-        await contract.createAndFundTask(data, deadline, issuers, approvers, amount)
+        await contract.createAndFundTask(data, deadline, issuers, [this.id, ...approvers], amount)
         await this.fetchBucketEvents(this.id)
       } catch (e) {
         this.root.uiStore.errorToast('Error creating task', e)
