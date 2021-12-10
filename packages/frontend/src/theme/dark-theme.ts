@@ -24,6 +24,7 @@ export const darkTheme: DefaultTheme = {
   text: {
     primary: ' #FFF',
     smooth: '#CACFDB',
+    accent: '#838383',
   },
   taskStatus: {
     open: 'rgba(75, 241, 60, 0.24)',

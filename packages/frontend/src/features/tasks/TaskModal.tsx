@@ -61,6 +61,7 @@ const TaskMetadata = styled.h2`
   display: flex;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: 600;
+  text-align: left;
 
   span {
     color: ${({ theme }) => theme.bg.placeholder};
