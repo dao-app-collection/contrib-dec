@@ -19,7 +19,7 @@ export const MIN_IN_MS = SEC_IN_MS * 60
 
 export const MINIMUM_GAS_FEE = 21000
 
-export const APP_NAME = 'prePO'
+export const APP_NAME = 'Contrib'
 
 // MY INFURA_ID, SWAP THIS FROM https://infura.io/dashboard/ethereum
 export const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad'
