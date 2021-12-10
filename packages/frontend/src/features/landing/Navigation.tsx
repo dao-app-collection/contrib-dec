@@ -5,7 +5,10 @@ const Wrapper = styled.div`
   margin-right: ${spacingIncrement(20)};
   padding: ${spacingIncrement(20)};
   padding-top: ${spacingIncrement(40)};
-  z-index: 5;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
 `
 
 const List = styled.ul`
