@@ -102,7 +102,7 @@ const LandingPage: FC = () => {
             <div>
               <p>
                 After being on both sides of the table of contribution. As Discord lurkers,
-                contributing DAO-members and part of core teams - We build a tool that we need, and
+                contributing DAO-members and part of core teams - we build a tool that we need, and
                 that we want to use. Without any limits 100% flexible to the DAO:s need! We wanted
                 to create a better overview of DAO:s their members, domains and open tasks! To see
                 how funds are allocated and even suggest where you feel contribution is needed.
