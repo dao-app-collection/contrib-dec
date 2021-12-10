@@ -304,6 +304,40 @@ export class BucketEntity {
     }
   }
 
+  createAndFundTask = async ({
+    data,
+    deadline,
+    issuers,
+    approvers,
+    amount,
+  }: {
+    data: string
+    deadline: number
+    issuers: string[]
+    approvers: string[]
+    amount: BigNumber
+  }): Promise<void> => {
+    if (this.root.web3Store.signer && this.root.web3Store.signerState.address) {
+      runInAction(() => {
+        this.creatingTask = true
+      })
+      try {
+        const contract = Bucket__factory.connect(
+          ethers.utils.getAddress(this.id),
+          this.root.web3Store.signer
+        )
+
+        await contract.createAndFundTask(data, deadline, issuers, approvers, amount)
+      } catch (e) {
+        this.root.uiStore.errorToast('Error creating task', e)
+      } finally {
+        runInAction(() => {
+          this.creatingTask = false
+        })
+      }
+    }
+  }
+
   get signerIsOwner(): boolean {
     if (!this.root.web3Store.signerState.address) return false
     return this.owners.includes(this.root.web3Store.signerState.address)
