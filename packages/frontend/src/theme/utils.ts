@@ -18,8 +18,7 @@ export const centered = css`
 `
 
 export const primaryFontFamily = css`
-  font-family: ${({ theme }): string => theme.primaryFontFamily};
-  font-weight: ${({ theme }): number => theme.extraBold};
+  font-family: ${({ theme }): string => theme.font.standard};
 `
 
 export const secondaryFontFamily = css`

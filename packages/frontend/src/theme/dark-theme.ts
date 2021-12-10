@@ -24,6 +24,16 @@ export const darkTheme: DefaultTheme = {
     primary: ' #FFF',
     smooth: '#CACFDB',
   },
+  taskStatus: {
+    open: 'rgba(75, 241, 60, 0.24)',
+    claimes: 'rgba(75, 241, 60, 0.24)',
+    completed: 'rgba(75, 241, 60, 0.24)',
+  },
+  taskStatusText: {
+    open: '#C1FFBC',
+    claimes: '#C1FFBC',
+    completed: '#C1FFBC',
+  },
 
   gap: (value: number) => `${value * 8}px`,
 }
