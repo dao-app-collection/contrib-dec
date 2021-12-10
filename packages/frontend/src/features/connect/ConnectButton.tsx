@@ -61,7 +61,7 @@ const ConnectButton: React.FC = () => {
         <Button onClick={onClick}>
           {getShortAccount(account) ?? 'Connect Wallet'}
           <Spacer w={0.5} inline />
-          <AccountIcon />
+          <AccountIcon account={account} />
         </Button>
       </Flex>
       <Modal visible={uiStore.accountModalOpen} onClose={closeHandler}>
@@ -71,7 +71,7 @@ const ConnectButton: React.FC = () => {
             <Grid alignItems="center" justify="center">
               {getShortAccount(account) ?? 'Connect Wallet'}
               <Spacer w={0.5} inline />
-              <AccountIcon />
+              <AccountIcon account={account} />
               <Spacer w={2} inline />
             </Grid>
             <Grid>

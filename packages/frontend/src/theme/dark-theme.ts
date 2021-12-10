@@ -12,6 +12,8 @@ export const darkTheme: DefaultTheme = {
 
   contrib: {
     primary: '#CA87FF',
+    accent: '#E5D4FF',
+    borderColor: '#565656',
   },
 
   bg: {

@@ -1,14 +1,12 @@
-import { observer } from 'mobx-react-lite'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
-import { useRootStore } from '../../context/RootStoreProvider'
 
-const Identicon: React.FC = () => {
-  const { web3Store } = useRootStore()
-  const { signerState } = web3Store
-  const account = signerState.address
-  if (!account) return null
-
-  return <Jazzicon diameter={15} seed={jsNumberForAddress(account)} />
+type Props = {
+  account: string | undefined
+  diameter?: number
 }
 
-export default observer(Identicon)
+const Identicon: React.FC<Props> = ({ account, diameter = 15 }) => {
+  return account ? <Jazzicon diameter={diameter} seed={jsNumberForAddress(account)} /> : null
+}
+
+export default Identicon
