@@ -57,7 +57,10 @@ const Transactions = (): React.FC => {
     fetchTransactions()
   }, [bucket.id])
 
-  const [symbol] = bucket?.token.symbol()
+  let symbol = ''
+  if (bucket?.token) {
+    symbol = bucket?.token?.symbol()
+  }
   const decimals = bucket?.token.decimals()
 
   function getName(address: string) {
