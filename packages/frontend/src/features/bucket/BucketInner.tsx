@@ -51,7 +51,6 @@ const BucketInner: FC = () => {
     {
       id: 'members',
       text: 'Members',
-      disabled: true,
     },
     {
       id: 'suggestions',
