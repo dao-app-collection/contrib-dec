@@ -208,7 +208,7 @@ export class BucketEntity {
     // })
   }
 
-  fetchBucketEvents = async (bucketAddress: string): Promise<TaskCreatedEvent[]> => {
+  fetchBucketEvents = async (bucketAddress: string): Promise<void> => {
     const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
 
     const result =
@@ -236,6 +236,7 @@ export class BucketEntity {
     )
 
     const bounties = await Promise.all(bucketTasks.map((task) => sbContract.getBounty(task.id)))
+    await Promise.all(bucketTasks.map((task) => task.load()))
 
     bucketTasks.forEach((task, index) => {
       task.setBounty(bounties[index])

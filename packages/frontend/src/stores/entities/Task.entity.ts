@@ -13,6 +13,7 @@ export class TaskEntity {
   data?: TaskMetaData
   status: 'default' | 'isApproving' | 'isApplying' | 'isTurningIn' | 'isCompleting' = 'default'
   bucket: BucketEntity
+  balance: BigNumber
 
   constructor(root: RootStore, { data, bucket }: { data: TheGraphTask; bucket: BucketEntity }) {
     this.root = root
@@ -24,6 +25,7 @@ export class TaskEntity {
       canApprove: computed,
       data: observable,
       status: observable,
+      balance: observable,
       apply: action,
       approve: action,
     })
@@ -100,7 +102,6 @@ export class TaskEntity {
     try {
       const data = await ceramic.read<TaskMetaData>(this.ceramicId)
 
-      console.log('task data', { data })
       if (data) {
         runInAction(() => {
           this.data = data
@@ -208,7 +209,9 @@ export class TaskEntity {
     })
   }
 
-  setBounty = ({ balance }) => {}
+  setBounty = ({ balance }) => {
+    this.balance = balance
+  }
 
   completeWork = async (): Promise<void> => {
     if (!this.canComplete) {
