@@ -1,11 +1,12 @@
 import * as React from 'react'
 import { Grid, Button, Spacer, Divider } from '@geist-ui/react'
 import { FC } from 'react'
-import dayjs from 'dayjs'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import { MyField, TaskMetaData } from '../../types/all-types'
 import { useRootStore } from '../../context/RootStoreProvider'
 import FormField from '../../components/form/FormField'
+import { spacingIncrement } from '../../theme/utils'
 
 type FormData = {
   title: string
@@ -22,6 +23,10 @@ type Props = {
   defaultValues?: Partial<TaskMetaData>
   loading?: boolean
 }
+
+const Form = styled.form`
+  padding: ${spacingIncrement(30)};
+`
 
 const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading }) => {
   const { uiStore } = useRootStore()
@@ -104,7 +109,7 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={_onSubmit}>
+      <Form onSubmit={_onSubmit}>
         <Grid.Container gap={4}>
           {fields.map((field) => (
             <Grid xs={24} md={12} key={field.name}>
@@ -119,7 +124,7 @@ const TaskForm: FC<Props> = ({ onSubmit, defaultValues, edit = false, loading })
         <Button loading={loading} htmlType="submit">
           {edit ? 'Update task' : 'Create task'}
         </Button>
-      </form>
+      </Form>
     </FormProvider>
   )
 }
