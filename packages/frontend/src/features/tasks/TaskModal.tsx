@@ -121,9 +121,9 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     if (task) {
       setVisble(true)
     } else {
+      setVisble(false)
       setTimeout(() => {
         setActiveTab('overview')
-        setVisble(false)
       }, 500)
     }
   }, [task])

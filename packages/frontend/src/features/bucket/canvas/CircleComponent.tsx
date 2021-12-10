@@ -17,7 +17,7 @@ export const interpolateSize = (radiusValue: Interpolation<number>, multiplier: 
 export const interpolateBorderWidth = (borderWidth: number, radiusValue: Interpolation<number>) =>
   to([radiusValue], (radius) => Math.min(borderWidth, radius))
 
-const Counter = styled(animated.div)`
+const Counter = styled(animated.div)<{ isSelected: boolean }>`
   align-items: center;
   background: #fff;
   border-radius: 72px;
@@ -32,6 +32,12 @@ const Counter = styled(animated.div)`
   top: 50%;
   transform: translate(50%, -50%);
   width: 38px;
+
+  ${(props) =>
+    props.isSelected &&
+    css`
+      transform: translate(63%, -50%);
+    `}
 `
 
 const Logo = styled(animated.div)`
@@ -134,7 +140,6 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
   const logoSize = interpolateSize(style.radius, 0.4)
   const titleSize = interpolateSize(style.radius, 0.2)
   const textSize = interpolateSize(style.radius, 0.15)
-
   if (isSelected && !node.data.gotChildren) {
     showInfo = true
   }
@@ -176,7 +181,11 @@ const CircleComponent = (circleProps: CircleProps<any>) => {
           <img src={logo} alt={node.data.name} />
         </Logo>
       )}
-      {showInfo && <Counter key="counter">4</Counter>}
+      {showInfo && node.data.entity.taskCount > 0 && (
+        <Counter isSelected={isSelected} key="counter">
+          <div>{node.data.entity.taskCount}</div>
+        </Counter>
+      )}
 
       <InfoInner
         animate={showInfo ? 'show' : 'hide'}
