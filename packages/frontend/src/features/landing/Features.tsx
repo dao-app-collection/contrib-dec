@@ -291,13 +291,13 @@ const items = [
 
   {
     title: 'Standard bounties',
-    body: 'Smart Contracts in Solidity to serve as a Standard for Bounties for EVM dApps tested and recognized for maximum security and reliability..',
+    body: 'Smart Contracts in Solidity to serve as a Standard for Bounties for EVM dApps tested and recognised for maximum security and reliability. Lock up funds in an escrow contract and reward people for completing tasks.',
     icon: bounties,
   },
 
   {
     title: 'Turning members into contributors',
-    body: 'Through a smooth and flexible onboarding we turn DAO-members into contributors. Making it easier and more structured to contribute.',
+    body: 'Through a smooth and flexible onboarding we turn DAO contributors into members. Providing a structured and simple path to contribute and join/vibe.',
     icon: contribs,
   },
 ]

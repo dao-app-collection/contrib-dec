@@ -9,6 +9,7 @@ const FormInput: FC<Props> = ({ label, register, name, required = false, ...prop
   return (
     <Input {...props} width="100%" {...register(name, { required })}>
       {label}
+      {required ? ' *' : ''}
     </Input>
   )
 }

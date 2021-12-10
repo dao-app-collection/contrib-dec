@@ -10,7 +10,9 @@ type Props = Field
 const FormTextarea: FC<Props> = ({ label, register, name, required = false, ...props }) => {
   return (
     <div style={{ width: '100%' }}>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel>
+        {label} {required ? ' *' : ''}
+      </InputLabel>
       <Textarea {...props} width="100%" {...register(name, { required })} />
     </div>
   )
