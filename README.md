@@ -12,6 +12,7 @@ https://hack.contrib.at/
 
 ### Video
 *VIMEO LINK*
+https://vimeo.com/655344599
 
 ### Start date
     Workshop began and discussion with DAO:s followed by a one week build sprint.

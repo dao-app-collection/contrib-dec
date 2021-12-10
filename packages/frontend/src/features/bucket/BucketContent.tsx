@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 import BucketInner from './BucketInner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import { pixelSizes } from '../../theme/breakpoints'
@@ -13,7 +14,7 @@ const Container = styled.div`
   color: ${(props) => props.theme.text.primary};
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh - 32px);
   overflow: hidden;
   position: relative;
   width: 420px;
@@ -39,4 +40,4 @@ const BucketContent: FC = () => {
   )
 }
 
-export default BucketContent
+export default observer(BucketContent)

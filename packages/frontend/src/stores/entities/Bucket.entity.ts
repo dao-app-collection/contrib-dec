@@ -9,6 +9,7 @@ import { EMPTY_CONTRACT_ADDRESS } from '../../lib/constants'
 import { slugify } from '../../utils/buckets-utils'
 import { Bucket__factory } from '../../generated/factories/Bucket__factory'
 import { TaskCreatedEvent } from '../../generated/Bucket'
+import { TransferEvent } from '../../generated/ERC20'
 
 import { ERC20__factory } from '../../generated/factories/ERC20__factory'
 import ceramic from '../../utils/services/ceramic'
@@ -245,6 +246,28 @@ export class BucketEntity {
     runInAction(() => {
       this.tasks = bucketTasks
     })
+  }
+
+  fetchTransactions = async (): Promise<TransferEvent[]> => {
+    const txs: TransferEvent[] = []
+
+    try {
+      const fromFilter = this.token?.contract?.filters.Transfer(this.id, null)
+
+      txs.push(
+        ...((await this.token.contract?.queryFilter(fromFilter!, 0, 'latest')) as TransferEvent[])
+      )
+
+      const toFilter = this.token?.contract?.filters.Transfer(null, this.id)
+
+      txs.push(
+        ...((await this.token.contract?.queryFilter(toFilter!, 0, 'latest')) as TransferEvent[])
+      )
+
+      return txs.sort((a, b) => a.blockNumber > b.blockNumber)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   getAllocation = async (): Promise<void> => {

@@ -10,7 +10,7 @@ import { Z_INDEX } from '../utils/general-settings'
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: ${(props) => props.theme.gap(2)};
   position: fixed;
   right: 0;
@@ -34,6 +34,7 @@ const Header: FC = () => {
           <a href="/">Contrib.</a>
         </Link>
       </Logo>
+      <Spacer w={2} inline />
       <div>
         <ConnectButton />
       </div>

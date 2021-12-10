@@ -6,7 +6,6 @@ import AvailableBuckets from './AvailableBuckets'
 import Features from './Features'
 import Header from './Header'
 import TextPart from './TextPart'
-import CreateBucketButton from '../bucket-crud/CreateBucketButton'
 import { pixelSizes } from '../../theme/breakpoints'
 import SEO from '../../components/SEO'
 
@@ -108,7 +107,6 @@ const LandingPage: FC = () => {
           <Spacer h={4} />
 
           <AvailableBuckets />
-          <CreateBucketButton />
         </Inner>
       </Page>
     </Wrapper>
