@@ -210,42 +210,49 @@ export class BucketEntity {
   }
 
   fetchBucketEvents = async (bucketAddress: string): Promise<void> => {
-    const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
+    try {
+      const bucketContract = Bucket__factory.connect(
+        bucketAddress,
+        this.root.web3Store.coreProvider
+      )
 
-    const result =
-      (await bucketContract.queryFilter(
-        bucketContract.filters.TaskCreated(null, null, null, null, null),
-        0,
-        'latest'
-      )) || []
+      const result =
+        (await bucketContract.queryFilter(
+          bucketContract.filters.TaskCreated(null, null, null, null, null),
+          0,
+          'latest'
+        )) || []
 
-    const bucketTasks = result.map((event) => {
-      // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
-      return new TaskEntity(this.root, {
-        bucket: this,
-        data: {
-          id: event.args.id,
-          ceramicId: event.args.data,
-        },
+      const bucketTasks = result.map((event) => {
+        // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
+        return new TaskEntity(this.root, {
+          bucket: this,
+          data: {
+            id: event.args.id,
+            ceramicId: event.args.data,
+          },
+        })
       })
-    })
 
-    const sbAddress = await bucketContract.standardBounties()
-    const sbContract = StandardBounties__factory.connect(
-      sbAddress,
-      this.root.web3Store.coreProvider
-    )
+      const sbAddress = await bucketContract.standardBounties()
+      const sbContract = StandardBounties__factory.connect(
+        sbAddress,
+        this.root.web3Store.coreProvider
+      )
 
-    const bounties = await Promise.all(bucketTasks.map((task) => sbContract.getBounty(task.id)))
-    await Promise.all(bucketTasks.map((task) => task.load()))
+      const bounties = await Promise.all(bucketTasks.map((task) => sbContract.getBounty(task.id)))
+      await Promise.all(bucketTasks.map((task) => task.load()))
 
-    bucketTasks.forEach((task, index) => {
-      task.setBounty(bounties[index])
-    })
+      bucketTasks.forEach((task, index) => {
+        task.setBounty(bounties[index])
+      })
 
-    runInAction(() => {
-      this.tasks = bucketTasks
-    })
+      runInAction(() => {
+        this.tasks = bucketTasks
+      })
+    } catch (e) {
+      this.root.uiStore.errorToast('Failed fetching buckets', e)
+    }
   }
 
   fetchTransactions = async (): Promise<TransferEvent[]> => {
@@ -279,35 +286,39 @@ export class BucketEntity {
   }
 
   fund = async (amount: BigNumber): Promise<void> => {
-    if (
-      this.root.web3Store.signer &&
-      this.root.web3Store.signerState.address &&
-      this.token.address
-    ) {
-      const erc20Contract = ERC20__factory.connect(this.token.address, this.root.web3Store.signer)
-      // const erc20Contract = new Erc20Store(this.root, this.token)
-      const INFINITE = BigNumber.from(
-        '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-      )
+    try {
+      if (
+        this.root.web3Store.signer &&
+        this.root.web3Store.signerState.address &&
+        this.token.address
+      ) {
+        const erc20Contract = ERC20__factory.connect(this.token.address, this.root.web3Store.signer)
+        // const erc20Contract = new Erc20Store(this.root, this.token)
+        const INFINITE = BigNumber.from(
+          '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+        )
 
-      const allowance = await erc20Contract.allowance(
-        this.root.web3Store.signerState.address,
-        this.id
-      )
+        const allowance = await erc20Contract.allowance(
+          this.root.web3Store.signerState.address,
+          this.id
+        )
 
-      if (allowance.lt(amount)) {
-        const tx = await erc20Contract.approve(ethers.utils.getAddress(this.id), INFINITE)
-        await tx.wait()
+        if (allowance.lt(amount)) {
+          const tx = await erc20Contract.approve(ethers.utils.getAddress(this.id), INFINITE)
+          await tx.wait()
+        }
+
+        const contract = Bucket__factory.connect(
+          ethers.utils.getAddress(this.id),
+          this.root.web3Store.signer
+        )
+
+        const tx2 = await contract.fundBucket(amount)
+        await tx2.wait()
+        await this.getAllocation()
       }
-
-      const contract = Bucket__factory.connect(
-        ethers.utils.getAddress(this.id),
-        this.root.web3Store.signer
-      )
-
-      const tx2 = await contract.fundBucket(amount)
-      await tx2.wait()
-      await this.getAllocation()
+    } catch (e) {
+      this.root.uiStore.errorToast('Failed to fund', e)
     }
   }
 
