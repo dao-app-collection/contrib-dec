@@ -113,9 +113,68 @@ export default new Ceramic()
 // }
 
 // only update by task owner
-type Meta = {
-  assignes: string[] // apply to       address payable[] memory  _fulfillers,
-  applications: [] // chose from
+
+if (typeof window !== 'undefined') {
+  window.getTaskSchema = () => {
+    const names = [
+      'title',
+      'body',
+      'assignes',
+      'applications',
+      'taskStatus',
+      'deadlineTimestamp',
+      'createdTimestamp',
+      'claimedTimestamp',
+      'taskType',
+      'experienceLevel',
+      'requirements',
+      'github',
+      'timeCommitment',
+    ]
+
+    const properties: any = {}
+
+    names.forEach((name) => {
+      properties[name] = {
+        type: name.includes('Timestamp') ? 'integer' : 'string',
+      }
+    })
+
+    return JSON.stringify({
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      properties,
+      type: 'object',
+      additionalProperties: true,
+      required: names,
+    })
+  }
 }
+
+// {
+//   "$schema": "http://json-schema.org/draft-07/schema#",
+//   "properties": {
+//           "name": {
+//                   "type": "string"
+//           },
+//           "description": {
+//                   "type": "string"
+//           },
+//           "website": {
+//                   "type": "string"
+//           },
+//           "discord": {
+//                   "type": "string"
+//           },
+//           "logo": {
+//                   "type": "string"
+//           },
+//           "primaryColor": {
+//                   "type": "string"
+//           }
+//   },
+//   "type": "object",
+//   "additionalProperties": true,
+//   "required": ["name", "description", "website", "discord", "logo", "primaryColor"]
+// }
 
 // ceramic commits streamID

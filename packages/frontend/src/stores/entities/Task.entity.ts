@@ -8,7 +8,7 @@ export class TaskEntity {
   root: RootStore
   id: string
   ceramicId: string
-  data?: TaskMetaData = undefined
+  data?: TaskMetaData
 
   constructor(root: RootStore, { data }: { data: TheGraphTask }) {
     this.root = root
@@ -23,6 +23,29 @@ export class TaskEntity {
   }
 
   load = async (): Promise<void> => {
+    try {
+      const data = await ceramic.read<TaskMetaData>(this.ceramicId)
+
+      console.log('task data', { data })
+      if (data) {
+        runInAction(() => {
+          this.data = data
+        })
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  updateData = (data: Partial<TaskMetaData>) => {
+    if (!this.data) {
+      return
+    }
+
+    const merged = {
+      ...this.data,
+      ...data,
+    }
     try {
       const data = await ceramic.read<TaskMetaData>(this.ceramicId)
 

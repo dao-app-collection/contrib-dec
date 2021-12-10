@@ -4,6 +4,7 @@ import { useRouter } from 'next/dist/client/router'
 import React, { FC } from 'react'
 import DAOLayout from '../components/DAOLayout'
 import PageLoader from '../components/PageLoader'
+import SEO from '../components/SEO'
 import { DaoProvider } from '../context/DaoContext'
 import { useRootStore } from '../context/RootStoreProvider'
 import BucketPage from '../features/bucket/BucketPage'
@@ -14,7 +15,15 @@ const SlugPage: FC = (props) => {
   const store = useRootStore()
 
   if (store.bucketStore.loading) {
-    return <PageLoader />
+    return (
+      <>
+        <PageLoader />
+        <SEO
+          title="Contrib. | Get a clear overview of tasks and token flows in your DAO"
+          description="DAO contribution and experience, validated on-chain"
+        />
+      </>
+    )
   }
 
   return (

@@ -26,10 +26,24 @@ export type BucketMetaData = {
   primaryColor?: string
 }
 
+type TaskStatus = 'Open' | 'Claimed' | 'Ongoing' | 'Ready for review' | 'Completed'
+type TaskType = 'Bounty' | 'Suggestion'
+type ExperienceLevel = 'intermediate' | 'beginner' | 'senior'
+
 export type TaskMetaData = {
   title: string
-  description: string
-  deadline: Dayjs
+  body: string
+  assignes: string[] //
+  applications: [] // chose from
+  taskStatus: TaskStatus
+  deadlineTimestamp?: number
+  createdTimestamp: number
+  claimedTimestamp?: number
+  taskType: TaskType
+  experienceLevel?: ExperienceLevel
+  requirements: string[]
+  github?: string
+  timeCommitment: string
 }
 
 export type TheGraphTask = {
