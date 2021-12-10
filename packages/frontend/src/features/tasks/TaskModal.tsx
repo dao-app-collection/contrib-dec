@@ -175,7 +175,17 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
             <span>Share link</span>
           </TopSection>
         </TopContainer>
-        Applicants:: {task.data?.applications?.join(',')}
+        Applicants::{' '}
+        {task.data?.applications?.map((address) => (
+          <div key={address}>
+            {address}
+            {task.canApprove && (
+              <Button onClick={() => task.approve(address)} loading={task.status === 'isApproving'}>
+                Approve
+              </Button>
+            )}
+          </div>
+        ))}
         <Tabs onChange={setActiveTab} selected={activeTab} tabs={tabs} />
       </Top>
 

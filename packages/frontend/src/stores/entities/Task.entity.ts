@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { action, computed, makeObservable, observable, runInAction } from 'mobx'
-import { TaskMetaData, TheGraphTask } from '../../types/all-types'
+import { BucketEntity } from './Bucket.entity'
+import { TaskMetaData, TaskStatus, TheGraphTask } from '../../types/all-types'
 import ceramic from '../../utils/services/ceramic'
 import { RootStore } from '../RootStore'
 
@@ -10,17 +11,20 @@ export class TaskEntity {
   ceramicId: string
   data?: TaskMetaData
   status = ''
+  bucket: BucketEntity
 
-  constructor(root: RootStore, { data }: { data: TheGraphTask }) {
+  constructor(root: RootStore, { data, bucket }: { data: TheGraphTask; bucket: BucketEntity }) {
     this.root = root
     this.id = data.id.toString()
     this.ceramicId = data?.ceramicId
-
+    this.bucket = bucket
     makeObservable(this, {
       canApply: computed,
+      canApprove: computed,
       data: observable,
       status: observable,
       apply: action,
+      approve: action,
     })
 
     this.load()
@@ -36,7 +40,27 @@ export class TaskEntity {
       return false
     }
 
+    if (this.bucket.owners.includes(userAddress)) {
+      return false
+    }
+
     return !this.data.applications?.includes(userAddress)
+  }
+
+  get canApprove(): boolean {
+    if (!this.data) {
+      return false
+    }
+
+    if (this.data.taskStatus !== TaskStatus.OPEN) {
+      return false
+    }
+
+    if (!this.root.web3Store.signerState.address) {
+      return false
+    }
+
+    return this.bucket.owners.includes(this.root.web3Store.signerState.address)
   }
 
   load = async (): Promise<void> => {
@@ -97,6 +121,33 @@ export class TaskEntity {
     await this.updateData({
       applications,
     })
-    this.status = 'default'
+    runInAction(() => {
+      this.status = 'default'
+    })
+  }
+
+  approve = async (approveAddress: string): Promise<void> => {
+    if (!this.data) {
+      return
+    }
+    const userAddress = this.root.web3Store.signerState.address
+
+    if (!userAddress) {
+      return
+    }
+
+    if (this.data.applications.includes(userAddress)) {
+      return
+    }
+
+    this.status = 'isApproving'
+    const assignes = [...this.data.assignes, approveAddress]
+    await this.updateData({
+      assignes,
+    })
+
+    runInAction(() => {
+      this.status = 'default'
+    })
   }
 }
