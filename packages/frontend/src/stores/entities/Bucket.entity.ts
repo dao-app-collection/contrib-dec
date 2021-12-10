@@ -12,6 +12,7 @@ import { TaskCreatedEvent } from '../../generated/Bucket'
 
 import { ERC20__factory } from '../../generated/factories/ERC20__factory'
 import ceramic from '../../utils/services/ceramic'
+import { StandardBounties__factory } from '../../generated'
 
 export class BucketEntity {
   root: RootStore
@@ -194,27 +195,13 @@ export class BucketEntity {
   }
 
   init = async (): Promise<void> => {
-    const result = await this.fetchBucketEvents(this.id)
-    const bucketTasks = result.map((event) => {
-      console.log(event.args)
-      // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
-      return new TaskEntity(this.root, {
-        bucket: this,
-        data: {
-          id: event.args.id,
-          ceramicId: event.args.data,
-          // deadline: event.args.deadline,
-          // issuers: event.args.issuers,
-          // approvers: event.args.approvers,
-        },
-      })
-    })
+    try {
+      await this.fetchBucketEvents(this.id)
 
-    runInAction(() => {
-      this.tasks = bucketTasks
-    })
-
-    this.getAllocation()
+      this.getAllocation()
+    } catch (e) {
+      this.root.uiStore.errorToast('Failed fetching tasks', e)
+    }
 
     // autorun(() => {
     //   this.setStructure()
@@ -224,13 +211,39 @@ export class BucketEntity {
   fetchBucketEvents = async (bucketAddress: string): Promise<TaskCreatedEvent[]> => {
     const bucketContract = Bucket__factory.connect(bucketAddress, this.root.web3Store.coreProvider)
 
-    const result = await bucketContract.queryFilter(
-      bucketContract.filters.TaskCreated(null, null, null, null, null),
-      0,
-      'latest'
+    const result =
+      (await bucketContract.queryFilter(
+        bucketContract.filters.TaskCreated(null, null, null, null, null),
+        0,
+        'latest'
+      )) || []
+
+    const bucketTasks = result.map((event) => {
+      // console.log(`Bucket Event ${this.name}`, { event, ceramicId: event.args.data })
+      return new TaskEntity(this.root, {
+        bucket: this,
+        data: {
+          id: event.args.id,
+          ceramicId: event.args.data,
+        },
+      })
+    })
+
+    const sbAddress = await bucketContract.standardBounties()
+    const sbContract = StandardBounties__factory.connect(
+      sbAddress,
+      this.root.web3Store.coreProvider
     )
 
-    return (result || []) as TaskCreatedEvent
+    const bounties = await Promise.all(bucketTasks.map((task) => sbContract.getBounty(task.id)))
+
+    bucketTasks.forEach((task, index) => {
+      task.setBounty(bounties[index])
+    })
+
+    runInAction(() => {
+      this.tasks = bucketTasks
+    })
   }
 
   getAllocation = async (): Promise<void> => {
@@ -296,7 +309,7 @@ export class BucketEntity {
         )
 
         await contract.createTask(data, deadline, issuers, approvers)
-        await this.fetchBucketEvents()
+        await this.fetchBucketEvents(this.id)
       } catch (e) {
         this.root.uiStore.errorToast('Error creating task', e)
       } finally {
@@ -331,6 +344,7 @@ export class BucketEntity {
         )
 
         await contract.createAndFundTask(data, deadline, issuers, approvers, amount)
+        await this.fetchBucketEvents(this.id)
       } catch (e) {
         this.root.uiStore.errorToast('Error creating task', e)
       } finally {

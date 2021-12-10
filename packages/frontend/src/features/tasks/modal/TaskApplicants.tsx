@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import { Tag } from '@geist-ui/react'
+import { Spacer, Tag } from '@geist-ui/react'
 import { TaskEntity } from '../../../stores/entities/Task.entity'
 import { spacingIncrement } from '../../../theme/utils'
 import { getShortAccount } from '../../../utils/account-utils'
@@ -28,33 +28,55 @@ const Account = styled.div`
 `
 
 type TaskApplicantProps = {
+  task: TaskEntity
   account: string
-  canApprove: boolean
   loading: boolean
   asssigned: boolean
   onClick: () => void
 }
 
-const TaskApplicant: React.FC<TaskApplicantProps> = ({
+const _TaskApplicant: React.FC<TaskApplicantProps> = ({
   account,
-  canApprove,
   loading,
   onClick,
   asssigned,
+  task,
 }) => {
   return (
     <Wrapper>
       <Identicon account={account} diameter={40} />
       <Account>{getShortAccount(account)}</Account>
-      {asssigned && <Tag type="lite">Assigned</Tag>}
-      {canApprove && (
+
+      {task.canApprove && (
         <Button loading={loading} onClick={onClick} modifier="dao">
           Approve
         </Button>
       )}
+
+      {task.canComplete && (
+        <Button loading={loading} onClick={() => task.completeWork()} modifier="dao">
+          Pay out
+        </Button>
+      )}
+
+      {asssigned && task.canTurnIn && (
+        <>
+          <Button
+            loading={task.status === 'isTurningIn'}
+            type="success"
+            onClick={() => task.turnInWork()}
+            modifier="dao"
+          >
+            Turn in work
+          </Button>
+          <Spacer w={1} />
+        </>
+      )}
+      {asssigned && <Tag type="lite">Assigned</Tag>}
     </Wrapper>
   )
 }
+const TaskApplicant = observer(_TaskApplicant)
 
 type Props = {
   task: TaskEntity | null
@@ -72,10 +94,10 @@ const TaskApplicants: React.FC<Props> = ({ task }) => {
     <div>
       {task.data?.applications?.map((applicant) => (
         <TaskApplicant
+          task={task}
           key={applicant}
           account={applicant}
           loading={task.status === 'isApproving'}
-          canApprove={task.canApprove}
           onClick={() => task.approve(applicant)}
           asssigned={task.data?.assignes.includes(applicant) || false}
         />

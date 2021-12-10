@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { useState } from 'react'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import useIsBucketOwner from './useIsBucketOwner'
 import { useRootStore } from '../context/RootStoreProvider'
 import { BucketEntity } from '../stores/entities/Bucket.entity'
@@ -23,7 +23,6 @@ const useCreateTask = ({
   const canCreateTask = useIsBucketOwner(selectedBucket)
 
   const createTask = async (payload: TaskPayload) => {
-    console.log('gets here!', { payload })
     if (web3Store.signerState.address) {
       let success = false
       setIsCreating(true)
@@ -33,11 +32,12 @@ const useCreateTask = ({
           data: payload.data,
         })
 
-        const tx = await selectedBucket?.createTask({
+        const tx = await selectedBucket?.createAndFundTask({
           data: ceramicId,
           deadline: payload.deadline,
           issuers: payload.issuers,
           approvers: payload.approvers,
+          amount: ethers.utils.parseEther('1.337'),
         })
         success = true
       } catch (e) {
