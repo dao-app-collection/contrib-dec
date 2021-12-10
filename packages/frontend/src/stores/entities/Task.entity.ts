@@ -78,7 +78,7 @@ export class TaskEntity {
     }
   }
 
-  updateData = async (newData: Partial<TaskMetanewData>) => {
+  updateData = async (newData: Partial<TaskMetaData>) => {
     if (!this.data) {
       return
     }
@@ -136,14 +136,19 @@ export class TaskEntity {
       return
     }
 
-    if (this.data.applications.includes(userAddress)) {
+    console.log('here')
+
+    if (!this.data.applications.includes(userAddress)) {
       return
     }
+
+    console.log('here2')
 
     this.status = 'isApproving'
     const assignes = [...this.data.assignes, approveAddress]
     await this.updateData({
       assignes,
+      taskStatus: TaskStatus.CLAIMED,
     })
 
     runInAction(() => {

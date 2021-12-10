@@ -142,8 +142,6 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     return null
   }
 
-  console.log(task.data?.applications)
-
   return (
     <Modal
       disableBackdropClick
@@ -154,7 +152,7 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
     >
       <Top>
         <Title>
-          <TaskStatusLabel status="open" size="large" />
+          <TaskStatusLabel status={task.data?.taskStatus} size="large" />
           <TaskCategory>Core tech</TaskCategory>
         </Title>
         <TopContainer>

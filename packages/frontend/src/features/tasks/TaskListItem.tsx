@@ -62,7 +62,7 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
       <Top>
         <Section>
           <Title>{task.data?.title}</Title>
-          <TaskStatusLabel status="open" />
+          <TaskStatusLabel status={task.data?.taskStatus} />
         </Section>
         <Section>
           <Description>Design</Description>

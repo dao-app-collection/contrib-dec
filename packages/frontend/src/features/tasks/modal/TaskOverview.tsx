@@ -73,7 +73,9 @@ const TaskOverview: React.FC<Props> = ({ task }) => {
       </Section>
       <Section>
         <Title>Description</Title>
-        <Description>{task.data?.description}</Description>
+        <Description>
+          <ReactMarkdown>{task.data?.body || ''}</ReactMarkdown>
+        </Description>
       </Section>
     </Wrapper>
   )

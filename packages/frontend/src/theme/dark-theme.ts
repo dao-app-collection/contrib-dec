@@ -1,5 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import { fontSizes } from './font-sizes'
+import { TaskStatus } from '../types/all-types'
 
 export const darkTheme: DefaultTheme = {
   fontSize: fontSizes,
@@ -29,9 +30,9 @@ export const darkTheme: DefaultTheme = {
     accent: '#838383',
   },
   taskStatus: {
-    open: 'rgba(75, 241, 60, 0.24)',
-    claimes: 'rgba(75, 241, 60, 0.24)',
-    completed: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.OPEN]: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.CLAIMED]: 'rgba(75, 241, 60, 0.24)',
+    [TaskStatus.COMPLETED]: 'rgba(75, 241, 60, 0.24)',
   },
   taskStatusText: {
     open: '#C1FFBC',
