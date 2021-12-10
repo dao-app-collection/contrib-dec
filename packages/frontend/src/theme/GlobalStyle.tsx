@@ -52,7 +52,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #react-select-3-listbox {
-    z-index: 100;
+    z-index: 1100;
   }
  
   

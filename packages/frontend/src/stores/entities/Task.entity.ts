@@ -239,6 +239,8 @@ export class TaskEntity {
       )
 
       const approverId = 0
+
+      console.log(this.id, this.data?.assignes || [], this.ceramicId, approverId)
       await contract.completeTask(this.id, this.data?.assignes || [], this.ceramicId, approverId, [
         this.balance,
       ])

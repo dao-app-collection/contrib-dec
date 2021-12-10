@@ -49,6 +49,7 @@ const Logo = styled(animated.div)`
   position: absolute;
   top: 0;
   transform: translate(-50%, -50%);
+  z-index: 5;
   img {
     height: 100%;
     object-fit: fill;

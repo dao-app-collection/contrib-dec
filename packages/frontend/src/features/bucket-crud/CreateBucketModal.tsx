@@ -1,4 +1,3 @@
-import { Loading } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC } from 'react'
@@ -29,7 +28,6 @@ const CreateBucketModal: FC<Props> = ({ onClose, visible, selectedBucket }) => {
     tokenAddress: selectedBucket?.tokenAddress,
     discord: selectedBucket?.data?.discord,
     website: selectedBucket?.data?.website,
-    // logo: selectedBucket?.data?.logo,
     colorPrimary: selectedBucket?.data?.primaryColor,
   }
 

@@ -1,4 +1,3 @@
-import { Button } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { FC, useState, useEffect } from 'react'
@@ -17,6 +16,7 @@ import useIsBucketOwner from '../../hooks/useIsBucketOwner'
 import useSelectedBucket from '../../hooks/useSelectedBucket'
 import Modal from '../../components/Modal'
 import { useRootStore } from '../../context/RootStoreProvider'
+import Button from '../../components/Button'
 
 type Props = {
   //   visible: boolean
@@ -165,12 +165,16 @@ const TaskModal: FC<Props> = ({ onClose, task }) => {
           </TopSection>
           <TopSection alignItems="flex-end">
             {task.canApply && (
-              <Button onClick={() => task.apply()} loading={task.status === 'isApplying'}>
+              <Button
+                modifier="dao"
+                onClick={() => task.apply()}
+                loading={task.status === 'isApplying'}
+              >
                 Apply for task
               </Button>
             )}
 
-            <span>Share link</span>
+            {/* <span>Share link</span> */}
           </TopSection>
         </TopContainer>
         {/* Applicants::{' '}

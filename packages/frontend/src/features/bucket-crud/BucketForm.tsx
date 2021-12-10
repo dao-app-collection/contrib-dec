@@ -37,7 +37,7 @@ const BucketForm: FC<Props> = ({ onSubmit, defaultValues, edit = false }) => {
   const methods = useForm<FormData>({
     defaultValues: {
       ...defaultValues,
-      owners: defaultValues.owners || OWNERS,
+      owners: defaultValues.owners || [],
       tokenAddress: defaultValues.tokenAddress || WEENUS_RINKENY_ADDRESS,
     },
   })
