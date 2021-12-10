@@ -16,8 +16,9 @@ const func: DeployFunction = async ({
   let standardBountiesAddress = '0x6ac6baf770b3ffe2ddb3c5797e47c17cebef2ec4'
 
   if (hre.network.name === 'hardhat') {
-    await deploy('FixedToken', {
+    await deploy('ContribTestToken', {
       from: deployer,
+      args: ['contrib', 'ctb', 18],
     })
 
     const sbResult = await deploy('StandardBounties', {

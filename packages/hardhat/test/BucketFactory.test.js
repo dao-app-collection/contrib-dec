@@ -13,8 +13,8 @@ describe('Bucket', function () {
     const bucketFactory = await deployments.get('BucketFactory')
     BucketFactory = await ethers.getContractAt('BucketFactory', bucketFactory.address)
 
-    const token = await deployments.get('FixedToken')
-    Token = await ethers.getContractAt('FixedToken', token.address)
+    const token = await deployments.get('ContribTestToken')
+    Token = await ethers.getContractAt('ContribTestToken', token.address)
 
     const standardBounties = await deployments.get('StandardBounties')
     StandardBounties = await ethers.getContractAt('StandardBounties', standardBounties.address)
