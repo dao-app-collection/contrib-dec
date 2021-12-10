@@ -26,9 +26,22 @@ export type BucketMetaData = {
   primaryColor?: string
 }
 
-type TaskStatus = 'Open' | 'Claimed' | 'Ongoing' | 'Ready for review' | 'Completed'
-type TaskType = 'Bounty' | 'Suggestion'
-type ExperienceLevel = 'intermediate' | 'beginner' | 'senior'
+export enum TaskStatus {
+  OPEN = 'Open',
+  CLAIMED = 'Claimed',
+  ONGOING = 'Ongoing',
+  REVIEW = 'Ready for review',
+  COMPLETED = 'Completed',
+}
+
+export enum TaskType {
+  BOUNTY = 'Bounty',
+  SUGGESTION = 'Suggestion',
+}
+
+// export type TaskStatus = 'Open' | 'Claimed' | 'Ongoing' | 'Ready for review' | 'Completed'
+// export type TaskType = 'Bounty' | 'Suggestion'
+export type ExperienceLevel = 'intermediate' | 'beginner' | 'senior'
 
 export type TaskMetaData = {
   title: string
@@ -36,7 +49,7 @@ export type TaskMetaData = {
   assignes: string[] //
   applications: [] // chose from
   taskStatus: TaskStatus
-  deadlineTimestamp?: number
+  deadlineTimestamp: number
   createdTimestamp: number
   claimedTimestamp?: number
   taskType: TaskType
@@ -75,9 +88,8 @@ export type BucketPayload = BucketMetaData & {
 }
 
 export type TaskPayload = {
-  title: string
-  description: string
-  deadline: Dayjs
+  data: TaskMetaData
+  deadline: number
   issuers: string[]
   approvers: string[]
 }
@@ -102,11 +114,17 @@ export type Field = {
   label: string
   required?: boolean
   disabled?: boolean
-
   register: UseFormRegister<any>
-}
+} & any
 
-export type FormFieldType = 'input' | 'textarea' | 'multiselect' | 'file'
+export type FormFieldType =
+  | 'input'
+  | 'textarea'
+  | 'multiselect'
+  | 'file'
+  | 'select'
+  | 'body'
+  | 'date'
 
 export type MyField = Omit<Field, 'register'> & {
   type?: FormFieldType

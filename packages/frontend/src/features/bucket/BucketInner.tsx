@@ -25,7 +25,7 @@ export type TabId = 'overview' | 'tasks' | 'members' | 'suggestions'
 
 const BucketInner: FC = () => {
   const { currentTask } = useDao()
-  const [activeTab, setActiveTab] = useState<TabId>('overview')
+  const [activeTab, setActiveTab] = useState<TabId>('tasks')
   const selected = useSelectedBucket()
 
   useEffect(() => {

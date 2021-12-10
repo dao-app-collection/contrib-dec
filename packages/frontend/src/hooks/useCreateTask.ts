@@ -28,21 +28,19 @@ const useCreateTask = ({
       let success = false
       setIsCreating(true)
       try {
+        console.log('::::', payload.data)
         const ceramicId = await ceramic.create({
           schema: CeramicSchema.TASK_META_DATA,
-          data: {
-            title: payload.title,
-            description: payload.description,
-          },
+          data: payload.data,
         })
 
         console.log({ ceramicId })
 
         const tx = await selectedBucket?.createTask({
           data: ceramicId,
-          deadline: payload.deadline.unix(),
-          issuers: selectedBucket.owners,
-          approvers: selectedBucket.owners,
+          deadline: payload.deadline,
+          issuers: payload.issuers,
+          approvers: payload.approvers,
         })
         success = true
       } catch (e) {

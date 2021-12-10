@@ -4,13 +4,13 @@ import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
 import { DID } from 'dids'
 import { TileDocument } from '@ceramicnetwork/stream-tile'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
-import { BucketMetaData } from '../../types/all-types'
+import { BucketMetaData, TaskMetaData } from '../../types/all-types'
 
 const API_URL = 'https://ceramic-clay.3boxlabs.com' // 'https://gateway.ceramic.network'
 
 export enum CeramicSchema {
   BUCKET_META_DATA = 'k3y52l7qbv1frxqaahvbejpzb1s4mu26894ec6dfsa9eu759u69hwo1x4bohl9dz4',
-  TASK_META_DATA = 'k6zn3rc3v8qin1nhs5janurq194ioqf45aeumk07spnm19d0ob0v0iqywc2otkluxtg8vxtcp321881rtw6vdol15chnpt6r2obrdmyhaisfaodlbxdyjpy',
+  TASK_META_DATA = 'k3y52l7qbv1frxzfcxjyk2ab2zff035thikmzprd86lw0pvniyihjuyvmierv1728',
 }
 
 export type BucketMetaDataInput = {
@@ -20,10 +20,7 @@ export type BucketMetaDataInput = {
 
 export type TaskMetaDataInput = {
   schema: CeramicSchema.TASK_META_DATA
-  data: {
-    title: string
-    description: string
-  }
+  data: TaskMetaData
 }
 
 type CeramicInput = BucketMetaDataInput | TaskMetaDataInput
@@ -135,8 +132,17 @@ if (typeof window !== 'undefined') {
     const properties: any = {}
 
     names.forEach((name) => {
-      properties[name] = {
-        type: name.includes('Timestamp') ? 'integer' : 'string',
+      if (['assignes', 'applications', 'requirements'].includes(name)) {
+        properties[name] = {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        }
+      } else {
+        properties[name] = {
+          type: name.includes('Timestamp') ? 'integer' : 'string',
+        }
       }
     })
 
