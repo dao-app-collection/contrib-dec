@@ -37,11 +37,8 @@ const Heading2 = styled.h2`
 
 const Heading3 = styled.h3`
   ${lineHeightHeadings}
-  font-size: ${({ theme }): string => theme.fontSize['3xl']};
-
-  ${media.tablet`
-    font-size: ${({ theme }): string => theme.fontSize.lg};
-  `}
+  font-size: ${({ theme }): string => theme.fontSize.sm};
+  margin: 0;
 `
 
 const Heading4 = styled.h4`

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FC } from 'react'
 import styled from 'styled-components'
+import TaskStatusLabel from './TaskStatusLabel'
 import { TaskEntity } from '../../stores/entities/Task.entity'
 import { primaryFontFamily } from '../../theme/general-settings'
 import { spacingIncrement } from '../../theme/utils'
@@ -52,26 +53,6 @@ const Amount = styled.div`
 type Props = {
   task: TaskEntity
   openTask: () => void
-}
-
-type TaskStatusLabelProps = {
-  status: 'open' | 'claimed' | 'completed'
-}
-
-const StatusLabel = styled.div<TaskStatusLabelProps>`
-  background: ${({ theme, status }) => theme.taskStatus[status]};
-  border-radius: 8px;
-  color: ${({ theme, status }) => theme.taskStatusText[status]};
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: 400;
-  height: 20px;
-  line-height: 1rem;
-  padding: ${spacingIncrement(1)} ${spacingIncrement(8)};
-  text-transform: uppercase;
-`
-
-const TaskStatusLabel: FC<TaskStatusLabelProps> = ({ status }) => {
-  return <StatusLabel status={status}>Open</StatusLabel>
 }
 
 const TaskListItem: FC<Props> = ({ task, openTask }) => {
