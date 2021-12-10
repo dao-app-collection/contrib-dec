@@ -1,5 +1,5 @@
 {
-  "name": "@dapp-starter-fullstack/frontend",
+  "name": "@contrib/frontend",
   "version": "1.0.0",
   "scripts": {
     "dev": "npx next",

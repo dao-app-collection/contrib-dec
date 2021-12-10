@@ -1,5 +1,5 @@
 {
-  "name": "@dapp-starter-fullstack/hardhat",
+  "name": "@contrib/hardhat",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

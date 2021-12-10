@@ -7874,18 +7874,6 @@ concat-stream@^1.5.1, concat-stream@^1.6.0, concat-stream@^1.6.2, concat-stream@
     inherits "^2.0.3"
     readable-stream "^3.0.2"
 
-configcat-common@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/configcat-common/-/configcat-common-4.5.0.tgz#fdfed250a0fbd37a365555120dad6a93d95b2230"
-  integrity sha512-RZA0C1BVRlXJaavehPXk8q2YpmZyLovUFz0SHHdfePteDJjZ2iL7USahQi0SwpPK+BA5PKUvHZMkchMV2UGuPA==
-
-configcat-js@5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/configcat-js/-/configcat-js-5.6.0.tgz#7ec3b65bc49e1450800644758d29d44c2a46316f"
-  integrity sha512-lMNdspGPCTSoIqtNQojXCKi4wjX1hl0vnTN3FMUKJQjCY32A6b9kBlbEocsVgzXEoArktRuMzOaXOVmY9+J8Tg==
-  dependencies:
-    configcat-common "^4.5.0"
-
 confusing-browser-globals@^1.0.10:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.10.tgz#30d1e7f3d1b882b25ec4933d1d1adac353d20a59"
