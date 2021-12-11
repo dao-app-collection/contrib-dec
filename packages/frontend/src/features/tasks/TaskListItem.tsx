@@ -69,9 +69,9 @@ const TaskListItem: FC<Props> = ({ task, openTask }) => {
         </Section>
         <Section>
           <Description>
-            {' '}
-            {task.data?.deadlineTimestamp &&
-              dayjs().from(dayjs(new Date(task.data?.deadlineTimestamp)), true)}
+            {task.data?.deadlineTimestamp
+              ? dayjs().from(dayjs(new Date(task.data?.deadlineTimestamp)), true)
+              : null}
           </Description>
           <Amount>{task.allocation}</Amount>
         </Section>

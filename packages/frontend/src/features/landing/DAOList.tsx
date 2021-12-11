@@ -38,6 +38,9 @@ const Item = styled.div`
       opacity: 0.75;
     }
   }
+  h2 {
+    color: white;
+  }
 
   @media (max-width: ${pixelSizes.tablet}) {
     h2 {

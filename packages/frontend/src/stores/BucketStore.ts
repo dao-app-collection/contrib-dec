@@ -30,6 +30,7 @@ export class BucketStore {
   }
 
   fetchBuckets = async (): Promise<void> => {
+    console.log('FETCH!')
     try {
       const events = await this.root.contribBucketFactoryContractStore.getEvents()
 

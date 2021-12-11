@@ -37,9 +37,13 @@ export class ContribBucketFactoryContractStore extends ContractStore {
       runInAction(() => {
         this.creatingBucket = true
       })
+      console.log(1)
       const tx = await this.sendTransaction<CreateBucket>('createBucket', params)
+      console.log(2)
       await tx.wait()
+      console.log(3)
       await this.root.bucketStore.fetchBuckets()
+      console.log(4)
       return true
     } catch (error) {
       this.root.uiStore.errorToast(`Error calling createBucket`, error)
