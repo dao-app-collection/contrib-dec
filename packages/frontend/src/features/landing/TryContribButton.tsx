@@ -1,5 +1,6 @@
 import { Button } from '@geist-ui/react'
 import { observer } from 'mobx-react-lite'
+import { useRouter } from 'next/dist/client/router'
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useRootStore } from '../../context/RootStoreProvider'
