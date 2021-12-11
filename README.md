@@ -24,7 +24,6 @@ We’re building next level coordination — where we know every DAO is unique!
 
 ### Video
 
-_VIMEO LINK_
 https://vimeo.com/655344599
 
 ### Start date
