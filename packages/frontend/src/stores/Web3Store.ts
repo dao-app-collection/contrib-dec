@@ -122,7 +122,7 @@ export class Web3Store {
         this.disconnect()
         return
       }
-      // await onboard.walletCheck()
+      await onboard.walletCheck()
       state = onboard.getState()
       if (!state.address || !state.wallet.name) {
         // Something went wrong connecting the wallet
