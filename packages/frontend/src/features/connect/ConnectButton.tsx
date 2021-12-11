@@ -21,6 +21,10 @@ const Flex = styled.div`
   display: flex;
 `
 
+const Body = styled.div`
+  padding: ${spacingIncrement(16)};
+`
+
 const AccountIcon = styled(Identicon)`
   margin-left: ${spacingIncrement(16)};
 `
@@ -66,21 +70,23 @@ const ConnectButton: React.FC = () => {
       </Flex>
       <Modal visible={uiStore.accountModalOpen} onClose={closeHandler}>
         <Modal.Title>Account</Modal.Title>
-        <Modal.Content>
-          <Grid.Container gap={2} justify="space-between">
-            <Grid alignItems="center" justify="center">
-              {getShortAccount(account) ?? 'Connect Wallet'}
-              <Spacer w={0.5} inline />
-              <AccountIcon account={account} />
-              <Spacer w={2} inline />
-            </Grid>
-            <Grid>
-              <Button auto onClick={disconnect}>
-                Change
-              </Button>
-            </Grid>
-          </Grid.Container>
-        </Modal.Content>
+        <Body>
+          <Modal.Content>
+            <Grid.Container gap={2} justify="space-between">
+              <Grid alignItems="center" justify="center">
+                {getShortAccount(account) ?? 'Connect Wallet'}
+                <Spacer w={0.5} inline />
+                <AccountIcon account={account} />
+                <Spacer w={2} inline />
+              </Grid>
+              <Grid>
+                <Button auto onClick={disconnect}>
+                  Change
+                </Button>
+              </Grid>
+            </Grid.Container>
+          </Modal.Content>
+        </Body>
       </Modal>
     </Wrapper>
   )

@@ -43,12 +43,8 @@ const Navigation: React.FC = () => {
       <nav>
         <List>
           <li>
-            <a
-              href="https://devpost.com/software/contribute-71auhd"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Devpost
+            <a href="https://github.com/danielivert/contrib-dec" target="_blank" rel="noreferrer">
+              Github
             </a>
           </li>
           <li>
